@@ -8,9 +8,13 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "typecheck": "turbo typecheck",
-    "db:push": "pnpm --filter web db:push"
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.10",
+    "dotenv": "^17.4.2",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "turbo": "^2.9.18",

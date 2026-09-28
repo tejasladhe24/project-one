@@ -1,1 +1,0 @@
-ALTER TABLE "team" ADD COLUMN "description" text;

@@ -9,11 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "auth:generate": "pnpm dlx auth generate --output ./src/db/auth-schema.ts --yes"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.69",
@@ -62,7 +58,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6",
-    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "tsx": "^4.23.13",
     "typescript": "^6",
