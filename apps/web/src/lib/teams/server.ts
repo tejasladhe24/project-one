@@ -116,13 +116,14 @@ export const updateTeamSettings = createServerFn({ method: "POST" })
     })
   )
   .handler(async ({ data }) => {
-    const { headers } = await requireOrgSession()
+    const { headers, organizationId } = await requireOrgSession()
 
     const payload: {
       name?: string
       identifier?: string
       description?: string
-    } = {}
+      organizationId: string
+    } = { organizationId }
     if (data.name !== undefined) payload.name = data.name.trim()
     if (data.identifier !== undefined) {
       payload.identifier = data.identifier.trim().toUpperCase()
@@ -196,7 +197,7 @@ export const updateTeamEstimateSettings = createServerFn({ method: "POST" })
 export const removeTeam = createServerFn({ method: "POST" })
   .validator(z.object({ teamId: z.string().min(1) }))
   .handler(async ({ data }) => {
-    const { headers, session } = await requireOrgSession()
+    const { headers, session, organizationId } = await requireOrgSession()
 
     // Better Auth forbids deleting the session's active team.
     if (session.session.activeTeamId === data.teamId) {
@@ -208,7 +209,7 @@ export const removeTeam = createServerFn({ method: "POST" })
 
     return auth.api.removeTeam({
       headers,
-      body: { teamId: data.teamId },
+      body: { teamId: data.teamId, organizationId },
     })
   })
 
@@ -245,6 +246,7 @@ export const leaveTeam = createServerFn({ method: "POST" })
       body: {
         teamId: data.teamId,
         userId: session.user.id,
+        organizationId,
       },
     })
   })
@@ -628,12 +630,13 @@ export const addMemberToTeam = createServerFn({ method: "POST" })
     })
   )
   .handler(async ({ data }) => {
-    const { headers } = await requireOrgSession()
+    const { headers, organizationId } = await requireOrgSession()
     return auth.api.addTeamMember({
       headers,
       body: {
         teamId: data.teamId,
         userId: data.userId,
+        organizationId,
       },
     })
   })
@@ -646,12 +649,13 @@ export const removeMemberFromTeam = createServerFn({ method: "POST" })
     })
   )
   .handler(async ({ data }) => {
-    const { headers } = await requireOrgSession()
+    const { headers, organizationId } = await requireOrgSession()
     return auth.api.removeTeamMember({
       headers,
       body: {
         teamId: data.teamId,
         userId: data.userId,
+        organizationId,
       },
     })
   })
