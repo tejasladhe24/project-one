@@ -48,11 +48,7 @@ export function TeamHomeShell({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 pb-3">
-          <EntityTabNav
-            tabs={tabs}
-            activeTab={activeTab}
-            params={{ teamId }}
-          />
+          <EntityTabNav tabs={tabs} activeTab={activeTab} params={{ teamId }} />
           {actions ? (
             <div className="flex items-center gap-2">{actions}</div>
           ) : null}

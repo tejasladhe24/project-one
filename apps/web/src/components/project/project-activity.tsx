@@ -123,12 +123,14 @@ function CommentBody({ body }: { body: string }) {
 
   if (lastIndex < body.length) {
     parts.push(
-      <React.Fragment key={`t-${key++}`}>{body.slice(lastIndex)}</React.Fragment>
+      <React.Fragment key={`t-${key++}`}>
+        {body.slice(lastIndex)}
+      </React.Fragment>
     )
   }
 
   return (
-    <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+    <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
       {parts}
     </p>
   )
@@ -323,7 +325,7 @@ function CommentItem({
             </div>
           </div>
           {depth === 0 || isOwn ? (
-            <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover/comment:opacity-100 group-focus-within/comment:opacity-100">
+            <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-focus-within/comment:opacity-100 group-hover/comment:opacity-100">
               {depth === 0 ? (
                 <Button
                   type="button"

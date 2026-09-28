@@ -54,9 +54,7 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
 import { Label } from "@workspace/ui/components/label"
-import {
-  Progress,
-} from "@workspace/ui/components/progress"
+import { Progress } from "@workspace/ui/components/progress"
 import {
   HoverCard,
   HoverCardContent,
@@ -164,11 +162,15 @@ function ProjectProgressCell({ project }: { project: ProjectRow }) {
           ) : null}
           <div className="flex items-center justify-between gap-3">
             <span className="text-muted-foreground">Created</span>
-            <span className="tabular-nums">{formatDate(project.createdAt)}</span>
+            <span className="tabular-nums">
+              {formatDate(project.createdAt)}
+            </span>
           </div>
           <div className="flex items-center justify-between gap-3">
             <span className="text-muted-foreground">Updated</span>
-            <span className="tabular-nums">{formatDate(project.updatedAt)}</span>
+            <span className="tabular-nums">
+              {formatDate(project.updatedAt)}
+            </span>
           </div>
         </div>
       </HoverCardContent>
@@ -267,7 +269,7 @@ const columns = columnHelper.columns([
   columnHelper.accessor("issuesCount", {
     header: "Issues",
     cell: ({ getValue }) => (
-      <span className="tabular-nums text-muted-foreground">{getValue()}</span>
+      <span className="text-muted-foreground tabular-nums">{getValue()}</span>
     ),
   }),
   columnHelper.accessor("progress", {
@@ -309,7 +311,6 @@ const columns = columnHelper.columns([
   }),
 ])
 
-
 type ProjectsTableProps = {
   data: ProjectRow[]
   onCreated?: () => void
@@ -317,11 +318,7 @@ type ProjectsTableProps = {
   teamId?: string
 }
 
-export function ProjectsTable({
-  data,
-  onCreated,
-  teamId,
-}: ProjectsTableProps) {
+export function ProjectsTable({ data, onCreated, teamId }: ProjectsTableProps) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<ColumnVisibilityState>({})

@@ -181,10 +181,9 @@ export function TeamMembersSettings({
   async function handleRemove(userId: string) {
     setError(null)
     try {
-      await mutate(
-        () => removeMemberFromTeam({ data: { teamId, userId } }),
-        { errorMessage: "Could not remove member" }
-      )
+      await mutate(() => removeMemberFromTeam({ data: { teamId, userId } }), {
+        errorMessage: "Could not remove member",
+      })
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not remove member")
     }
@@ -435,9 +434,7 @@ export function TeamMembersSettings({
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger
-                              render={
-                                <Button variant="ghost" size="icon-sm" />
-                              }
+                              render={<Button variant="ghost" size="icon-sm" />}
                             >
                               <IconDots className="size-4" />
                             </DropdownMenuTrigger>

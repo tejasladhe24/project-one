@@ -102,7 +102,11 @@ function inboxItemUrl(item: InboxNotificationItem) {
   return url.toString()
 }
 
-function ReviewDetail({ notification }: { notification: InboxNotificationItem }) {
+function ReviewDetail({
+  notification,
+}: {
+  notification: InboxNotificationItem
+}) {
   return (
     <div className="flex h-full flex-col p-6">
       <div className="flex items-center gap-2 text-muted-foreground">
@@ -130,9 +134,7 @@ function TeamJoinRequestDetail({
   notification: InboxNotificationItem
 }) {
   const { mutate, pending } = useServerMutation()
-  const [accepted, setAccepted] = React.useState(
-    notification.requesterIsMember
-  )
+  const [accepted, setAccepted] = React.useState(notification.requesterIsMember)
 
   React.useEffect(() => {
     setAccepted(notification.requesterIsMember)
@@ -294,14 +296,11 @@ function InboxNotificationRow({
 
   async function remove() {
     try {
-      await mutate(
-        () => deleteInboxNotification({ data: { id: item.id } }),
-        {
-          successMessage: "Notification deleted",
-          errorMessage: "Failed to delete",
-          invalidate: false,
-        }
-      )
+      await mutate(() => deleteInboxNotification({ data: { id: item.id } }), {
+        successMessage: "Notification deleted",
+        errorMessage: "Failed to delete",
+        invalidate: false,
+      })
       onDeleted(item.id)
     } catch {
       // toast handled by useServerMutation
@@ -536,7 +535,6 @@ export function InboxView({ notifications, selectedId }: InboxViewProps) {
     void markInboxNotificationRead({ data: { id: item.id } }).then(() => {
       void router.invalidate()
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on selection change
   }, [selectedId])
 
   function handleDeleted(deletedId: string) {

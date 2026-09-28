@@ -43,8 +43,8 @@ export function NavWorkspace({
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton onClick={() => navigate({ to: item.url })}>
-                <item.icon />
-                <span>{item.name}</span>
+              <item.icon />
+              <span>{item.name}</span>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger

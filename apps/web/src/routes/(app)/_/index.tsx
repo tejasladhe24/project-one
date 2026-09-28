@@ -20,6 +20,6 @@ function HomePage() {
           <DataTable data={data} />
         </div>
       </div>
-    </div>  
+    </div>
   )
 }

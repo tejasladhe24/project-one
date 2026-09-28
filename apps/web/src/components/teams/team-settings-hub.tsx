@@ -41,13 +41,7 @@ type TeamSettingsHubProps = {
   templateCount: number
 }
 
-function SettingsRow({
-  item,
-  teamId,
-}: {
-  item: SettingsLink
-  teamId: string
-}) {
+function SettingsRow({ item, teamId }: { item: SettingsLink; teamId: string }) {
   const Icon = item.icon
   const content = (
     <>
@@ -99,13 +93,15 @@ export function TeamSettingsHub({
   const general: SettingsLink[] = [
     {
       title: "General",
-      description: "Name, identifier, timezone, estimates, and broader settings",
+      description:
+        "Name, identifier, timezone, estimates, and broader settings",
       icon: IconSettings,
       to: "/team/$teamId/settings/general",
     },
     {
       title: "Access and permissions",
-      description: "Manage team access and who in the team can take certain actions",
+      description:
+        "Manage team access and who in the team can take certain actions",
       icon: IconShield,
       disabled: true,
     },
@@ -176,7 +172,8 @@ export function TeamSettingsHub({
     },
     {
       title: "Workflows & automations",
-      description: "Manage issue automations, git workflows and other workflows",
+      description:
+        "Manage issue automations, git workflows and other workflows",
       icon: IconGitBranch,
       disabled: true,
     },

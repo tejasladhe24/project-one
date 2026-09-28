@@ -26,10 +26,7 @@ import {
 } from "@workspace/ui/components/popover"
 import { cn } from "@workspace/ui/lib/utils"
 import { toast } from "sonner"
-import {
-  MetaMenu,
-  MetaPillTrigger,
-} from "@/components/issue/meta-menu"
+import { MetaMenu, MetaPillTrigger } from "@/components/issue/meta-menu"
 import { PriorityIcon } from "@/components/issue/priority-icon"
 import type { ProjectDetail } from "@/components/project/project-shell"
 import { useServerMutation } from "@/hooks/use-server-mutation"
@@ -54,10 +51,7 @@ function OutlineMetaTrigger({
   ...props
 }: React.ComponentProps<"button">) {
   return (
-    <MetaPillTrigger
-      className={cn(outlineTriggerClass, className)}
-      {...props}
-    >
+    <MetaPillTrigger className={cn(outlineTriggerClass, className)} {...props}>
       {children}
     </MetaPillTrigger>
   )
@@ -127,7 +121,9 @@ function PropertyRow({
 }) {
   return (
     <div className="flex items-center gap-3 rounded-md px-1 py-1.5 hover:bg-muted/40">
-      <span className="w-20 shrink-0 text-xs text-muted-foreground">{label}</span>
+      <span className="w-20 shrink-0 text-xs text-muted-foreground">
+        {label}
+      </span>
       <div className="min-w-0 flex-1">{children}</div>
     </div>
   )
@@ -153,14 +149,14 @@ export function ProjectProperties({
   const dateDefaults = periodFormDefaults(project)
   const [startDate, setStartDate] = React.useState(dateDefaults.startDate)
   const [targetDate, setTargetDate] = React.useState(dateDefaults.targetDate)
-  const [memberIds, setMemberIds] = React.useState(
-    () => project.members.map((m) => m.userId)
+  const [memberIds, setMemberIds] = React.useState(() =>
+    project.members.map((m) => m.userId)
   )
-  const [teamIds, setTeamIds] = React.useState(
-    () => project.teams.map((t) => t.teamId)
+  const [teamIds, setTeamIds] = React.useState(() =>
+    project.teams.map((t) => t.teamId)
   )
-  const [labelIds, setLabelIds] = React.useState(
-    () => project.labels.map((l) => l.id)
+  const [labelIds, setLabelIds] = React.useState(() =>
+    project.labels.map((l) => l.id)
   )
 
   React.useEffect(() => {
@@ -345,7 +341,9 @@ export function ProjectProperties({
           trigger={
             <OutlineMetaTrigger disabled={busy} className="max-w-full">
               <PriorityIcon priority={project.priority} />
-              <span className="truncate">{priorityLabel(project.priority)}</span>
+              <span className="truncate">
+                {priorityLabel(project.priority)}
+              </span>
             </OutlineMetaTrigger>
           }
         >

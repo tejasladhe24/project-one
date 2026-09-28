@@ -18,10 +18,7 @@ import { priorityLabel } from "@/lib/issues/meta"
 import { recordProjectActivity } from "@/lib/projects/activity"
 import { formatProjectShortDate } from "@/lib/projects/dates"
 import { requireProjectInOrg } from "@/lib/server/access"
-import {
-  getOptionalOrgSession,
-  requireOrgSession,
-} from "@/lib/server/session"
+import { getOptionalOrgSession, requireOrgSession } from "@/lib/server/session"
 import { generateUUID } from "@/lib/utils"
 
 const leadUser = alias(user, "lead_user")
@@ -382,10 +379,7 @@ export const updateProject = createServerFn({ method: "POST" })
       message: string
     }[] = []
 
-    if (
-      data.name !== undefined &&
-      data.name.trim() !== before.name
-    ) {
+    if (data.name !== undefined && data.name.trim() !== before.name) {
       activityRows.push({
         type: "name-change",
         message: `${actorName} renamed the project to ${data.name.trim()}`,
@@ -442,10 +436,7 @@ export const updateProject = createServerFn({ method: "POST" })
       }
     }
 
-    if (
-      data.startDate !== undefined ||
-      data.targetDate !== undefined
-    ) {
+    if (data.startDate !== undefined || data.targetDate !== undefined) {
       const nextStart =
         data.startDate !== undefined
           ? data.startDate === null || data.startDate === ""
@@ -499,9 +490,7 @@ export const updateProject = createServerFn({ method: "POST" })
         .from(member)
         .where(eq(member.organizationId, organizationId))
       const allowed = new Set(orgMembers.map((m) => m.userId))
-      const nextIds = new Set(
-        data.memberIds.filter((id) => allowed.has(id))
-      )
+      const nextIds = new Set(data.memberIds.filter((id) => allowed.has(id)))
 
       const leadId = data.leadId !== undefined ? data.leadId : before.lead
       if (leadId && allowed.has(leadId)) nextIds.add(leadId)
@@ -551,9 +540,7 @@ export const updateProject = createServerFn({ method: "POST" })
         .from(team)
         .where(eq(team.organizationId, organizationId))
       const allowed = new Map(orgTeams.map((t) => [t.id, t]))
-      const nextIds = [
-        ...new Set(data.teamIds.filter((id) => allowed.has(id))),
-      ]
+      const nextIds = [...new Set(data.teamIds.filter((id) => allowed.has(id)))]
 
       if (
         !sameIdSet(

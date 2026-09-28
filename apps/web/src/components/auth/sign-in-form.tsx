@@ -192,7 +192,9 @@ export function SignInForm({
           Don&apos;t have an account?{" "}
           <Link
             to="/sign-up"
-            search={{ redirect: redirectTo === "/select-org" ? undefined : redirectTo }}
+            search={{
+              redirect: redirectTo === "/select-org" ? undefined : redirectTo,
+            }}
             className="text-foreground underline-offset-4 hover:underline"
           >
             Sign up

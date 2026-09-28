@@ -18,8 +18,8 @@ export const Route = createFileRoute(
 )({
   loader: async ({ params, context }) => {
     const team = context.team
-    const [ document] = await Promise.all([
-            getTeamDocument({
+    const [document] = await Promise.all([
+      getTeamDocument({
         data: { teamId: params.teamId, documentId: params.documentId },
       }),
     ])
@@ -48,10 +48,7 @@ function TeamDocumentPage() {
     setContent(document.content ?? "")
   }, [document.title, document.content])
 
-  async function persist(patch: {
-    title?: string
-    content?: string | null
-  }) {
+  async function persist(patch: { title?: string; content?: string | null }) {
     try {
       await mutate(
         () =>

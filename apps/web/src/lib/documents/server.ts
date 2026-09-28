@@ -4,10 +4,7 @@ import { alias } from "drizzle-orm/pg-core"
 import { z } from "zod"
 import { db } from "@/db"
 import { issue, project, team, teamDocument, user } from "@/db/schema"
-import {
-  requireProjectInOrg,
-  requireTeamInOrg,
-} from "@/lib/server/access"
+import { requireProjectInOrg, requireTeamInOrg } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"
 import { generateUUID } from "@/lib/utils"
 

@@ -18,10 +18,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { formatRelativeTime } from "@/components/team/team-documents-table"
 import { IssueCommentComposer } from "@/components/team/issue-comment-composer"
 import { useServerMutation } from "@/hooks/use-server-mutation"
-import {
-  createIssueComment,
-  deleteIssueComment,
-} from "@/lib/issues/comments"
+import { createIssueComment, deleteIssueComment } from "@/lib/issues/comments"
 import {
   getIssueTimeline,
   listIssueSubscribers,
@@ -200,12 +197,14 @@ function CommentBody({ body }: { body: string }) {
 
   if (lastIndex < body.length) {
     parts.push(
-      <React.Fragment key={`t-${key++}`}>{body.slice(lastIndex)}</React.Fragment>
+      <React.Fragment key={`t-${key++}`}>
+        {body.slice(lastIndex)}
+      </React.Fragment>
     )
   }
 
   return (
-    <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+    <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
       {parts}
     </p>
   )
@@ -366,7 +365,7 @@ function CommentItem({
             </div>
           </div>
           {depth === 0 || isOwn ? (
-            <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-hover/comment:opacity-100 group-focus-within/comment:opacity-100">
+            <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity group-focus-within/comment:opacity-100 group-hover/comment:opacity-100">
               {depth === 0 ? (
                 <Button
                   type="button"
@@ -552,9 +551,7 @@ export function IssueActivity({
                   className="size-6 ring-2 ring-background"
                   title={s.name}
                 >
-                  {s.image ? (
-                    <AvatarImage src={s.image} alt={s.name} />
-                  ) : null}
+                  {s.image ? <AvatarImage src={s.image} alt={s.name} /> : null}
                   <AvatarFallback className="text-[9px]">
                     {getInitials(s.name)}
                   </AvatarFallback>

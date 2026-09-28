@@ -16,10 +16,7 @@ import {
 import { recordIssueActivity, subscribeToIssue } from "@/lib/issues/activity"
 import { priorityLabel } from "@/lib/issues/meta"
 import { getCurrentCycleNumber } from "@/lib/cycles/dates"
-import {
-  getOptionalOrgSession,
-  requireOrgSession,
-} from "@/lib/server/session"
+import { getOptionalOrgSession, requireOrgSession } from "@/lib/server/session"
 import { listStatuses } from "@/lib/statuses"
 import { generateUUID } from "@/lib/utils"
 
@@ -79,9 +76,7 @@ export const listIssues = createServerFn({ method: "GET" })
         id: issue.id,
         number: issue.number,
         title: issue.title,
-        ...(includeDescription
-          ? { description: issue.description }
-          : {}),
+        ...(includeDescription ? { description: issue.description } : {}),
         priority: issue.priority,
         dueDate: issue.dueDate,
         estimatedHours: issue.estimatedHours,
@@ -219,10 +214,7 @@ export const getIssue = createServerFn({ method: "GET" })
       .leftJoin(issueStatus, eq(issue.statusId, issueStatus.id))
       .leftJoin(assignee, eq(issue.assigneeId, assignee.id))
       .where(
-        and(
-          eq(issue.id, data.issueId),
-          eq(team.organizationId, organizationId)
-        )
+        and(eq(issue.id, data.issueId), eq(team.organizationId, organizationId))
       )
       .limit(1)
 
@@ -284,10 +276,7 @@ export const createIssue = createServerFn({ method: "POST" })
         .select({ id: issueStatus.id })
         .from(issueStatus)
         .where(
-          and(
-            eq(issueStatus.id, statusId),
-            eq(issueStatus.teamId, data.teamId)
-          )
+          and(eq(issueStatus.id, statusId), eq(issueStatus.teamId, data.teamId))
         )
         .limit(1)
       if (!ownedStatus) throw new Error("Status not found")
@@ -687,10 +676,7 @@ export const updateIssue = createServerFn({ method: "POST" })
         })
       }
 
-      if (
-        data.projectId !== undefined &&
-        data.projectId !== before.projectId
-      ) {
+      if (data.projectId !== undefined && data.projectId !== before.projectId) {
         let nextName: string | null = null
         if (data.projectId) {
           const [p] = await tx

@@ -12,10 +12,7 @@ import {
   teamMember,
   user,
 } from "@/db/schema"
-import {
-  recordIssueActivity,
-  subscribeToIssue,
-} from "@/lib/issues/activity"
+import { recordIssueActivity, subscribeToIssue } from "@/lib/issues/activity"
 import { requireTeamIssueAccess } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"
 import { generateUUID } from "@/lib/utils"
@@ -42,10 +39,7 @@ export function formatUserMention(name: string, userId: string) {
   return `@[${name}](user:${userId})`
 }
 
-export function formatIssueMention(
-  label: string,
-  issueId: string
-) {
+export function formatIssueMention(label: string, issueId: string) {
   return `@[${label}](issue:${issueId})`
 }
 

@@ -1,8 +1,4 @@
-import {
-  createFileRoute,
-  redirect,
-  useRouter,
-} from "@tanstack/react-router"
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router"
 import { IssuesTable } from "@/components/issues/issues-table"
 import { getCurrentCycleNumber } from "@/lib/cycles/dates"
 import { listIssues, toIssueRows } from "@/lib/issues"
