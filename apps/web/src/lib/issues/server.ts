@@ -802,9 +802,7 @@ export const deleteIssue = createServerFn({ method: "POST" })
 
       const deleted = await tx
         .delete(issue)
-        .where(
-          and(eq(issue.id, data.issueId), eq(issue.teamId, data.teamId))
-        )
+        .where(and(eq(issue.id, data.issueId), eq(issue.teamId, data.teamId)))
         .returning({ id: issue.id })
 
       if (deleted.length === 0) throw new Error("Issue not found")

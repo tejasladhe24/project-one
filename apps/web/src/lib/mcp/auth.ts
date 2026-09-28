@@ -36,7 +36,9 @@ export async function requireMcpAuth(
 ): Promise<OrgSessionContext> {
   const key = extractApiKey(request)
   if (!key) {
-    throw new McpAuthError("Missing API key (x-api-key or Authorization: Bearer)")
+    throw new McpAuthError(
+      "Missing API key (x-api-key or Authorization: Bearer)"
+    )
   }
 
   const verified = await auth.api.verifyApiKey({

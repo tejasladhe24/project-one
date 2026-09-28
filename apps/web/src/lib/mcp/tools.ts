@@ -74,10 +74,7 @@ import {
   declineTeamJoinRequest,
 } from "@/lib/teams/server"
 import { updateTeamCycleSettings, listSidebarTeams } from "@/lib/cycles/server"
-import {
-  listOrganizations,
-  listMembers,
-} from "@/lib/auth/session"
+import { listOrganizations, listMembers } from "@/lib/auth/session"
 import { requireOrgMember } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"
 
@@ -210,7 +207,10 @@ export function registerMcpTools(server: McpServer) {
         const { headers, organizationId } = await requireOrgSession()
         const identifier =
           args.identifier?.trim().toUpperCase() ||
-          args.name.replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 4) ||
+          args.name
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .toUpperCase()
+            .slice(0, 4) ||
           "TEAM"
         return auth.api.createTeam({
           headers,
@@ -369,8 +369,7 @@ export function registerMcpTools(server: McpServer) {
       description: "Get a project by id.",
       inputSchema: { projectId: z.string().min(1) },
     },
-    async ({ projectId }) =>
-      runTool(() => getProject({ data: { projectId } }))
+    async ({ projectId }) => runTool(() => getProject({ data: { projectId } }))
   )
 
   server.registerTool(
@@ -402,7 +401,8 @@ export function registerMcpTools(server: McpServer) {
   server.registerTool(
     "project_update",
     {
-      description: "Update a project (name, status, members, teams, labels, …).",
+      description:
+        "Update a project (name, status, members, teams, labels, …).",
       inputSchema: {
         projectId: z.string().min(1),
         name: z.string().min(1).optional(),
@@ -803,8 +803,7 @@ export function registerMcpTools(server: McpServer) {
       description: "List documents for a team.",
       inputSchema: { teamId: z.string().min(1) },
     },
-    async ({ teamId }) =>
-      runTool(() => listTeamDocuments({ data: { teamId } }))
+    async ({ teamId }) => runTool(() => listTeamDocuments({ data: { teamId } }))
   )
 
   server.registerTool(
@@ -875,8 +874,7 @@ export function registerMcpTools(server: McpServer) {
       description: "Mark an inbox notification as read.",
       inputSchema: { id: z.string().min(1) },
     },
-    async ({ id }) =>
-      runTool(() => markInboxNotificationRead({ data: { id } }))
+    async ({ id }) => runTool(() => markInboxNotificationRead({ data: { id } }))
   )
 
   server.registerTool(
@@ -895,7 +893,6 @@ export function registerMcpTools(server: McpServer) {
       description: "Delete an inbox notification.",
       inputSchema: { id: z.string().min(1) },
     },
-    async ({ id }) =>
-      runTool(() => deleteInboxNotification({ data: { id } }))
+    async ({ id }) => runTool(() => deleteInboxNotification({ data: { id } }))
   )
 }

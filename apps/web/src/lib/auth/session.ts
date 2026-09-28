@@ -63,8 +63,7 @@ export const listUserTeams = createServerFn({ method: "GET" }).handler(
   async () => {
     const headers = getAuthHeaders()
     const stored = orgSessionStore.getStore()
-    const session =
-      stored?.session ?? (await auth.api.getSession({ headers }))
+    const session = stored?.session ?? (await auth.api.getSession({ headers }))
     const organizationId =
       stored?.organizationId ?? session?.session.activeOrganizationId
     if (!organizationId) return []
