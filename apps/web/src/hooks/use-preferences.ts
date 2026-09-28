@@ -41,7 +41,10 @@ export function usePreferences() {
   )
 
   const updatePreference = React.useCallback(
-    <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => {
+    <TKey extends keyof UserPreferences>(
+      key: TKey,
+      value: UserPreferences[TKey]
+    ) => {
       setPreferences((current) => ({ ...current, [key]: value }))
     },
     [setPreferences]
