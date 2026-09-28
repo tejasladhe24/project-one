@@ -9,7 +9,11 @@ import { db, redis } from "@/db"
 import * as schema from "@/db/schema"
 import { generateUUID } from "@/lib/utils"
 import { emailClient } from "@/email"
-import { ForgotPasswordEmail, OrganizationInvitationEmail, VerifyEmail } from "@/email/templates"
+import {
+  ForgotPasswordEmail,
+  OrganizationInvitationEmail,
+  VerifyEmail,
+} from "@/email/templates"
 import { isProduction } from "@/lib/constants"
 
 function teamMembershipKey(teamId: string, userId: string) {
@@ -100,9 +104,7 @@ export const auth = betterAuth({
     "https://project-one-tejas.vercel.app",
     "https://project-one-git-dev-tejas-ladhes-projects.vercel.app",
     "https://*.vercel.app",
-  ].filter(
-    (v, i, arr): v is string => Boolean(v) && arr.indexOf(v) === i
-  ),
+  ].filter((v, i, arr): v is string => Boolean(v) && arr.indexOf(v) === i),
   advanced: {
     database: {
       generateId: (_options) => generateUUID(),
