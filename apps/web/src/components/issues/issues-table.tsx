@@ -558,9 +558,7 @@ export function IssuesTable({
           })
         }
       }
-      return [...groups.values()].sort((a, b) =>
-        a.label.localeCompare(b.label)
-      )
+      return [...groups.values()].sort((a, b) => a.label.localeCompare(b.label))
     }
 
     if (groupBy === "cycle") {
@@ -592,10 +590,7 @@ export function IssuesTable({
         })
       }
 
-      if (
-        currentCycleNumber != null &&
-        !groups.has(currentCycleNumber)
-      ) {
+      if (currentCycleNumber != null && !groups.has(currentCycleNumber)) {
         const sample = issues[0]
         const settings = sample
           ? {
@@ -645,7 +640,11 @@ export function IssuesTable({
 
   function handleRowUpdated(issueId: string, next: IssueMetadataValue) {
     setIssues((prev) => {
-      if (mode === "mine" && currentUserId && next.assigneeId !== currentUserId) {
+      if (
+        mode === "mine" &&
+        currentUserId &&
+        next.assigneeId !== currentUserId
+      ) {
         return prev.filter((issue) => issue.id !== issueId)
       }
       if (groupBy === "cycle" && next.cycleNumber == null) {
@@ -670,8 +669,7 @@ export function IssuesTable({
     onUpdated?.()
   }
 
-  const title =
-    titleProp ?? (mode === "mine" ? "My Issues" : "Issues")
+  const title = titleProp ?? (mode === "mine" ? "My Issues" : "Issues")
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -822,9 +820,7 @@ export function IssuesTable({
                                 }
                               : undefined,
                           }}
-                          onUpdated={(next) =>
-                            handleRowUpdated(issue.id, next)
-                          }
+                          onUpdated={(next) => handleRowUpdated(issue.id, next)}
                           onEstimateUpdated={(estimatedHours) =>
                             handleEstimateUpdated(issue.id, estimatedHours)
                           }

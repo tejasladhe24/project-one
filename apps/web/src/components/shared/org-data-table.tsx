@@ -65,9 +65,7 @@ export function OrgTableToolbar({
       </div>
       <div className="flex items-center gap-2">
         <DropdownMenu>
-          <DropdownMenuTrigger
-            render={<Button variant="outline" size="sm" />}
-          >
+          <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
             <span className="hidden lg:inline">Customize Columns</span>
             <span className="lg:hidden">Columns</span>
             <IconChevronDown data-icon="inline-end" />

@@ -2,10 +2,7 @@ import { and, eq } from "drizzle-orm"
 import { db } from "@/db"
 import { issue, member, project, team, teamMember } from "@/db/schema"
 
-export async function requireTeamInOrg(
-  teamId: string,
-  organizationId: string
-) {
+export async function requireTeamInOrg(teamId: string, organizationId: string) {
   const [owned] = await db
     .select({ id: team.id })
     .from(team)
@@ -30,10 +27,7 @@ export async function requireProjectInOrg(
   return owned
 }
 
-export async function requireOrgMember(
-  userId: string,
-  organizationId: string
-) {
+export async function requireOrgMember(userId: string, organizationId: string) {
   const [row] = await db
     .select({ id: member.id, userId: member.userId })
     .from(member)
@@ -69,9 +63,7 @@ export async function requireTeamIssueAccess(
     db
       .select({ id: teamMember.id })
       .from(teamMember)
-      .where(
-        and(eq(teamMember.teamId, teamId), eq(teamMember.userId, userId))
-      )
+      .where(and(eq(teamMember.teamId, teamId), eq(teamMember.userId, userId)))
       .limit(1)
       .then((rows) => rows[0]),
   ])

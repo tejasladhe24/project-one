@@ -29,10 +29,7 @@ import {
   estimateTypeMenuLabel,
   type EstimateType,
 } from "@/lib/estimates"
-import {
-  updateTeamEstimateSettings,
-  updateTeamSettings,
-} from "@/lib/teams"
+import { updateTeamEstimateSettings, updateTeamSettings } from "@/lib/teams"
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -66,8 +63,7 @@ export function TeamGeneralSettings({
   countUnestimatedIssues,
 }: TeamGeneralSettingsProps) {
   const { mutate } = useServerMutation()
-  const { mutate: mutateEstimates, pending: estimateBusy } =
-    useServerMutation()
+  const { mutate: mutateEstimates, pending: estimateBusy } = useServerMutation()
   const [formError, setFormError] = React.useState<string | null>(null)
   const [saved, setSaved] = React.useState(false)
   const [estimateError, setEstimateError] = React.useState<string | null>(null)
@@ -253,9 +249,7 @@ export function TeamGeneralSettings({
             <AlertDescription>{formError}</AlertDescription>
           </Alert>
         ) : null}
-        {saved ? (
-          <p className="text-sm text-muted-foreground">Saved</p>
-        ) : null}
+        {saved ? <p className="text-sm text-muted-foreground">Saved</p> : null}
 
         <form.Subscribe selector={(s) => s.isSubmitting}>
           {(isSubmitting) => (

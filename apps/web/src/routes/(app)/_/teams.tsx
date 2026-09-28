@@ -1,8 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
-import {
-  TeamsTable,
-  type TeamRow,
-} from "@/components/teams/teams-table"
+import { TeamsTable, type TeamRow } from "@/components/teams/teams-table"
 import { listOrgTeamsWithMembership } from "@/lib/teams"
 
 function toTeamRows(

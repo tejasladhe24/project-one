@@ -198,7 +198,9 @@ export function SignUpForm({
                   field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid || undefined}>
-                    <FieldLabel htmlFor={field.name}>Confirm password</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Confirm password
+                    </FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
@@ -265,7 +267,9 @@ export function SignUpForm({
           Already have an account?{" "}
           <Link
             to="/sign-in"
-            search={{ redirect: redirectTo === "/select-org" ? undefined : redirectTo }}
+            search={{
+              redirect: redirectTo === "/select-org" ? undefined : redirectTo,
+            }}
             className="text-foreground underline-offset-4 hover:underline"
           >
             Sign in

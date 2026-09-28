@@ -1,8 +1,4 @@
-import {
-  createFileRoute,
-  getRouteApi,
-  useRouter,
-} from "@tanstack/react-router"
+import { createFileRoute, getRouteApi, useRouter } from "@tanstack/react-router"
 import { IssuesTable } from "@/components/issues/issues-table"
 import { ProjectSplitLayout } from "@/components/project/project-shell"
 import { listIssues, toIssueRows } from "@/lib/issues"

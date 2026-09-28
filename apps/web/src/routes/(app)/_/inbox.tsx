@@ -35,7 +35,5 @@ export const Route = createFileRoute("/(app)/_/inbox")({
 function InboxPage() {
   const { notifications, selectedId } = Route.useLoaderData()
 
-  return (
-    <InboxView notifications={notifications} selectedId={selectedId} />
-  )
+  return <InboxView notifications={notifications} selectedId={selectedId} />
 }

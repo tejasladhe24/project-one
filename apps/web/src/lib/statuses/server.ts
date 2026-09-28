@@ -96,8 +96,7 @@ const ENGINEERING_STATUS_SEEDS: StatusSeed[] = [
   {
     name: "Blocked",
     category: "started",
-    description:
-      "When a ticket cannot continue due to external circumstances",
+    description: "When a ticket cannot continue due to external circumstances",
     sortOrder: 1,
   },
   {
@@ -357,10 +356,7 @@ export const createStatus = createServerFn({ method: "POST" })
         .select({ id: issueStatus.id })
         .from(issueStatus)
         .where(
-          and(
-            eq(issueStatus.teamId, data.teamId),
-            eq(issueStatus.name, name)
-          )
+          and(eq(issueStatus.teamId, data.teamId), eq(issueStatus.name, name))
         )
         .limit(1)
       if (dup) throw new Error("A status with that name already exists")
@@ -446,10 +442,7 @@ export const updateStatus = createServerFn({ method: "POST" })
           .select({ id: issueStatus.id })
           .from(issueStatus)
           .where(
-            and(
-              eq(issueStatus.teamId, data.teamId),
-              eq(issueStatus.name, name)
-            )
+            and(eq(issueStatus.teamId, data.teamId), eq(issueStatus.name, name))
           )
           .limit(1)
         if (dup && dup.id !== data.id) {

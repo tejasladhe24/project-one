@@ -37,7 +37,9 @@ export const getLabel = createServerFn({ method: "GET" })
         updatedAt: label.updatedAt,
       })
       .from(label)
-      .where(and(eq(label.id, data.id), eq(label.organizationId, organizationId)))
+      .where(
+        and(eq(label.id, data.id), eq(label.organizationId, organizationId))
+      )
       .limit(1)
 
     if (!row) throw new Error("Label not found")
@@ -59,7 +61,9 @@ export const createLabel = createServerFn({ method: "POST" })
     const [existing] = await db
       .select({ id: label.id })
       .from(label)
-      .where(and(eq(label.organizationId, organizationId), eq(label.name, name)))
+      .where(
+        and(eq(label.organizationId, organizationId), eq(label.name, name))
+      )
       .limit(1)
     if (existing) throw new Error("A label with that name already exists")
 
@@ -91,14 +95,18 @@ export const updateLabel = createServerFn({ method: "POST" })
     const [owned] = await db
       .select({ id: label.id })
       .from(label)
-      .where(and(eq(label.id, data.id), eq(label.organizationId, organizationId)))
+      .where(
+        and(eq(label.id, data.id), eq(label.organizationId, organizationId))
+      )
       .limit(1)
     if (!owned) throw new Error("Label not found")
 
     const [dup] = await db
       .select({ id: label.id })
       .from(label)
-      .where(and(eq(label.organizationId, organizationId), eq(label.name, name)))
+      .where(
+        and(eq(label.organizationId, organizationId), eq(label.name, name))
+      )
       .limit(1)
     if (dup && dup.id !== data.id) {
       throw new Error("A label with that name already exists")
@@ -107,7 +115,9 @@ export const updateLabel = createServerFn({ method: "POST" })
     const [updated] = await db
       .update(label)
       .set({ name })
-      .where(and(eq(label.id, data.id), eq(label.organizationId, organizationId)))
+      .where(
+        and(eq(label.id, data.id), eq(label.organizationId, organizationId))
+      )
       .returning()
 
     return updated
@@ -121,12 +131,16 @@ export const deleteLabel = createServerFn({ method: "POST" })
     const [owned] = await db
       .select({ id: label.id })
       .from(label)
-      .where(and(eq(label.id, data.id), eq(label.organizationId, organizationId)))
+      .where(
+        and(eq(label.id, data.id), eq(label.organizationId, organizationId))
+      )
       .limit(1)
     if (!owned) throw new Error("Label not found")
 
     await db
       .delete(label)
-      .where(and(eq(label.id, data.id), eq(label.organizationId, organizationId)))
+      .where(
+        and(eq(label.id, data.id), eq(label.organizationId, organizationId))
+      )
     return { ok: true as const }
   })

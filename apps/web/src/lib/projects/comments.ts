@@ -267,9 +267,7 @@ export const deleteProjectComment = createServerFn({ method: "POST" })
       throw new Error("You can only delete your own comments")
     }
 
-    await db
-      .delete(projectComment)
-      .where(eq(projectComment.id, data.commentId))
+    await db.delete(projectComment).where(eq(projectComment.id, data.commentId))
     return { ok: true as const }
   })
 

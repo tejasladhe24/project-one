@@ -472,12 +472,7 @@ export const acceptTeamJoinRequest = createServerFn({ method: "POST" })
           type: inboxNotification.type,
         })
         .from(inboxNotification)
-        .where(
-          and(
-            eq(inboxNotification.id, data.notificationId),
-            pendingWhere
-          )
-        )
+        .where(and(eq(inboxNotification.id, data.notificationId), pendingWhere))
         .limit(1)
       if (!notification) {
         throw new Error("Join request not found")
@@ -551,7 +546,6 @@ export const declineTeamJoinRequest = createServerFn({ method: "POST" })
   })
 
 export const listTeamMembersDetailed = createServerFn({ method: "GET" })
-
   .validator(z.object({ teamId: z.string().min(1) }))
   .handler(async ({ data }) => {
     const { organizationId } = await requireOrgSession()

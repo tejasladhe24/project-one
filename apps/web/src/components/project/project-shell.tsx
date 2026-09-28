@@ -162,12 +162,8 @@ export function ProjectPropertyPills({
 
   const periodUnset = isProjectPeriodUnset(project.startDate)
   const suggestion = suggestedProjectPeriod()
-  const pillStart = periodUnset
-    ? suggestion.startDate
-    : project.startDate
-  const pillTarget = periodUnset
-    ? suggestion.targetDate
-    : project.targetDate
+  const pillStart = periodUnset ? suggestion.startDate : project.startDate
+  const pillTarget = periodUnset ? suggestion.targetDate : project.targetDate
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
@@ -315,7 +311,9 @@ export function ProjectPropertyPills({
           render={
             <MetaPillTrigger disabled={busy}>
               <IconCalendar className="size-3.5 text-muted-foreground" />
-              <span className={periodUnset ? "text-muted-foreground" : undefined}>
+              <span
+                className={periodUnset ? "text-muted-foreground" : undefined}
+              >
                 {formatProjectShortDate(pillStart)} →{" "}
                 {formatProjectShortDate(pillTarget)}
               </span>
@@ -404,7 +402,9 @@ export function ProjectHero({ project }: { project: ProjectDetail }) {
         <IconBox className="size-5" />
       </div>
       <div className="min-w-0">
-        <h1 className="text-2xl font-semibold tracking-tight">{project.name}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {project.name}
+        </h1>
       </div>
     </div>
   )
@@ -437,7 +437,7 @@ export function ProjectSplitLayout({
   return (
     <ResizablePanelGroup
       orientation="horizontal"
-      className="min-h-0 h-full w-full"
+      className="h-full min-h-0 w-full"
     >
       <ResizablePanel defaultSize="80" minSize="45" className="min-w-0">
         <div className="h-full min-h-0 overflow-y-auto">{children}</div>

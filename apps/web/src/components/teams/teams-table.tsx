@@ -157,10 +157,7 @@ function MemberTeamActions({ team, onLeave }: MemberTeamActionsProps) {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => onLeave(team)}
-          >
+          <DropdownMenuItem variant="destructive" onClick={() => onLeave(team)}>
             Leave
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -179,13 +176,10 @@ function JoinRequestButton({ team, onRequested }: JoinRequestButtonProps) {
 
   async function handleRequest() {
     try {
-      await mutate(
-        () => requestTeamJoin({ data: { teamId: team.id } }),
-        {
-          successMessage: "Join request sent to owners and admins",
-          errorMessage: "Could not send join request",
-        }
-      )
+      await mutate(() => requestTeamJoin({ data: { teamId: team.id } }), {
+        successMessage: "Join request sent to owners and admins",
+        errorMessage: "Could not send join request",
+      })
       onRequested?.()
     } catch {
       // toast handled by useServerMutation
@@ -317,10 +311,7 @@ export function TeamsTable({ data, onCreated }: TeamsTableProps) {
                 }}
               />
             ) : (
-              <JoinRequestButton
-                team={row.original}
-                onRequested={onCreated}
-              />
+              <JoinRequestButton team={row.original} onRequested={onCreated} />
             ),
         }),
       ]),
@@ -504,7 +495,10 @@ export function TeamsTable({ data, onCreated }: TeamsTableProps) {
           </div>
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="teams-rows-per-page" className="text-sm font-medium">
+              <Label
+                htmlFor="teams-rows-per-page"
+                className="text-sm font-medium"
+              >
                 Rows per page
               </Label>
               <Select

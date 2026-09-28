@@ -37,8 +37,7 @@ export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
   const { mutate, pending } = useServerMutation()
   const [switchingId, setSwitchingId] = React.useState<string | null>(null)
 
-  const activeOrg =
-    orgs.find((org) => org.isActive) ?? orgs[0] ?? null
+  const activeOrg = orgs.find((org) => org.isActive) ?? orgs[0] ?? null
 
   async function switchOrg(org: OrgSwitcherItem) {
     if (org.id === activeOrg?.id || switchingId || pending) return

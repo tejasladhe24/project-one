@@ -16,46 +16,45 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/triage")({
   loaderDeps: ({ search }) => ({ issueId: search.issue }),
   loader: async ({ params, deps, context }) => {
     const team = context.team
-    const [issues, statuses, members, projects, labels] =
-      await Promise.all([
-        listIssues({
-          data: {
-            teamId: params.teamId,
-            statusCategory: "triage",
-            includeDescription: true,
-          },
-        }),
-        listStatuses({ data: { teamId: params.teamId } }),
-        listTeamMembersDetailed({ data: { teamId: params.teamId } }),
-        listProjectOptions(),
-        listLabels(),
-      ])
+    const [issues, statuses, members, projects, labels] = await Promise.all([
+      listIssues({
+        data: {
+          teamId: params.teamId,
+          statusCategory: "triage",
+          includeDescription: true,
+        },
+      }),
+      listStatuses({ data: { teamId: params.teamId } }),
+      listTeamMembersDetailed({ data: { teamId: params.teamId } }),
+      listProjectOptions(),
+      listLabels(),
+    ])
 
     const triageIssues = issues.map((issue) => ({
-        id: issue.id,
-        number: issue.number,
-        title: issue.title,
-        description: issue.description,
-        priority: issue.priority,
-        createdAt: issue.createdAt,
-        updatedAt: issue.updatedAt,
-        teamIdentifier: issue.teamIdentifier,
-        statusId: issue.statusId,
-        statusName: issue.statusName,
-        statusCategory: issue.statusCategory,
-        statusSortOrder: issue.statusSortOrder,
-        projectId: issue.projectId,
-        projectName: issue.projectName,
-        assigneeId: issue.assigneeId,
-        assigneeName: issue.assigneeName,
-        assigneeImage: issue.assigneeImage,
-        labels: issue.labels,
-        cycleNumber: issue.cycleNumber,
-        cyclesEnabled: issue.cyclesEnabled,
-        cycleDurationWeeks: issue.cycleDurationWeeks,
-        cycleStartDay: issue.cycleStartDay,
-        cyclesOrigin: issue.cyclesOrigin,
-      }))
+      id: issue.id,
+      number: issue.number,
+      title: issue.title,
+      description: issue.description,
+      priority: issue.priority,
+      createdAt: issue.createdAt,
+      updatedAt: issue.updatedAt,
+      teamIdentifier: issue.teamIdentifier,
+      statusId: issue.statusId,
+      statusName: issue.statusName,
+      statusCategory: issue.statusCategory,
+      statusSortOrder: issue.statusSortOrder,
+      projectId: issue.projectId,
+      projectName: issue.projectName,
+      assigneeId: issue.assigneeId,
+      assigneeName: issue.assigneeName,
+      assigneeImage: issue.assigneeImage,
+      labels: issue.labels,
+      cycleNumber: issue.cycleNumber,
+      cyclesEnabled: issue.cyclesEnabled,
+      cycleDurationWeeks: issue.cycleDurationWeeks,
+      cycleStartDay: issue.cycleStartDay,
+      cyclesOrigin: issue.cyclesOrigin,
+    }))
 
     const selectedId =
       deps.issueId && triageIssues.some((i) => i.id === deps.issueId)

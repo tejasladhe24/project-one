@@ -54,7 +54,9 @@ type IssueViewProps = {
   projects?: MetadataProject[]
   labels?: MetadataLabel[]
   className?: string
-  onUpdated?: (next: IssueMetadataValue & { description?: string | null }) => void
+  onUpdated?: (
+    next: IssueMetadataValue & { description?: string | null }
+  ) => void
 }
 
 export function IssueView({
@@ -76,11 +78,13 @@ export function IssueView({
 
   const needsOptions =
     !statusesProp || !membersProp || !projectsProp || !labelsProp
-  const { byTeam, projects: loadedProjects, labels: loadedLabels } =
-    useIssueMetadataOptions(needsOptions ? [issue.teamId] : [])
+  const {
+    byTeam,
+    projects: loadedProjects,
+    labels: loadedLabels,
+  } = useIssueMetadataOptions(needsOptions ? [issue.teamId] : [])
 
-  const statuses =
-    statusesProp ?? byTeam[issue.teamId]?.statuses ?? []
+  const statuses = statusesProp ?? byTeam[issue.teamId]?.statuses ?? []
   const members = membersProp ?? byTeam[issue.teamId]?.members ?? []
   const projects = projectsProp ?? loadedProjects
   const labels = labelsProp ?? loadedLabels
@@ -159,7 +163,9 @@ export function IssueView({
                 {formatIssueKey(issue.teamIdentifier, issue.number)}
               </span>
               {issue.teamName ? (
-                <span className="text-muted-foreground">· {issue.teamName}</span>
+                <span className="text-muted-foreground">
+                  · {issue.teamName}
+                </span>
               ) : null}
             </div>
             <h2 className="mt-1 text-xl font-semibold tracking-tight">

@@ -97,8 +97,8 @@ export function TeamCyclesSettings({
         <h1 className="text-2xl font-semibold tracking-tight">Cycles</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Cycles create rhythm and focus with short, time-boxed planning windows
-          for {teamName}. Issues that aren&apos;t finished can stay attached to a
-          past cycle or be moved into the current one.
+          for {teamName}. Issues that aren&apos;t finished can stay attached to
+          a past cycle or be moved into the current one.
         </p>
       </div>
 
