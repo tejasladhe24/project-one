@@ -27,6 +27,8 @@ import { Route as appIssueIssueIdRouteImport } from './routes/(app)/_/issue/$iss
 import { Route as appProjectIdRouteImport } from './routes/(app)/_/project/$id'
 import { Route as appSettingsIndexRouteImport } from './routes/(app)/_/settings/index'
 import { Route as appSettingsMcpRouteImport } from './routes/(app)/_/settings/mcp'
+import { Route as appSettingsPreferencesRouteImport } from './routes/(app)/_/settings/preferences'
+import { Route as appSettingsProfileRouteImport } from './routes/(app)/_/settings/profile'
 import { Route as appTeamTeamIdRouteImport } from './routes/(app)/_/team/$teamId'
 import { Route as authAcceptInvitationInvitationIdRouteImport } from './routes/(auth)/_/accept-invitation/$invitationId'
 import { Route as appProjectIdIndexRouteImport } from './routes/(app)/_/project/$id/index'
@@ -134,6 +136,16 @@ const appSettingsIndexRoute = appSettingsIndexRouteImport.update({
 const appSettingsMcpRoute = appSettingsMcpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => appSettingsRoute,
+} as any)
+const appSettingsPreferencesRoute = appSettingsPreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => appSettingsRoute,
+} as any)
+const appSettingsProfileRoute = appSettingsProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => appSettingsRoute,
 } as any)
 const appTeamTeamIdRoute = appTeamTeamIdRouteImport.update({
@@ -263,6 +275,8 @@ export interface FileRoutesByFullPath {
   '/issue/$issueId': typeof appIssueIssueIdRoute
   '/project/$id': typeof appProjectIdRouteWithChildren
   '/settings/mcp': typeof appSettingsMcpRoute
+  '/settings/preferences': typeof appSettingsPreferencesRoute
+  '/settings/profile': typeof appSettingsProfileRoute
   '/team/$teamId': typeof appTeamTeamIdRouteWithChildren
   '/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
   '/settings/': typeof appSettingsIndexRoute
@@ -299,6 +313,8 @@ export interface FileRoutesByTo {
   '/': typeof appIndexRoute
   '/issue/$issueId': typeof appIssueIssueIdRoute
   '/settings/mcp': typeof appSettingsMcpRoute
+  '/settings/preferences': typeof appSettingsPreferencesRoute
+  '/settings/profile': typeof appSettingsProfileRoute
   '/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
   '/settings': typeof appSettingsIndexRoute
   '/project/$id/activity': typeof appProjectIdActivityRoute
@@ -337,6 +353,8 @@ export interface FileRoutesById {
   '/(app)/_/issue/$issueId': typeof appIssueIssueIdRoute
   '/(app)/_/project/$id': typeof appProjectIdRouteWithChildren
   '/(app)/_/settings/mcp': typeof appSettingsMcpRoute
+  '/(app)/_/settings/preferences': typeof appSettingsPreferencesRoute
+  '/(app)/_/settings/profile': typeof appSettingsProfileRoute
   '/(app)/_/team/$teamId': typeof appTeamTeamIdRouteWithChildren
   '/(auth)/_/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
   '/(app)/_/settings/': typeof appSettingsIndexRoute
@@ -377,6 +395,8 @@ export interface FileRouteTypes {
     | '/issue/$issueId'
     | '/project/$id'
     | '/settings/mcp'
+    | '/settings/preferences'
+    | '/settings/profile'
     | '/team/$teamId'
     | '/accept-invitation/$invitationId'
     | '/settings/'
@@ -413,6 +433,8 @@ export interface FileRouteTypes {
     | '/'
     | '/issue/$issueId'
     | '/settings/mcp'
+    | '/settings/preferences'
+    | '/settings/profile'
     | '/accept-invitation/$invitationId'
     | '/settings'
     | '/project/$id/activity'
@@ -450,6 +472,8 @@ export interface FileRouteTypes {
     | '/(app)/_/issue/$issueId'
     | '/(app)/_/project/$id'
     | '/(app)/_/settings/mcp'
+    | '/(app)/_/settings/preferences'
+    | '/(app)/_/settings/profile'
     | '/(app)/_/team/$teamId'
     | '/(auth)/_/accept-invitation/$invitationId'
     | '/(app)/_/settings/'
@@ -608,6 +632,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appSettingsMcpRouteImport
       parentRoute: typeof appSettingsRoute
     }
+    '/(app)/_/settings/preferences': {
+      id: '/(app)/_/settings/preferences'
+      path: '/preferences'
+      fullPath: '/settings/preferences'
+      preLoaderRoute: typeof appSettingsPreferencesRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
+    '/(app)/_/settings/profile': {
+      id: '/(app)/_/settings/profile'
+      path: '/profile'
+      fullPath: '/settings/profile'
+      preLoaderRoute: typeof appSettingsProfileRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
     '/(app)/_/team/$teamId': {
       id: '/(app)/_/team/$teamId'
       path: '/team/$teamId'
@@ -753,11 +791,15 @@ declare module '@tanstack/react-router' {
 
 interface appSettingsRouteChildren {
   appSettingsMcpRoute: typeof appSettingsMcpRoute
+  appSettingsPreferencesRoute: typeof appSettingsPreferencesRoute
+  appSettingsProfileRoute: typeof appSettingsProfileRoute
   appSettingsIndexRoute: typeof appSettingsIndexRoute
 }
 
 const appSettingsRouteChildren: appSettingsRouteChildren = {
   appSettingsMcpRoute: appSettingsMcpRoute,
+  appSettingsPreferencesRoute: appSettingsPreferencesRoute,
+  appSettingsProfileRoute: appSettingsProfileRoute,
   appSettingsIndexRoute: appSettingsIndexRoute,
 }
 

@@ -21,6 +21,7 @@ import {
 } from "@/lib/issues/comments"
 import { listProjectCommentMentionOptions } from "@/lib/projects/comments"
 import { getInitials, statusDotClass } from "@/lib/issues/meta"
+import { usePreferences } from "@/hooks/use-preferences"
 
 type MentionUser = {
   userId: string
@@ -203,6 +204,8 @@ export function IssueCommentComposer({
   onCancel,
   className,
 }: IssueCommentComposerProps) {
+  const { preferences } = usePreferences()
+  const submitOnEnter = preferences.commentSubmitKey === "enter"
   const [hasContent, setHasContent] = React.useState(false)
   const [submitting, setSubmitting] = React.useState(false)
   const [mention, setMention] = React.useState<MentionState | null>(null)
@@ -350,17 +353,24 @@ export function IssueCommentComposer({
       triggerRangeRef.current = null
       return
     }
-    if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
-      event.preventDefault()
-      void handleSubmit()
-      return
-    }
-    // Prevent Enter from creating awkward nested divs; use soft break.
-    if (
+
+    const isModEnter = (event.metaKey || event.ctrlKey) && event.key === "Enter"
+    const isPlainEnter =
       event.key === "Enter" &&
       !event.shiftKey &&
       !event.metaKey &&
       !event.ctrlKey
+
+    if (submitOnEnter ? isPlainEnter || isModEnter : isModEnter) {
+      event.preventDefault()
+      void handleSubmit()
+      return
+    }
+
+    // Soft line break: Shift+Enter always; plain Enter when submit is ⌘↵.
+    if (
+      event.key === "Enter" &&
+      (event.shiftKey || (!submitOnEnter && isPlainEnter))
     ) {
       event.preventDefault()
       document.execCommand("insertLineBreak")
@@ -484,7 +494,7 @@ export function IssueCommentComposer({
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">
-          @ to mention · ⌘↵ to send
+          @ to mention · {submitOnEnter ? "Enter" : "⌘↵"} to send
         </p>
         <div className="flex items-center gap-2">
           {onCancel ? (
