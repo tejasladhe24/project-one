@@ -1,6 +1,7 @@
 import { env } from "@/env"
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "@better-auth/drizzle-adapter"
+import { apiKey } from "@better-auth/api-key"
 import { organization } from "better-auth/plugins/organization"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
 import { createHash } from "node:crypto"
@@ -267,6 +268,17 @@ export const auth = betterAuth({
             inviteLink,
           }),
         })
+      },
+    }),
+    apiKey({
+      enableMetadata: true,
+      // Lets getSession() work when x-api-key is present (e.g. MCP clients).
+      enableSessionForAPIKeys: true,
+      defaultPrefix: "po_",
+      rateLimit: {
+        enabled: true,
+        timeWindow: 1000 * 60 * 60 * 24,
+        maxRequests: 10_000,
       },
     }),
     tanstackStartCookies(),

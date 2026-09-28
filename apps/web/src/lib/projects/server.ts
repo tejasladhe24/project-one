@@ -769,3 +769,23 @@ export const listOrgTeamOptions = createServerFn({ method: "GET" }).handler(
       .orderBy(asc(team.name))
   }
 )
+
+export const deleteProject = createServerFn({ method: "POST" })
+  .validator(z.object({ projectId: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    const { organizationId } = await requireOrgSession()
+    await requireProjectInOrg(data.projectId, organizationId)
+
+    const deleted = await db
+      .delete(project)
+      .where(
+        and(
+          eq(project.id, data.projectId),
+          eq(project.organizationId, organizationId)
+        )
+      )
+      .returning({ id: project.id })
+
+    if (deleted.length === 0) throw new Error("Project not found")
+    return { ok: true as const, projectId: data.projectId }
+  })

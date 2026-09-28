@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { and, asc, eq, inArray, isNotNull, max } from "drizzle-orm"
+import { and, asc, eq, inArray, isNotNull, max, or } from "drizzle-orm"
 import { alias } from "drizzle-orm/pg-core"
 import { z } from "zod"
 import { db } from "@/db"
@@ -10,6 +10,7 @@ import {
   label,
   member,
   project,
+  relatedIssue,
   team,
   user,
 } from "@/db/schema"
@@ -17,6 +18,7 @@ import { recordIssueActivity, subscribeToIssue } from "@/lib/issues/activity"
 import { priorityLabel } from "@/lib/issues/meta"
 import { getCurrentCycleNumber } from "@/lib/cycles/dates"
 import { getOptionalOrgSession, requireOrgSession } from "@/lib/server/session"
+import { requireTeamIssueAccess } from "@/lib/server/access"
 import { listStatuses } from "@/lib/statuses"
 import { generateUUID } from "@/lib/utils"
 
@@ -769,4 +771,42 @@ export const updateIssue = createServerFn({ method: "POST" })
         labels: nextLabels,
       }
     })
+  })
+
+export const deleteIssue = createServerFn({ method: "POST" })
+  .validator(
+    z.object({
+      teamId: z.string().min(1),
+      issueId: z.string().min(1),
+    })
+  )
+  .handler(async ({ data }) => {
+    const { session, organizationId } = await requireOrgSession()
+    await requireTeamIssueAccess(
+      data.teamId,
+      data.issueId,
+      organizationId,
+      session.user.id
+    )
+
+    await db.transaction(async (tx) => {
+      // related_issue has no ON DELETE cascade
+      await tx
+        .delete(relatedIssue)
+        .where(
+          or(
+            eq(relatedIssue.issueId, data.issueId),
+            eq(relatedIssue.relatedIssueId, data.issueId)
+          )
+        )
+
+      const deleted = await tx
+        .delete(issue)
+        .where(and(eq(issue.id, data.issueId), eq(issue.teamId, data.teamId)))
+        .returning({ id: issue.id })
+
+      if (deleted.length === 0) throw new Error("Issue not found")
+    })
+
+    return { ok: true as const, issueId: data.issueId }
   })
