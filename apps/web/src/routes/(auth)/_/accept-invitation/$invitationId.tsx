@@ -53,9 +53,7 @@ function AcceptInvitationPage() {
   const { invitationId } = Route.useParams()
   const navigate = useNavigate()
   const router = useRouter()
-  const [pending, setPending] = React.useState<"accept" | "reject" | null>(
-    null
-  )
+  const [pending, setPending] = React.useState<"accept" | "reject" | null>(null)
   const [actionError, setActionError] = React.useState<string | null>(null)
 
   async function accept() {
@@ -151,7 +149,9 @@ function AcceptInvitationPage() {
           <CardTitle>Join {invitation.organizationName}</CardTitle>
           <CardDescription>
             {invitation.inviterEmail} invited you to join as{" "}
-            <span className="font-medium text-foreground">{invitation.role}</span>
+            <span className="font-medium text-foreground">
+              {invitation.role}
+            </span>
             .
           </CardDescription>
         </CardHeader>
@@ -173,9 +173,7 @@ function AcceptInvitationPage() {
             disabled={pending !== null}
             onClick={() => void accept()}
           >
-            {pending === "accept" ? (
-              <Spinner data-icon="inline-start" />
-            ) : null}
+            {pending === "accept" ? <Spinner data-icon="inline-start" /> : null}
             {pending === "accept" ? "Joining…" : "Accept invitation"}
           </Button>
           <Button
@@ -184,9 +182,7 @@ function AcceptInvitationPage() {
             disabled={pending !== null}
             onClick={() => void reject()}
           >
-            {pending === "reject" ? (
-              <Spinner data-icon="inline-start" />
-            ) : null}
+            {pending === "reject" ? <Spinner data-icon="inline-start" /> : null}
             {pending === "reject" ? "Rejecting…" : "Decline"}
           </Button>
         </CardFooter>

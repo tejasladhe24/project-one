@@ -9,7 +9,11 @@ import { db, redis } from "@/db"
 import * as schema from "@/db/schema"
 import { generateUUID } from "@/lib/utils"
 import { emailClient } from "@/email"
-import { ForgotPasswordEmail, OrganizationInvitationEmail, VerifyEmail } from "@/email/templates"
+import {
+  ForgotPasswordEmail,
+  OrganizationInvitationEmail,
+  VerifyEmail,
+} from "@/email/templates"
 import { isProduction } from "@/lib/constants"
 
 function teamMembershipKey(teamId: string, userId: string) {

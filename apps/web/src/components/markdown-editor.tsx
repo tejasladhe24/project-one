@@ -52,9 +52,11 @@ function prefixLines(
 ) {
   const lineStart = value.lastIndexOf("\n", start - 1) + 1
   const lineEnd =
-    end === 0 ? 0 : value.indexOf("\n", end - 1) === -1
-      ? value.length
-      : value.indexOf("\n", end - 1)
+    end === 0
+      ? 0
+      : value.indexOf("\n", end - 1) === -1
+        ? value.length
+        : value.indexOf("\n", end - 1)
   const block = value.slice(lineStart, lineEnd || value.length)
   const lines = block.split("\n")
   const nextBlock = lines
@@ -83,7 +85,11 @@ export function MarkdownEditor({
   const isWrite = mode === "write"
 
   function applyEdit(
-    edit: (value: string, start: number, end: number) => {
+    edit: (
+      value: string,
+      start: number,
+      end: number
+    ) => {
       next: string
       selectionStart: number
       selectionEnd: number

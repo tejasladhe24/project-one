@@ -64,18 +64,18 @@ const editStatusSchema = z.object({
 
 type StatusRow = Awaited<ReturnType<typeof listStatuses>>[number]
 
-export const Route = createFileRoute(
-  "/(app)/_/team/$teamId/settings/statuses"
-)({
-  loader: async ({ params, context }) => {
-    const team = context.team
-    const [ statuses] = await Promise.all([
-            listStatuses({ data: { teamId: params.teamId } }),
-    ])
-    return { team, statuses }
-  },
-  component: TeamStatusesPage,
-})
+export const Route = createFileRoute("/(app)/_/team/$teamId/settings/statuses")(
+  {
+    loader: async ({ params, context }) => {
+      const team = context.team
+      const [statuses] = await Promise.all([
+        listStatuses({ data: { teamId: params.teamId } }),
+      ])
+      return { team, statuses }
+    },
+    component: TeamStatusesPage,
+  }
+)
 
 function CreateStatusForm({
   teamId,
@@ -238,12 +238,12 @@ function EditStatusForm({
 }) {
   const [formError, setFormError] = React.useState<string | null>(null)
   const fixed = isFixedStatusCategory(status.category)
-  const categoryItems = (
-    fixed ? STATUS_CATEGORIES : CREATABLE_CATEGORIES
-  ).map((value) => ({
-    value,
-    label: STATUS_CATEGORY_LABELS[value],
-  }))
+  const categoryItems = (fixed ? STATUS_CATEGORIES : CREATABLE_CATEGORIES).map(
+    (value) => ({
+      value,
+      label: STATUS_CATEGORY_LABELS[value],
+    })
+  )
 
   const form = useForm({
     defaultValues: {
@@ -442,11 +442,7 @@ function TeamStatusesPage() {
             if (!open) setCreateCategory(undefined)
           }}
         >
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => openCreate()}
-          >
+          <Button size="sm" variant="outline" onClick={() => openCreate()}>
             <IconPlus data-icon="inline-start" />
             Add
           </Button>

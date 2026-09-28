@@ -3,10 +3,12 @@ import { getRequestHeaders } from "@tanstack/react-start/server"
 import { z } from "zod"
 import { auth } from "@/lib/auth/server"
 
-export const getSession = createServerFn({ method: "GET" }).handler(async () => {
-  const headers = getRequestHeaders()
-  return auth.api.getSession({ headers })
-})
+export const getSession = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const headers = getRequestHeaders()
+    return auth.api.getSession({ headers })
+  }
+)
 
 export const getInvitation = createServerFn({ method: "GET" })
   .validator(z.object({ invitationId: z.string().min(1) }))
@@ -21,8 +23,7 @@ export const getInvitation = createServerFn({ method: "GET" })
     } catch (error) {
       return {
         invitation: null,
-        error:
-          error instanceof Error ? error.message : "Invitation not found",
+        error: error instanceof Error ? error.message : "Invitation not found",
       }
     }
   })

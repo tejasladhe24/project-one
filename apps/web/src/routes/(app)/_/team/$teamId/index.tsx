@@ -1,6 +1,5 @@
 import * as React from "react"
-import { Link } from "@tanstack/react-router"
-import { createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
 import {
   Avatar,
   AvatarFallback,
@@ -10,10 +9,7 @@ import { MarkdownEditor } from "@/components/markdown-editor"
 import { TeamHomeShell } from "@/components/team/team-home-shell"
 import { useServerMutation } from "@/hooks/use-server-mutation"
 import { listTeamDocuments } from "@/lib/documents"
-import {
-  listTeamMembersDetailed,
-  updateTeamSettings,
-} from "@/lib/teams"
+import { listTeamMembersDetailed, updateTeamSettings } from "@/lib/teams"
 import { Separator } from "@workspace/ui/components/separator"
 import { cn } from "@workspace/ui/lib/utils"
 import { buttonVariants } from "@workspace/ui/components/button"
@@ -21,8 +17,8 @@ import { buttonVariants } from "@workspace/ui/components/button"
 export const Route = createFileRoute("/(app)/_/team/$teamId/")({
   loader: async ({ params, context }) => {
     const team = context.team
-    const [ members, documents] = await Promise.all([
-            listTeamMembersDetailed({ data: { teamId: params.teamId } }),
+    const [members, documents] = await Promise.all([
+      listTeamMembersDetailed({ data: { teamId: params.teamId } }),
       listTeamDocuments({ data: { teamId: params.teamId } }),
     ])
     return {
@@ -98,7 +94,7 @@ function TeamOverviewPage() {
             />
           </div>
 
-          <Separator/>
+          <Separator />
 
           <section>
             <div className="mb-2 flex items-center justify-between">
@@ -164,12 +160,10 @@ function TeamOverviewPage() {
             </Link>
           </section>
 
-          <Separator/>
+          <Separator />
 
           <section className="flex flex-col gap-2">
-            <h3 className="ml-2 text-xs text-muted-foreground">
-              Go To
-            </h3>
+            <h3 className="ml-2 text-xs text-muted-foreground">Go To</h3>
             <ul className="flex flex-col text-sm">
               <li>
                 <Link

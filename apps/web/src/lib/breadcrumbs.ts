@@ -48,14 +48,10 @@ export function buildBreadcrumbs(
 
   if (routeId.includes("/issue/$issueId")) {
     const issue = asRecord(data?.issue)
-    const title =
-      typeof issue?.title === "string" ? issue.title : "Issue"
-    const number =
-      typeof issue?.number === "number" ? issue.number : undefined
+    const title = typeof issue?.title === "string" ? issue.title : "Issue"
+    const number = typeof issue?.number === "number" ? issue.number : undefined
     const teamIdentifier =
-      typeof issue?.teamIdentifier === "string"
-        ? issue.teamIdentifier
-        : null
+      typeof issue?.teamIdentifier === "string" ? issue.teamIdentifier : null
     const key =
       number != null
         ? `${(teamIdentifier ?? "ISS").toUpperCase()}-${String(number).padStart(4, "0")}`
@@ -72,12 +68,8 @@ export function buildBreadcrumbs(
       .find((m) => m.routeId === "/(app)/_/project/$id")
     const projectData = asRecord(projectMatch?.loaderData)
     const project = asRecord(projectData?.project) ?? asRecord(data?.project)
-    const name =
-      typeof project?.name === "string" ? project.name : "Project"
-    return [
-      { label: "Projects", to: "/projects" },
-      { label: name },
-    ]
+    const name = typeof project?.name === "string" ? project.name : "Project"
+    return [{ label: "Projects", to: "/projects" }, { label: name }]
   }
 
   if (routeId.includes("/team/$teamId")) {
@@ -136,9 +128,7 @@ export function buildBreadcrumbs(
         const document = asRecord(data?.document)
         crumbs.push({
           label:
-            typeof document?.title === "string"
-              ? document.title
-              : "Document",
+            typeof document?.title === "string" ? document.title : "Document",
         })
       }
     } else if (routeId.includes("/settings")) {
@@ -147,7 +137,8 @@ export function buildBreadcrumbs(
       else if (routeId.includes("/statuses")) crumbs.push({ label: "Statuses" })
       else if (routeId.includes("/members")) crumbs.push({ label: "Members" })
       else if (routeId.includes("/general")) crumbs.push({ label: "General" })
-      else if (routeId.includes("/templates")) crumbs.push({ label: "Templates" })
+      else if (routeId.includes("/templates"))
+        crumbs.push({ label: "Templates" })
       else if (routeId.includes("/cycles")) crumbs.push({ label: "Cycles" })
     }
     return crumbs

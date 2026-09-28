@@ -49,7 +49,9 @@ export function SiteHeader() {
                 <BreadcrumbItem key={`${crumb.label}-${index}`}>
                   {index > 0 ? <BreadcrumbSeparator /> : null}
                   {isLast || !crumb.to ? (
-                    <BreadcrumbPage className="truncate">{label}</BreadcrumbPage>
+                    <BreadcrumbPage className="truncate">
+                      {label}
+                    </BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink
                       render={

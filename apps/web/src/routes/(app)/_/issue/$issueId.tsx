@@ -17,7 +17,7 @@ function IssuePage() {
   const { issue, currentUserId } = Route.useLoaderData()
 
   return (
-    <div className="mx-auto flex h-[calc(100svh-var(--header-height))] w-full max-w-5xl min-h-0 flex-col">
+    <div className="mx-auto flex h-[calc(100svh-var(--header-height))] min-h-0 w-full max-w-5xl flex-col">
       <IssueView issue={issue} currentUserId={currentUserId} />
     </div>
   )

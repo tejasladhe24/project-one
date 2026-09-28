@@ -1,11 +1,6 @@
 import * as React from "react"
 import { Link } from "@tanstack/react-router"
-import {
-  IconFile,
-  IconPaperclip,
-  IconPlus,
-  IconX,
-} from "@tabler/icons-react"
+import { IconFile, IconPaperclip, IconPlus, IconX } from "@tabler/icons-react"
 import { Button } from "@workspace/ui/components/button"
 import {
   Combobox,

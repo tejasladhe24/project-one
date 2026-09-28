@@ -16,7 +16,7 @@ export function useServerMutation() {
   const [pending, setPending] = React.useState(false)
 
   const mutate = React.useCallback(
-    async <T,>(fn: () => Promise<T>, options: MutateOptions = {}) => {
+    async <T>(fn: () => Promise<T>, options: MutateOptions = {}) => {
       const {
         successMessage,
         errorMessage = "Something went wrong",
@@ -29,9 +29,7 @@ export function useServerMutation() {
         if (invalidate) void router.invalidate()
         return result
       } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : errorMessage
-        )
+        toast.error(error instanceof Error ? error.message : errorMessage)
         throw error
       } finally {
         setPending(false)

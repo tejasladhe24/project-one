@@ -3,12 +3,7 @@ import { and, asc, eq, notInArray } from "drizzle-orm"
 import { alias } from "drizzle-orm/pg-core"
 import { z } from "zod"
 import { db } from "@/db"
-import {
-  issueActivity,
-  issueComment,
-  issueSubscriber,
-  user,
-} from "@/db/schema"
+import { issueActivity, issueComment, issueSubscriber, user } from "@/db/schema"
 import { subscribeToIssue } from "@/lib/issues/activity"
 import { requireTeamIssueAccess } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"
@@ -156,7 +151,10 @@ export const getIssueTimeline = createServerFn({ method: "GET" })
           reason: issueSubscriber.reason,
         })
         .from(issueSubscriber)
-        .innerJoin(subscriberUser, eq(issueSubscriber.userId, subscriberUser.id))
+        .innerJoin(
+          subscriberUser,
+          eq(issueSubscriber.userId, subscriberUser.id)
+        )
         .where(eq(issueSubscriber.issueId, data.issueId))
         .orderBy(asc(subscriberUser.name)),
     ])

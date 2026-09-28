@@ -1,11 +1,5 @@
-import {
-  createFileRoute,
-  useRouter,
-} from "@tanstack/react-router"
-import {
-  IssuesTable,
-  type IssueRow,
-} from "@/components/issues/issues-table"
+import { createFileRoute, useRouter } from "@tanstack/react-router"
+import { IssuesTable, type IssueRow } from "@/components/issues/issues-table"
 import { listUserTeams } from "@/lib/auth/session"
 import { listIssues, toIssueRows } from "@/lib/issues"
 import { listProjectOptions } from "@/lib/projects"

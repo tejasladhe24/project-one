@@ -1,7 +1,4 @@
-import {
-  createFileRoute,
-  useRouter,
-} from "@tanstack/react-router"
+import { createFileRoute, useRouter } from "@tanstack/react-router"
 import {
   ProjectsTable,
   type ProjectRow,
@@ -37,8 +34,8 @@ function toProjectRows(
 export const Route = createFileRoute("/(app)/_/team/$teamId/projects")({
   loader: async ({ params, context }) => {
     const team = context.team
-    const [ data] = await Promise.all([
-            listTeamProjects({ data: { teamId: params.teamId } }),
+    const [data] = await Promise.all([
+      listTeamProjects({ data: { teamId: params.teamId } }),
     ])
     return { team, projects: toProjectRows(data) }
   },

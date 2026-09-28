@@ -9,8 +9,8 @@ import {
 export const Route = createFileRoute("/(app)/_/team/$teamId/settings/members")({
   loader: async ({ params, context }) => {
     const team = context.team
-    const [ members, candidates, invitations] = await Promise.all([
-            listTeamMembersDetailed({ data: { teamId: params.teamId } }),
+    const [members, candidates, invitations] = await Promise.all([
+      listTeamMembersDetailed({ data: { teamId: params.teamId } }),
       listOrgMembersForTeamAdd({ data: { teamId: params.teamId } }),
       listTeamJoinRequests({ data: { teamId: params.teamId } }),
     ])

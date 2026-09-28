@@ -86,8 +86,7 @@ function serializeEditor(root: HTMLElement): string {
       const type = node.dataset.mentionType as "user" | "issue"
       const id = node.dataset.mentionId
       const label =
-        node.dataset.mentionLabel ??
-        (node.textContent ?? "").replace(/^@/, "")
+        node.dataset.mentionLabel ?? (node.textContent ?? "").replace(/^@/, "")
       out +=
         type === "user"
           ? formatUserMention(label, id)
@@ -125,7 +124,10 @@ function getTextBeforeCaret(root: HTMLElement): string | null {
   return pre.toString()
 }
 
-function deleteAtTrigger(root: HTMLElement, savedRange?: Range | null): boolean {
+function deleteAtTrigger(
+  root: HTMLElement,
+  savedRange?: Range | null
+): boolean {
   const selection = window.getSelection()
   if (!selection) return false
 
@@ -354,7 +356,12 @@ export function IssueCommentComposer({
       return
     }
     // Prevent Enter from creating awkward nested divs; use soft break.
-    if (event.key === "Enter" && !event.shiftKey && !event.metaKey && !event.ctrlKey) {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey &&
+      !event.metaKey &&
+      !event.ctrlKey
+    ) {
       event.preventDefault()
       document.execCommand("insertLineBreak")
       syncHasContent()

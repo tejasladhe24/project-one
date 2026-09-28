@@ -62,14 +62,11 @@ export function NavTeams({
             </CollapsibleTrigger>
 
             <CollapsibleContent>
-              <SidebarMenuSub className="px-0 mx-2">
+              <SidebarMenuSub className="mx-2 px-0">
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
                     render={
-                      <Link
-                        to="/team/$teamId"
-                        params={{ teamId: item.id }}
-                      />
+                      <Link to="/team/$teamId" params={{ teamId: item.id }} />
                     }
                   >
                     <IconHome /> <span>Home</span>
@@ -89,12 +86,7 @@ export function NavTeams({
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
                   <SidebarMenuSubButton
-                    render={
-                      <Link
-                        to="/issues"
-                        search={{ team_id: item.id }}
-                      />
-                    }
+                    render={<Link to="/issues" search={{ team_id: item.id }} />}
                   >
                     <IconBugFilled /> <span>Issues</span>
                   </SidebarMenuSubButton>

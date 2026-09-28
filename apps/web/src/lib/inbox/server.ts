@@ -20,8 +20,8 @@ const actor = alias(user, "inbox_actor")
 const assignee = alias(user, "inbox_issue_assignee")
 const requesterMembership = alias(teamMember, "inbox_requester_membership")
 
-export const listInboxNotifications = createServerFn({ method: "GET" })
-  .handler(async () => {
+export const listInboxNotifications = createServerFn({ method: "GET" }).handler(
+  async () => {
     const { session, organizationId } = await requireOrgSession()
 
     const rows = await db
@@ -79,7 +79,8 @@ export const listInboxNotifications = createServerFn({ method: "GET" })
       actorImage: row.actorImage,
       requesterIsMember: row.requesterMembershipId != null,
     }))
-  })
+  }
+)
 
 export const markInboxNotificationRead = createServerFn({ method: "POST" })
   .validator(z.object({ id: z.string().min(1) }))
@@ -164,10 +165,7 @@ export const getInboxIssueDetail = createServerFn({ method: "GET" })
       .leftJoin(issueStatus, eq(issue.statusId, issueStatus.id))
       .leftJoin(assignee, eq(issue.assigneeId, assignee.id))
       .where(
-        and(
-          eq(issue.id, data.issueId),
-          eq(team.organizationId, organizationId)
-        )
+        and(eq(issue.id, data.issueId), eq(team.organizationId, organizationId))
       )
       .limit(1)
 
