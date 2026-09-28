@@ -306,10 +306,10 @@ export function McpApiKeysTable({ data, onChanged }: McpApiKeysTableProps) {
     if (!deleteRow) return
     setDeleteError(null)
     try {
-      await mutate(
-        () => revokeMcpApiKey({ data: { keyId: deleteRow.id } }),
-        { successMessage: "API key deleted", invalidate: false }
-      )
+      await mutate(() => revokeMcpApiKey({ data: { keyId: deleteRow.id } }), {
+        successMessage: "API key deleted",
+        invalidate: false,
+      })
       setDeleteRow(null)
       onChanged?.()
     } catch (error) {
@@ -435,7 +435,7 @@ export function McpApiKeysTable({ data, onChanged }: McpApiKeysTableProps) {
                     {row.name || "Untitled"}
                   </TableCell>
                   <TableCell>
-                    <code className="text-muted-foreground text-sm">
+                    <code className="text-sm text-muted-foreground">
                       {row.start ? `${row.start}…` : "—"}
                     </code>
                   </TableCell>

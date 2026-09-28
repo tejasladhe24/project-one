@@ -29,8 +29,7 @@ export async function requireOrgSession(): Promise<OrgSessionContext> {
 
 /** For list endpoints that return [] when unauthenticated / no active org. */
 export async function getOptionalOrgSession(): Promise<
-  | OrgSessionContext
-  | { headers: Headers; session: null; organizationId: null }
+  OrgSessionContext | { headers: Headers; session: null; organizationId: null }
 > {
   const stored = orgSessionStore.getStore()
   if (stored) return stored
