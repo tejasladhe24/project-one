@@ -161,6 +161,19 @@ export const auth = betterAuth({
     },
     requireEmailVerification: isProduction,
   },
+  user: {
+    additionalFields: {
+      username: {
+        type: "string",
+        required: false,
+        input: true,
+      },
+    },
+    changeEmail: {
+      enabled: true,
+      updateEmailWithoutVerification: true,
+    },
+  },
   secondaryStorage: {
     get: async (key) => redis.get(key),
     set: async (key, value, ttl) => {
