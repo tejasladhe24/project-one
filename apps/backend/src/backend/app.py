@@ -1,18 +1,9 @@
-"""FastAPI entry: health, REST tool mirrors, and MCP SSE mount."""
+"""Minimal FastAPI application template."""
 
 from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from backend.models import (
-    EvaluatePayoffsRequest,
-    EvaluatePayoffsResponse,
-    MonteCarloRequest,
-    MonteCarloResponse,
-    NashRequest,
-    NashResponse,
-)
 
 app = FastAPI(title="Backend", version="0.1.0")
 

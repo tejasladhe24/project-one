@@ -1,13 +1,13 @@
 # Project One
 
-Linear-style issue tracking monorepo: organizations, teams, projects, issues, cycles, documents, and inbox — with a shared UI package and an optional Python backend.
+Linear-style issue tracking monorepo: organizations, teams, projects, issues, cycles, documents, and inbox — with a shared UI package and a minimal FastAPI backend template.
 
 ## Monorepo layout
 
 | Path | Package | Role |
 |------|---------|------|
 | [`apps/web`](apps/web) | `web` | TanStack Start app (auth, product UI, Drizzle, server functions) — [README](apps/web/README.md) |
-| [`apps/backend`](apps/backend) | `backend` | FastAPI + MCP service (analysis / tool endpoints) — [README](apps/backend/README.md) |
+| [`apps/backend`](apps/backend) | `backend` | Minimal FastAPI template — [README](apps/backend/README.md) |
 | [`packages/ui`](packages/ui) | `@workspace/ui` | Shared shadcn/ui components, styles, and utilities — [README](packages/ui/README.md) |
 
 ## Docs

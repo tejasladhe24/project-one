@@ -12,7 +12,7 @@
 | Cache / sessions helpers | Redis 7 |
 | Email | Resend + React Email |
 | Validation | Zod |
-| Python service | FastAPI + Uvicorn (+ MCP) |
+| Python service | FastAPI + Uvicorn (template) |
 | Local infra | Docker Compose |
 
 ## Monorepo tooling
@@ -79,11 +79,9 @@
 
 - **Python ≥ 3.11**, Hatchling packaging
 - **FastAPI** + **Uvicorn**
-- **Pydantic** models
-- **MCP** server mount alongside REST mirrors
-- Scientific stack present: **NumPy**, **SciPy**, **Polars** (analysis / simulation endpoints)
+- Minimal template with `GET /health` only — no product domain logic yet
 
-Independent of the web app’s Drizzle schema; treat as a sidecar for compute / MCP tools.
+Independent of the web app’s Drizzle schema; extend when server-side Python features are needed.
 
 ## Infrastructure (local)
 
@@ -109,7 +107,7 @@ packages/ui/src/
   components/     # Shared primitives
   styles/         # Global CSS / design tokens
 apps/backend/src/backend/
-  app.py          # FastAPI entry
+  app.py          # FastAPI entry (health only)
 ```
 
 ## Related docs

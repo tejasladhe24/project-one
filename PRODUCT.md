@@ -85,7 +85,7 @@ Not implemented as first-class product features yet (may exist only as stubs or 
 - Time tracking / billing
 - Native mobile apps
 - Full AI agent product surface (AI SDK is present for future use)
-- Deep coupling of the Python backend into the main issue UX
+- Product features on the Python FastAPI backend (template only today)
 
 ## Related docs
 
