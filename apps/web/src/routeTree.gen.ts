@@ -8,673 +8,762 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root"
-import { Route as appRouteImport } from "./routes/(app)/_"
-import { Route as authRouteImport } from "./routes/(auth)/_"
-import { Route as appIndexRouteImport } from "./routes/(app)/_/index"
-import { Route as appInboxRouteImport } from "./routes/(app)/_/inbox"
-import { Route as appIssuesRouteImport } from "./routes/(app)/_/issues"
-import { Route as appMembersRouteImport } from "./routes/(app)/_/members"
-import { Route as appProjectsRouteImport } from "./routes/(app)/_/projects"
-import { Route as appTeamsRouteImport } from "./routes/(app)/_/teams"
-import { Route as authSelectOrgRouteImport } from "./routes/(auth)/_/select-org"
-import { Route as authSignInRouteImport } from "./routes/(auth)/_/sign-in"
-import { Route as authSignUpRouteImport } from "./routes/(auth)/_/sign-up"
-import { Route as ApiAuthSplatRouteImport } from "./routes/api/auth/$"
-import { Route as appIssueIssueIdRouteImport } from "./routes/(app)/_/issue/$issueId"
-import { Route as appProjectIdRouteImport } from "./routes/(app)/_/project/$id"
-import { Route as appTeamTeamIdRouteImport } from "./routes/(app)/_/team/$teamId"
-import { Route as authAcceptInvitationInvitationIdRouteImport } from "./routes/(auth)/_/accept-invitation/$invitationId"
-import { Route as appProjectIdIndexRouteImport } from "./routes/(app)/_/project/$id/index"
-import { Route as appProjectIdActivityRouteImport } from "./routes/(app)/_/project/$id/activity"
-import { Route as appProjectIdIssuesRouteImport } from "./routes/(app)/_/project/$id/issues"
-import { Route as appTeamTeamIdIndexRouteImport } from "./routes/(app)/_/team/$teamId/index"
-import { Route as appTeamTeamIdCyclesRouteImport } from "./routes/(app)/_/team/$teamId/cycles"
-import { Route as appTeamTeamIdDocumentsRouteImport } from "./routes/(app)/_/team/$teamId/documents"
-import { Route as appTeamTeamIdProjectsRouteImport } from "./routes/(app)/_/team/$teamId/projects"
-import { Route as appTeamTeamIdSettingsRouteImport } from "./routes/(app)/_/team/$teamId/settings"
-import { Route as appTeamTeamIdTriageRouteImport } from "./routes/(app)/_/team/$teamId/triage"
-import { Route as appTeamTeamIdDocumentsIndexRouteImport } from "./routes/(app)/_/team/$teamId/documents/index"
-import { Route as appTeamTeamIdDocumentsDocumentIdRouteImport } from "./routes/(app)/_/team/$teamId/documents/$documentId"
-import { Route as appTeamTeamIdSettingsIndexRouteImport } from "./routes/(app)/_/team/$teamId/settings/index"
-import { Route as appTeamTeamIdSettingsCyclesRouteImport } from "./routes/(app)/_/team/$teamId/settings/cycles"
-import { Route as appTeamTeamIdSettingsGeneralRouteImport } from "./routes/(app)/_/team/$teamId/settings/general"
-import { Route as appTeamTeamIdSettingsLabelsRouteImport } from "./routes/(app)/_/team/$teamId/settings/labels"
-import { Route as appTeamTeamIdSettingsMembersRouteImport } from "./routes/(app)/_/team/$teamId/settings/members"
-import { Route as appTeamTeamIdSettingsStatusesRouteImport } from "./routes/(app)/_/team/$teamId/settings/statuses"
-import { Route as appTeamTeamIdSettingsTemplatesRouteImport } from "./routes/(app)/_/team/$teamId/settings/templates"
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as appRouteImport } from './routes/(app)/_'
+import { Route as authRouteImport } from './routes/(auth)/_'
+import { Route as ApiMcpRouteImport } from './routes/api/mcp'
+import { Route as appIndexRouteImport } from './routes/(app)/_/index'
+import { Route as appInboxRouteImport } from './routes/(app)/_/inbox'
+import { Route as appIssuesRouteImport } from './routes/(app)/_/issues'
+import { Route as appMembersRouteImport } from './routes/(app)/_/members'
+import { Route as appProjectsRouteImport } from './routes/(app)/_/projects'
+import { Route as appSettingsRouteImport } from './routes/(app)/_/settings'
+import { Route as appTeamsRouteImport } from './routes/(app)/_/teams'
+import { Route as authSelectOrgRouteImport } from './routes/(auth)/_/select-org'
+import { Route as authSignInRouteImport } from './routes/(auth)/_/sign-in'
+import { Route as authSignUpRouteImport } from './routes/(auth)/_/sign-up'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as appIssueIssueIdRouteImport } from './routes/(app)/_/issue/$issueId'
+import { Route as appProjectIdRouteImport } from './routes/(app)/_/project/$id'
+import { Route as appSettingsIndexRouteImport } from './routes/(app)/_/settings/index'
+import { Route as appSettingsMcpRouteImport } from './routes/(app)/_/settings/mcp'
+import { Route as appTeamTeamIdRouteImport } from './routes/(app)/_/team/$teamId'
+import { Route as authAcceptInvitationInvitationIdRouteImport } from './routes/(auth)/_/accept-invitation/$invitationId'
+import { Route as appProjectIdIndexRouteImport } from './routes/(app)/_/project/$id/index'
+import { Route as appProjectIdActivityRouteImport } from './routes/(app)/_/project/$id/activity'
+import { Route as appProjectIdIssuesRouteImport } from './routes/(app)/_/project/$id/issues'
+import { Route as appTeamTeamIdIndexRouteImport } from './routes/(app)/_/team/$teamId/index'
+import { Route as appTeamTeamIdCyclesRouteImport } from './routes/(app)/_/team/$teamId/cycles'
+import { Route as appTeamTeamIdDocumentsRouteImport } from './routes/(app)/_/team/$teamId/documents'
+import { Route as appTeamTeamIdProjectsRouteImport } from './routes/(app)/_/team/$teamId/projects'
+import { Route as appTeamTeamIdSettingsRouteImport } from './routes/(app)/_/team/$teamId/settings'
+import { Route as appTeamTeamIdTriageRouteImport } from './routes/(app)/_/team/$teamId/triage'
+import { Route as appTeamTeamIdDocumentsIndexRouteImport } from './routes/(app)/_/team/$teamId/documents/index'
+import { Route as appTeamTeamIdDocumentsDocumentIdRouteImport } from './routes/(app)/_/team/$teamId/documents/$documentId'
+import { Route as appTeamTeamIdSettingsIndexRouteImport } from './routes/(app)/_/team/$teamId/settings/index'
+import { Route as appTeamTeamIdSettingsCyclesRouteImport } from './routes/(app)/_/team/$teamId/settings/cycles'
+import { Route as appTeamTeamIdSettingsGeneralRouteImport } from './routes/(app)/_/team/$teamId/settings/general'
+import { Route as appTeamTeamIdSettingsLabelsRouteImport } from './routes/(app)/_/team/$teamId/settings/labels'
+import { Route as appTeamTeamIdSettingsMembersRouteImport } from './routes/(app)/_/team/$teamId/settings/members'
+import { Route as appTeamTeamIdSettingsStatusesRouteImport } from './routes/(app)/_/team/$teamId/settings/statuses'
+import { Route as appTeamTeamIdSettingsTemplatesRouteImport } from './routes/(app)/_/team/$teamId/settings/templates'
 
 const appRoute = appRouteImport.update({
-  id: "/(app)/_",
+  id: '/(app)/_',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authRoute = authRouteImport.update({
-  id: "/(auth)/_",
+  id: '/(auth)/_',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMcpRoute = ApiMcpRouteImport.update({
+  id: '/api/mcp',
+  path: '/api/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const appIndexRoute = appIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => appRoute,
 } as any)
 const appInboxRoute = appInboxRouteImport.update({
-  id: "/inbox",
-  path: "/inbox",
+  id: '/inbox',
+  path: '/inbox',
   getParentRoute: () => appRoute,
 } as any)
 const appIssuesRoute = appIssuesRouteImport.update({
-  id: "/issues",
-  path: "/issues",
+  id: '/issues',
+  path: '/issues',
   getParentRoute: () => appRoute,
 } as any)
 const appMembersRoute = appMembersRouteImport.update({
-  id: "/members",
-  path: "/members",
+  id: '/members',
+  path: '/members',
   getParentRoute: () => appRoute,
 } as any)
 const appProjectsRoute = appProjectsRouteImport.update({
-  id: "/projects",
-  path: "/projects",
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => appRoute,
+} as any)
+const appSettingsRoute = appSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => appRoute,
 } as any)
 const appTeamsRoute = appTeamsRouteImport.update({
-  id: "/teams",
-  path: "/teams",
+  id: '/teams',
+  path: '/teams',
   getParentRoute: () => appRoute,
 } as any)
 const authSelectOrgRoute = authSelectOrgRouteImport.update({
-  id: "/select-org",
-  path: "/select-org",
+  id: '/select-org',
+  path: '/select-org',
   getParentRoute: () => authRoute,
 } as any)
 const authSignInRoute = authSignInRouteImport.update({
-  id: "/sign-in",
-  path: "/sign-in",
+  id: '/sign-in',
+  path: '/sign-in',
   getParentRoute: () => authRoute,
 } as any)
 const authSignUpRoute = authSignUpRouteImport.update({
-  id: "/sign-up",
-  path: "/sign-up",
+  id: '/sign-up',
+  path: '/sign-up',
   getParentRoute: () => authRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: "/api/auth/$",
-  path: "/api/auth/$",
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const appIssueIssueIdRoute = appIssueIssueIdRouteImport.update({
-  id: "/issue/$issueId",
-  path: "/issue/$issueId",
+  id: '/issue/$issueId',
+  path: '/issue/$issueId',
   getParentRoute: () => appRoute,
 } as any)
 const appProjectIdRoute = appProjectIdRouteImport.update({
-  id: "/project/$id",
-  path: "/project/$id",
+  id: '/project/$id',
+  path: '/project/$id',
   getParentRoute: () => appRoute,
 } as any)
+const appSettingsIndexRoute = appSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appSettingsRoute,
+} as any)
+const appSettingsMcpRoute = appSettingsMcpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => appSettingsRoute,
+} as any)
 const appTeamTeamIdRoute = appTeamTeamIdRouteImport.update({
-  id: "/team/$teamId",
-  path: "/team/$teamId",
+  id: '/team/$teamId',
+  path: '/team/$teamId',
   getParentRoute: () => appRoute,
 } as any)
 const authAcceptInvitationInvitationIdRoute =
   authAcceptInvitationInvitationIdRouteImport.update({
-    id: "/accept-invitation/$invitationId",
-    path: "/accept-invitation/$invitationId",
+    id: '/accept-invitation/$invitationId',
+    path: '/accept-invitation/$invitationId',
     getParentRoute: () => authRoute,
   } as any)
 const appProjectIdIndexRoute = appProjectIdIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => appProjectIdRoute,
 } as any)
 const appProjectIdActivityRoute = appProjectIdActivityRouteImport.update({
-  id: "/activity",
-  path: "/activity",
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => appProjectIdRoute,
 } as any)
 const appProjectIdIssuesRoute = appProjectIdIssuesRouteImport.update({
-  id: "/issues",
-  path: "/issues",
+  id: '/issues',
+  path: '/issues',
   getParentRoute: () => appProjectIdRoute,
 } as any)
 const appTeamTeamIdIndexRoute = appTeamTeamIdIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => appTeamTeamIdRoute,
 } as any)
 const appTeamTeamIdCyclesRoute = appTeamTeamIdCyclesRouteImport.update({
-  id: "/cycles",
-  path: "/cycles",
+  id: '/cycles',
+  path: '/cycles',
   getParentRoute: () => appTeamTeamIdRoute,
 } as any)
 const appTeamTeamIdDocumentsRoute = appTeamTeamIdDocumentsRouteImport.update({
-  id: "/documents",
-  path: "/documents",
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => appTeamTeamIdRoute,
 } as any)
 const appTeamTeamIdProjectsRoute = appTeamTeamIdProjectsRouteImport.update({
-  id: "/projects",
-  path: "/projects",
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => appTeamTeamIdRoute,
 } as any)
 const appTeamTeamIdSettingsRoute = appTeamTeamIdSettingsRouteImport.update({
-  id: "/settings",
-  path: "/settings",
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => appTeamTeamIdRoute,
 } as any)
 const appTeamTeamIdTriageRoute = appTeamTeamIdTriageRouteImport.update({
-  id: "/triage",
-  path: "/triage",
+  id: '/triage',
+  path: '/triage',
   getParentRoute: () => appTeamTeamIdRoute,
 } as any)
 const appTeamTeamIdDocumentsIndexRoute =
   appTeamTeamIdDocumentsIndexRouteImport.update({
-    id: "/",
-    path: "/",
+    id: '/',
+    path: '/',
     getParentRoute: () => appTeamTeamIdDocumentsRoute,
   } as any)
 const appTeamTeamIdDocumentsDocumentIdRoute =
   appTeamTeamIdDocumentsDocumentIdRouteImport.update({
-    id: "/$documentId",
-    path: "/$documentId",
+    id: '/$documentId',
+    path: '/$documentId',
     getParentRoute: () => appTeamTeamIdDocumentsRoute,
   } as any)
 const appTeamTeamIdSettingsIndexRoute =
   appTeamTeamIdSettingsIndexRouteImport.update({
-    id: "/",
-    path: "/",
+    id: '/',
+    path: '/',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 const appTeamTeamIdSettingsCyclesRoute =
   appTeamTeamIdSettingsCyclesRouteImport.update({
-    id: "/cycles",
-    path: "/cycles",
+    id: '/cycles',
+    path: '/cycles',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 const appTeamTeamIdSettingsGeneralRoute =
   appTeamTeamIdSettingsGeneralRouteImport.update({
-    id: "/general",
-    path: "/general",
+    id: '/general',
+    path: '/general',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 const appTeamTeamIdSettingsLabelsRoute =
   appTeamTeamIdSettingsLabelsRouteImport.update({
-    id: "/labels",
-    path: "/labels",
+    id: '/labels',
+    path: '/labels',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 const appTeamTeamIdSettingsMembersRoute =
   appTeamTeamIdSettingsMembersRouteImport.update({
-    id: "/members",
-    path: "/members",
+    id: '/members',
+    path: '/members',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 const appTeamTeamIdSettingsStatusesRoute =
   appTeamTeamIdSettingsStatusesRouteImport.update({
-    id: "/statuses",
-    path: "/statuses",
+    id: '/statuses',
+    path: '/statuses',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 const appTeamTeamIdSettingsTemplatesRoute =
   appTeamTeamIdSettingsTemplatesRouteImport.update({
-    id: "/templates",
-    path: "/templates",
+    id: '/templates',
+    path: '/templates',
     getParentRoute: () => appTeamTeamIdSettingsRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  "/inbox": typeof appInboxRoute
-  "/issues": typeof appIssuesRoute
-  "/members": typeof appMembersRoute
-  "/projects": typeof appProjectsRoute
-  "/teams": typeof appTeamsRoute
-  "/select-org": typeof authSelectOrgRoute
-  "/sign-in": typeof authSignInRoute
-  "/sign-up": typeof authSignUpRoute
-  "/api/auth/$": typeof ApiAuthSplatRoute
-  "/": typeof appIndexRoute
-  "/issue/$issueId": typeof appIssueIssueIdRoute
-  "/project/$id": typeof appProjectIdRouteWithChildren
-  "/team/$teamId": typeof appTeamTeamIdRouteWithChildren
-  "/accept-invitation/$invitationId": typeof authAcceptInvitationInvitationIdRoute
-  "/project/$id/activity": typeof appProjectIdActivityRoute
-  "/project/$id/issues": typeof appProjectIdIssuesRoute
-  "/team/$teamId/cycles": typeof appTeamTeamIdCyclesRoute
-  "/team/$teamId/documents": typeof appTeamTeamIdDocumentsRouteWithChildren
-  "/team/$teamId/projects": typeof appTeamTeamIdProjectsRoute
-  "/team/$teamId/settings": typeof appTeamTeamIdSettingsRouteWithChildren
-  "/team/$teamId/triage": typeof appTeamTeamIdTriageRoute
-  "/project/$id/": typeof appProjectIdIndexRoute
-  "/team/$teamId/": typeof appTeamTeamIdIndexRoute
-  "/team/$teamId/documents/$documentId": typeof appTeamTeamIdDocumentsDocumentIdRoute
-  "/team/$teamId/settings/cycles": typeof appTeamTeamIdSettingsCyclesRoute
-  "/team/$teamId/settings/general": typeof appTeamTeamIdSettingsGeneralRoute
-  "/team/$teamId/settings/labels": typeof appTeamTeamIdSettingsLabelsRoute
-  "/team/$teamId/settings/members": typeof appTeamTeamIdSettingsMembersRoute
-  "/team/$teamId/settings/statuses": typeof appTeamTeamIdSettingsStatusesRoute
-  "/team/$teamId/settings/templates": typeof appTeamTeamIdSettingsTemplatesRoute
-  "/team/$teamId/documents/": typeof appTeamTeamIdDocumentsIndexRoute
-  "/team/$teamId/settings/": typeof appTeamTeamIdSettingsIndexRoute
+  '/api/mcp': typeof ApiMcpRoute
+  '/inbox': typeof appInboxRoute
+  '/issues': typeof appIssuesRoute
+  '/members': typeof appMembersRoute
+  '/projects': typeof appProjectsRoute
+  '/settings': typeof appSettingsRouteWithChildren
+  '/teams': typeof appTeamsRoute
+  '/select-org': typeof authSelectOrgRoute
+  '/sign-in': typeof authSignInRoute
+  '/sign-up': typeof authSignUpRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/': typeof appIndexRoute
+  '/issue/$issueId': typeof appIssueIssueIdRoute
+  '/project/$id': typeof appProjectIdRouteWithChildren
+  '/settings/mcp': typeof appSettingsMcpRoute
+  '/team/$teamId': typeof appTeamTeamIdRouteWithChildren
+  '/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
+  '/settings/': typeof appSettingsIndexRoute
+  '/project/$id/activity': typeof appProjectIdActivityRoute
+  '/project/$id/issues': typeof appProjectIdIssuesRoute
+  '/team/$teamId/cycles': typeof appTeamTeamIdCyclesRoute
+  '/team/$teamId/documents': typeof appTeamTeamIdDocumentsRouteWithChildren
+  '/team/$teamId/projects': typeof appTeamTeamIdProjectsRoute
+  '/team/$teamId/settings': typeof appTeamTeamIdSettingsRouteWithChildren
+  '/team/$teamId/triage': typeof appTeamTeamIdTriageRoute
+  '/project/$id/': typeof appProjectIdIndexRoute
+  '/team/$teamId/': typeof appTeamTeamIdIndexRoute
+  '/team/$teamId/documents/$documentId': typeof appTeamTeamIdDocumentsDocumentIdRoute
+  '/team/$teamId/settings/cycles': typeof appTeamTeamIdSettingsCyclesRoute
+  '/team/$teamId/settings/general': typeof appTeamTeamIdSettingsGeneralRoute
+  '/team/$teamId/settings/labels': typeof appTeamTeamIdSettingsLabelsRoute
+  '/team/$teamId/settings/members': typeof appTeamTeamIdSettingsMembersRoute
+  '/team/$teamId/settings/statuses': typeof appTeamTeamIdSettingsStatusesRoute
+  '/team/$teamId/settings/templates': typeof appTeamTeamIdSettingsTemplatesRoute
+  '/team/$teamId/documents/': typeof appTeamTeamIdDocumentsIndexRoute
+  '/team/$teamId/settings/': typeof appTeamTeamIdSettingsIndexRoute
 }
 export interface FileRoutesByTo {
-  "/inbox": typeof appInboxRoute
-  "/issues": typeof appIssuesRoute
-  "/members": typeof appMembersRoute
-  "/projects": typeof appProjectsRoute
-  "/teams": typeof appTeamsRoute
-  "/select-org": typeof authSelectOrgRoute
-  "/sign-in": typeof authSignInRoute
-  "/sign-up": typeof authSignUpRoute
-  "/api/auth/$": typeof ApiAuthSplatRoute
-  "/": typeof appIndexRoute
-  "/issue/$issueId": typeof appIssueIssueIdRoute
-  "/accept-invitation/$invitationId": typeof authAcceptInvitationInvitationIdRoute
-  "/project/$id/activity": typeof appProjectIdActivityRoute
-  "/project/$id/issues": typeof appProjectIdIssuesRoute
-  "/team/$teamId/cycles": typeof appTeamTeamIdCyclesRoute
-  "/team/$teamId/projects": typeof appTeamTeamIdProjectsRoute
-  "/team/$teamId/triage": typeof appTeamTeamIdTriageRoute
-  "/project/$id": typeof appProjectIdIndexRoute
-  "/team/$teamId": typeof appTeamTeamIdIndexRoute
-  "/team/$teamId/documents/$documentId": typeof appTeamTeamIdDocumentsDocumentIdRoute
-  "/team/$teamId/settings/cycles": typeof appTeamTeamIdSettingsCyclesRoute
-  "/team/$teamId/settings/general": typeof appTeamTeamIdSettingsGeneralRoute
-  "/team/$teamId/settings/labels": typeof appTeamTeamIdSettingsLabelsRoute
-  "/team/$teamId/settings/members": typeof appTeamTeamIdSettingsMembersRoute
-  "/team/$teamId/settings/statuses": typeof appTeamTeamIdSettingsStatusesRoute
-  "/team/$teamId/settings/templates": typeof appTeamTeamIdSettingsTemplatesRoute
-  "/team/$teamId/documents": typeof appTeamTeamIdDocumentsIndexRoute
-  "/team/$teamId/settings": typeof appTeamTeamIdSettingsIndexRoute
+  '/api/mcp': typeof ApiMcpRoute
+  '/inbox': typeof appInboxRoute
+  '/issues': typeof appIssuesRoute
+  '/members': typeof appMembersRoute
+  '/projects': typeof appProjectsRoute
+  '/teams': typeof appTeamsRoute
+  '/select-org': typeof authSelectOrgRoute
+  '/sign-in': typeof authSignInRoute
+  '/sign-up': typeof authSignUpRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/': typeof appIndexRoute
+  '/issue/$issueId': typeof appIssueIssueIdRoute
+  '/settings/mcp': typeof appSettingsMcpRoute
+  '/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
+  '/settings': typeof appSettingsIndexRoute
+  '/project/$id/activity': typeof appProjectIdActivityRoute
+  '/project/$id/issues': typeof appProjectIdIssuesRoute
+  '/team/$teamId/cycles': typeof appTeamTeamIdCyclesRoute
+  '/team/$teamId/projects': typeof appTeamTeamIdProjectsRoute
+  '/team/$teamId/triage': typeof appTeamTeamIdTriageRoute
+  '/project/$id': typeof appProjectIdIndexRoute
+  '/team/$teamId': typeof appTeamTeamIdIndexRoute
+  '/team/$teamId/documents/$documentId': typeof appTeamTeamIdDocumentsDocumentIdRoute
+  '/team/$teamId/settings/cycles': typeof appTeamTeamIdSettingsCyclesRoute
+  '/team/$teamId/settings/general': typeof appTeamTeamIdSettingsGeneralRoute
+  '/team/$teamId/settings/labels': typeof appTeamTeamIdSettingsLabelsRoute
+  '/team/$teamId/settings/members': typeof appTeamTeamIdSettingsMembersRoute
+  '/team/$teamId/settings/statuses': typeof appTeamTeamIdSettingsStatusesRoute
+  '/team/$teamId/settings/templates': typeof appTeamTeamIdSettingsTemplatesRoute
+  '/team/$teamId/documents': typeof appTeamTeamIdDocumentsIndexRoute
+  '/team/$teamId/settings': typeof appTeamTeamIdSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  "/(app)/_": typeof appRouteWithChildren
-  "/(auth)/_": typeof authRouteWithChildren
-  "/(app)/_/inbox": typeof appInboxRoute
-  "/(app)/_/issues": typeof appIssuesRoute
-  "/(app)/_/members": typeof appMembersRoute
-  "/(app)/_/projects": typeof appProjectsRoute
-  "/(app)/_/teams": typeof appTeamsRoute
-  "/(auth)/_/select-org": typeof authSelectOrgRoute
-  "/(auth)/_/sign-in": typeof authSignInRoute
-  "/(auth)/_/sign-up": typeof authSignUpRoute
-  "/api/auth/$": typeof ApiAuthSplatRoute
-  "/(app)/_/": typeof appIndexRoute
-  "/(app)/_/issue/$issueId": typeof appIssueIssueIdRoute
-  "/(app)/_/project/$id": typeof appProjectIdRouteWithChildren
-  "/(app)/_/team/$teamId": typeof appTeamTeamIdRouteWithChildren
-  "/(auth)/_/accept-invitation/$invitationId": typeof authAcceptInvitationInvitationIdRoute
-  "/(app)/_/project/$id/activity": typeof appProjectIdActivityRoute
-  "/(app)/_/project/$id/issues": typeof appProjectIdIssuesRoute
-  "/(app)/_/team/$teamId/cycles": typeof appTeamTeamIdCyclesRoute
-  "/(app)/_/team/$teamId/documents": typeof appTeamTeamIdDocumentsRouteWithChildren
-  "/(app)/_/team/$teamId/projects": typeof appTeamTeamIdProjectsRoute
-  "/(app)/_/team/$teamId/settings": typeof appTeamTeamIdSettingsRouteWithChildren
-  "/(app)/_/team/$teamId/triage": typeof appTeamTeamIdTriageRoute
-  "/(app)/_/project/$id/": typeof appProjectIdIndexRoute
-  "/(app)/_/team/$teamId/": typeof appTeamTeamIdIndexRoute
-  "/(app)/_/team/$teamId/documents/$documentId": typeof appTeamTeamIdDocumentsDocumentIdRoute
-  "/(app)/_/team/$teamId/settings/cycles": typeof appTeamTeamIdSettingsCyclesRoute
-  "/(app)/_/team/$teamId/settings/general": typeof appTeamTeamIdSettingsGeneralRoute
-  "/(app)/_/team/$teamId/settings/labels": typeof appTeamTeamIdSettingsLabelsRoute
-  "/(app)/_/team/$teamId/settings/members": typeof appTeamTeamIdSettingsMembersRoute
-  "/(app)/_/team/$teamId/settings/statuses": typeof appTeamTeamIdSettingsStatusesRoute
-  "/(app)/_/team/$teamId/settings/templates": typeof appTeamTeamIdSettingsTemplatesRoute
-  "/(app)/_/team/$teamId/documents/": typeof appTeamTeamIdDocumentsIndexRoute
-  "/(app)/_/team/$teamId/settings/": typeof appTeamTeamIdSettingsIndexRoute
+  '/(app)/_': typeof appRouteWithChildren
+  '/(auth)/_': typeof authRouteWithChildren
+  '/api/mcp': typeof ApiMcpRoute
+  '/(app)/_/inbox': typeof appInboxRoute
+  '/(app)/_/issues': typeof appIssuesRoute
+  '/(app)/_/members': typeof appMembersRoute
+  '/(app)/_/projects': typeof appProjectsRoute
+  '/(app)/_/settings': typeof appSettingsRouteWithChildren
+  '/(app)/_/teams': typeof appTeamsRoute
+  '/(auth)/_/select-org': typeof authSelectOrgRoute
+  '/(auth)/_/sign-in': typeof authSignInRoute
+  '/(auth)/_/sign-up': typeof authSignUpRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/(app)/_/': typeof appIndexRoute
+  '/(app)/_/issue/$issueId': typeof appIssueIssueIdRoute
+  '/(app)/_/project/$id': typeof appProjectIdRouteWithChildren
+  '/(app)/_/settings/mcp': typeof appSettingsMcpRoute
+  '/(app)/_/team/$teamId': typeof appTeamTeamIdRouteWithChildren
+  '/(auth)/_/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
+  '/(app)/_/settings/': typeof appSettingsIndexRoute
+  '/(app)/_/project/$id/activity': typeof appProjectIdActivityRoute
+  '/(app)/_/project/$id/issues': typeof appProjectIdIssuesRoute
+  '/(app)/_/team/$teamId/cycles': typeof appTeamTeamIdCyclesRoute
+  '/(app)/_/team/$teamId/documents': typeof appTeamTeamIdDocumentsRouteWithChildren
+  '/(app)/_/team/$teamId/projects': typeof appTeamTeamIdProjectsRoute
+  '/(app)/_/team/$teamId/settings': typeof appTeamTeamIdSettingsRouteWithChildren
+  '/(app)/_/team/$teamId/triage': typeof appTeamTeamIdTriageRoute
+  '/(app)/_/project/$id/': typeof appProjectIdIndexRoute
+  '/(app)/_/team/$teamId/': typeof appTeamTeamIdIndexRoute
+  '/(app)/_/team/$teamId/documents/$documentId': typeof appTeamTeamIdDocumentsDocumentIdRoute
+  '/(app)/_/team/$teamId/settings/cycles': typeof appTeamTeamIdSettingsCyclesRoute
+  '/(app)/_/team/$teamId/settings/general': typeof appTeamTeamIdSettingsGeneralRoute
+  '/(app)/_/team/$teamId/settings/labels': typeof appTeamTeamIdSettingsLabelsRoute
+  '/(app)/_/team/$teamId/settings/members': typeof appTeamTeamIdSettingsMembersRoute
+  '/(app)/_/team/$teamId/settings/statuses': typeof appTeamTeamIdSettingsStatusesRoute
+  '/(app)/_/team/$teamId/settings/templates': typeof appTeamTeamIdSettingsTemplatesRoute
+  '/(app)/_/team/$teamId/documents/': typeof appTeamTeamIdDocumentsIndexRoute
+  '/(app)/_/team/$teamId/settings/': typeof appTeamTeamIdSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/inbox"
-    | "/issues"
-    | "/members"
-    | "/projects"
-    | "/teams"
-    | "/select-org"
-    | "/sign-in"
-    | "/sign-up"
-    | "/api/auth/$"
-    | "/"
-    | "/issue/$issueId"
-    | "/project/$id"
-    | "/team/$teamId"
-    | "/accept-invitation/$invitationId"
-    | "/project/$id/activity"
-    | "/project/$id/issues"
-    | "/team/$teamId/cycles"
-    | "/team/$teamId/documents"
-    | "/team/$teamId/projects"
-    | "/team/$teamId/settings"
-    | "/team/$teamId/triage"
-    | "/project/$id/"
-    | "/team/$teamId/"
-    | "/team/$teamId/documents/$documentId"
-    | "/team/$teamId/settings/cycles"
-    | "/team/$teamId/settings/general"
-    | "/team/$teamId/settings/labels"
-    | "/team/$teamId/settings/members"
-    | "/team/$teamId/settings/statuses"
-    | "/team/$teamId/settings/templates"
-    | "/team/$teamId/documents/"
-    | "/team/$teamId/settings/"
+    | '/api/mcp'
+    | '/inbox'
+    | '/issues'
+    | '/members'
+    | '/projects'
+    | '/settings'
+    | '/teams'
+    | '/select-org'
+    | '/sign-in'
+    | '/sign-up'
+    | '/api/auth/$'
+    | '/'
+    | '/issue/$issueId'
+    | '/project/$id'
+    | '/settings/mcp'
+    | '/team/$teamId'
+    | '/accept-invitation/$invitationId'
+    | '/settings/'
+    | '/project/$id/activity'
+    | '/project/$id/issues'
+    | '/team/$teamId/cycles'
+    | '/team/$teamId/documents'
+    | '/team/$teamId/projects'
+    | '/team/$teamId/settings'
+    | '/team/$teamId/triage'
+    | '/project/$id/'
+    | '/team/$teamId/'
+    | '/team/$teamId/documents/$documentId'
+    | '/team/$teamId/settings/cycles'
+    | '/team/$teamId/settings/general'
+    | '/team/$teamId/settings/labels'
+    | '/team/$teamId/settings/members'
+    | '/team/$teamId/settings/statuses'
+    | '/team/$teamId/settings/templates'
+    | '/team/$teamId/documents/'
+    | '/team/$teamId/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | "/inbox"
-    | "/issues"
-    | "/members"
-    | "/projects"
-    | "/teams"
-    | "/select-org"
-    | "/sign-in"
-    | "/sign-up"
-    | "/api/auth/$"
-    | "/"
-    | "/issue/$issueId"
-    | "/accept-invitation/$invitationId"
-    | "/project/$id/activity"
-    | "/project/$id/issues"
-    | "/team/$teamId/cycles"
-    | "/team/$teamId/projects"
-    | "/team/$teamId/triage"
-    | "/project/$id"
-    | "/team/$teamId"
-    | "/team/$teamId/documents/$documentId"
-    | "/team/$teamId/settings/cycles"
-    | "/team/$teamId/settings/general"
-    | "/team/$teamId/settings/labels"
-    | "/team/$teamId/settings/members"
-    | "/team/$teamId/settings/statuses"
-    | "/team/$teamId/settings/templates"
-    | "/team/$teamId/documents"
-    | "/team/$teamId/settings"
+    | '/api/mcp'
+    | '/inbox'
+    | '/issues'
+    | '/members'
+    | '/projects'
+    | '/teams'
+    | '/select-org'
+    | '/sign-in'
+    | '/sign-up'
+    | '/api/auth/$'
+    | '/'
+    | '/issue/$issueId'
+    | '/settings/mcp'
+    | '/accept-invitation/$invitationId'
+    | '/settings'
+    | '/project/$id/activity'
+    | '/project/$id/issues'
+    | '/team/$teamId/cycles'
+    | '/team/$teamId/projects'
+    | '/team/$teamId/triage'
+    | '/project/$id'
+    | '/team/$teamId'
+    | '/team/$teamId/documents/$documentId'
+    | '/team/$teamId/settings/cycles'
+    | '/team/$teamId/settings/general'
+    | '/team/$teamId/settings/labels'
+    | '/team/$teamId/settings/members'
+    | '/team/$teamId/settings/statuses'
+    | '/team/$teamId/settings/templates'
+    | '/team/$teamId/documents'
+    | '/team/$teamId/settings'
   id:
-    | "__root__"
-    | "/(app)/_"
-    | "/(auth)/_"
-    | "/(app)/_/inbox"
-    | "/(app)/_/issues"
-    | "/(app)/_/members"
-    | "/(app)/_/projects"
-    | "/(app)/_/teams"
-    | "/(auth)/_/select-org"
-    | "/(auth)/_/sign-in"
-    | "/(auth)/_/sign-up"
-    | "/api/auth/$"
-    | "/(app)/_/"
-    | "/(app)/_/issue/$issueId"
-    | "/(app)/_/project/$id"
-    | "/(app)/_/team/$teamId"
-    | "/(auth)/_/accept-invitation/$invitationId"
-    | "/(app)/_/project/$id/activity"
-    | "/(app)/_/project/$id/issues"
-    | "/(app)/_/team/$teamId/cycles"
-    | "/(app)/_/team/$teamId/documents"
-    | "/(app)/_/team/$teamId/projects"
-    | "/(app)/_/team/$teamId/settings"
-    | "/(app)/_/team/$teamId/triage"
-    | "/(app)/_/project/$id/"
-    | "/(app)/_/team/$teamId/"
-    | "/(app)/_/team/$teamId/documents/$documentId"
-    | "/(app)/_/team/$teamId/settings/cycles"
-    | "/(app)/_/team/$teamId/settings/general"
-    | "/(app)/_/team/$teamId/settings/labels"
-    | "/(app)/_/team/$teamId/settings/members"
-    | "/(app)/_/team/$teamId/settings/statuses"
-    | "/(app)/_/team/$teamId/settings/templates"
-    | "/(app)/_/team/$teamId/documents/"
-    | "/(app)/_/team/$teamId/settings/"
+    | '__root__'
+    | '/(app)/_'
+    | '/(auth)/_'
+    | '/api/mcp'
+    | '/(app)/_/inbox'
+    | '/(app)/_/issues'
+    | '/(app)/_/members'
+    | '/(app)/_/projects'
+    | '/(app)/_/settings'
+    | '/(app)/_/teams'
+    | '/(auth)/_/select-org'
+    | '/(auth)/_/sign-in'
+    | '/(auth)/_/sign-up'
+    | '/api/auth/$'
+    | '/(app)/_/'
+    | '/(app)/_/issue/$issueId'
+    | '/(app)/_/project/$id'
+    | '/(app)/_/settings/mcp'
+    | '/(app)/_/team/$teamId'
+    | '/(auth)/_/accept-invitation/$invitationId'
+    | '/(app)/_/settings/'
+    | '/(app)/_/project/$id/activity'
+    | '/(app)/_/project/$id/issues'
+    | '/(app)/_/team/$teamId/cycles'
+    | '/(app)/_/team/$teamId/documents'
+    | '/(app)/_/team/$teamId/projects'
+    | '/(app)/_/team/$teamId/settings'
+    | '/(app)/_/team/$teamId/triage'
+    | '/(app)/_/project/$id/'
+    | '/(app)/_/team/$teamId/'
+    | '/(app)/_/team/$teamId/documents/$documentId'
+    | '/(app)/_/team/$teamId/settings/cycles'
+    | '/(app)/_/team/$teamId/settings/general'
+    | '/(app)/_/team/$teamId/settings/labels'
+    | '/(app)/_/team/$teamId/settings/members'
+    | '/(app)/_/team/$teamId/settings/statuses'
+    | '/(app)/_/team/$teamId/settings/templates'
+    | '/(app)/_/team/$teamId/documents/'
+    | '/(app)/_/team/$teamId/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   appRoute: typeof appRouteWithChildren
   authRoute: typeof authRouteWithChildren
+  ApiMcpRoute: typeof ApiMcpRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/(app)/_": {
-      id: "/(app)/_"
-      path: ""
-      fullPath: ""
+    '/(app)/_': {
+      id: '/(app)/_'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof appRouteImport
       parentRoute: typeof rootRouteImport
     }
-    "/(auth)/_": {
-      id: "/(auth)/_"
-      path: ""
-      fullPath: ""
+    '/(auth)/_': {
+      id: '/(auth)/_'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof authRouteImport
       parentRoute: typeof rootRouteImport
     }
-    "/(app)/_/": {
-      id: "/(app)/_/"
-      path: "/"
-      fullPath: "/"
+    '/api/mcp': {
+      id: '/api/mcp'
+      path: '/api/mcp'
+      fullPath: '/api/mcp'
+      preLoaderRoute: typeof ApiMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)/_/': {
+      id: '/(app)/_/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof appIndexRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/inbox": {
-      id: "/(app)/_/inbox"
-      path: "/inbox"
-      fullPath: "/inbox"
+    '/(app)/_/inbox': {
+      id: '/(app)/_/inbox'
+      path: '/inbox'
+      fullPath: '/inbox'
       preLoaderRoute: typeof appInboxRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/issues": {
-      id: "/(app)/_/issues"
-      path: "/issues"
-      fullPath: "/issues"
+    '/(app)/_/issues': {
+      id: '/(app)/_/issues'
+      path: '/issues'
+      fullPath: '/issues'
       preLoaderRoute: typeof appIssuesRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/members": {
-      id: "/(app)/_/members"
-      path: "/members"
-      fullPath: "/members"
+    '/(app)/_/members': {
+      id: '/(app)/_/members'
+      path: '/members'
+      fullPath: '/members'
       preLoaderRoute: typeof appMembersRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/projects": {
-      id: "/(app)/_/projects"
-      path: "/projects"
-      fullPath: "/projects"
+    '/(app)/_/projects': {
+      id: '/(app)/_/projects'
+      path: '/projects'
+      fullPath: '/projects'
       preLoaderRoute: typeof appProjectsRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/teams": {
-      id: "/(app)/_/teams"
-      path: "/teams"
-      fullPath: "/teams"
+    '/(app)/_/settings': {
+      id: '/(app)/_/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof appSettingsRouteImport
+      parentRoute: typeof appRoute
+    }
+    '/(app)/_/teams': {
+      id: '/(app)/_/teams'
+      path: '/teams'
+      fullPath: '/teams'
       preLoaderRoute: typeof appTeamsRouteImport
       parentRoute: typeof appRoute
     }
-    "/(auth)/_/select-org": {
-      id: "/(auth)/_/select-org"
-      path: "/select-org"
-      fullPath: "/select-org"
+    '/(auth)/_/select-org': {
+      id: '/(auth)/_/select-org'
+      path: '/select-org'
+      fullPath: '/select-org'
       preLoaderRoute: typeof authSelectOrgRouteImport
       parentRoute: typeof authRoute
     }
-    "/(auth)/_/sign-in": {
-      id: "/(auth)/_/sign-in"
-      path: "/sign-in"
-      fullPath: "/sign-in"
+    '/(auth)/_/sign-in': {
+      id: '/(auth)/_/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
       preLoaderRoute: typeof authSignInRouteImport
       parentRoute: typeof authRoute
     }
-    "/(auth)/_/sign-up": {
-      id: "/(auth)/_/sign-up"
-      path: "/sign-up"
-      fullPath: "/sign-up"
+    '/(auth)/_/sign-up': {
+      id: '/(auth)/_/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
       preLoaderRoute: typeof authSignUpRouteImport
       parentRoute: typeof authRoute
     }
-    "/api/auth/$": {
-      id: "/api/auth/$"
-      path: "/api/auth/$"
-      fullPath: "/api/auth/$"
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    "/(app)/_/issue/$issueId": {
-      id: "/(app)/_/issue/$issueId"
-      path: "/issue/$issueId"
-      fullPath: "/issue/$issueId"
+    '/(app)/_/issue/$issueId': {
+      id: '/(app)/_/issue/$issueId'
+      path: '/issue/$issueId'
+      fullPath: '/issue/$issueId'
       preLoaderRoute: typeof appIssueIssueIdRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/project/$id": {
-      id: "/(app)/_/project/$id"
-      path: "/project/$id"
-      fullPath: "/project/$id"
+    '/(app)/_/project/$id': {
+      id: '/(app)/_/project/$id'
+      path: '/project/$id'
+      fullPath: '/project/$id'
       preLoaderRoute: typeof appProjectIdRouteImport
       parentRoute: typeof appRoute
     }
-    "/(app)/_/team/$teamId": {
-      id: "/(app)/_/team/$teamId"
-      path: "/team/$teamId"
-      fullPath: "/team/$teamId"
+    '/(app)/_/settings/': {
+      id: '/(app)/_/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof appSettingsIndexRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
+    '/(app)/_/settings/mcp': {
+      id: '/(app)/_/settings/mcp'
+      path: '/mcp'
+      fullPath: '/settings/mcp'
+      preLoaderRoute: typeof appSettingsMcpRouteImport
+      parentRoute: typeof appSettingsRoute
+    }
+    '/(app)/_/team/$teamId': {
+      id: '/(app)/_/team/$teamId'
+      path: '/team/$teamId'
+      fullPath: '/team/$teamId'
       preLoaderRoute: typeof appTeamTeamIdRouteImport
       parentRoute: typeof appRoute
     }
-    "/(auth)/_/accept-invitation/$invitationId": {
-      id: "/(auth)/_/accept-invitation/$invitationId"
-      path: "/accept-invitation/$invitationId"
-      fullPath: "/accept-invitation/$invitationId"
+    '/(auth)/_/accept-invitation/$invitationId': {
+      id: '/(auth)/_/accept-invitation/$invitationId'
+      path: '/accept-invitation/$invitationId'
+      fullPath: '/accept-invitation/$invitationId'
       preLoaderRoute: typeof authAcceptInvitationInvitationIdRouteImport
       parentRoute: typeof authRoute
     }
-    "/(app)/_/project/$id/": {
-      id: "/(app)/_/project/$id/"
-      path: "/"
-      fullPath: "/project/$id/"
+    '/(app)/_/project/$id/': {
+      id: '/(app)/_/project/$id/'
+      path: '/'
+      fullPath: '/project/$id/'
       preLoaderRoute: typeof appProjectIdIndexRouteImport
       parentRoute: typeof appProjectIdRoute
     }
-    "/(app)/_/project/$id/activity": {
-      id: "/(app)/_/project/$id/activity"
-      path: "/activity"
-      fullPath: "/project/$id/activity"
+    '/(app)/_/project/$id/activity': {
+      id: '/(app)/_/project/$id/activity'
+      path: '/activity'
+      fullPath: '/project/$id/activity'
       preLoaderRoute: typeof appProjectIdActivityRouteImport
       parentRoute: typeof appProjectIdRoute
     }
-    "/(app)/_/project/$id/issues": {
-      id: "/(app)/_/project/$id/issues"
-      path: "/issues"
-      fullPath: "/project/$id/issues"
+    '/(app)/_/project/$id/issues': {
+      id: '/(app)/_/project/$id/issues'
+      path: '/issues'
+      fullPath: '/project/$id/issues'
       preLoaderRoute: typeof appProjectIdIssuesRouteImport
       parentRoute: typeof appProjectIdRoute
     }
-    "/(app)/_/team/$teamId/": {
-      id: "/(app)/_/team/$teamId/"
-      path: "/"
-      fullPath: "/team/$teamId/"
+    '/(app)/_/team/$teamId/': {
+      id: '/(app)/_/team/$teamId/'
+      path: '/'
+      fullPath: '/team/$teamId/'
       preLoaderRoute: typeof appTeamTeamIdIndexRouteImport
       parentRoute: typeof appTeamTeamIdRoute
     }
-    "/(app)/_/team/$teamId/cycles": {
-      id: "/(app)/_/team/$teamId/cycles"
-      path: "/cycles"
-      fullPath: "/team/$teamId/cycles"
+    '/(app)/_/team/$teamId/cycles': {
+      id: '/(app)/_/team/$teamId/cycles'
+      path: '/cycles'
+      fullPath: '/team/$teamId/cycles'
       preLoaderRoute: typeof appTeamTeamIdCyclesRouteImport
       parentRoute: typeof appTeamTeamIdRoute
     }
-    "/(app)/_/team/$teamId/documents": {
-      id: "/(app)/_/team/$teamId/documents"
-      path: "/documents"
-      fullPath: "/team/$teamId/documents"
+    '/(app)/_/team/$teamId/documents': {
+      id: '/(app)/_/team/$teamId/documents'
+      path: '/documents'
+      fullPath: '/team/$teamId/documents'
       preLoaderRoute: typeof appTeamTeamIdDocumentsRouteImport
       parentRoute: typeof appTeamTeamIdRoute
     }
-    "/(app)/_/team/$teamId/projects": {
-      id: "/(app)/_/team/$teamId/projects"
-      path: "/projects"
-      fullPath: "/team/$teamId/projects"
+    '/(app)/_/team/$teamId/projects': {
+      id: '/(app)/_/team/$teamId/projects'
+      path: '/projects'
+      fullPath: '/team/$teamId/projects'
       preLoaderRoute: typeof appTeamTeamIdProjectsRouteImport
       parentRoute: typeof appTeamTeamIdRoute
     }
-    "/(app)/_/team/$teamId/settings": {
-      id: "/(app)/_/team/$teamId/settings"
-      path: "/settings"
-      fullPath: "/team/$teamId/settings"
+    '/(app)/_/team/$teamId/settings': {
+      id: '/(app)/_/team/$teamId/settings'
+      path: '/settings'
+      fullPath: '/team/$teamId/settings'
       preLoaderRoute: typeof appTeamTeamIdSettingsRouteImport
       parentRoute: typeof appTeamTeamIdRoute
     }
-    "/(app)/_/team/$teamId/triage": {
-      id: "/(app)/_/team/$teamId/triage"
-      path: "/triage"
-      fullPath: "/team/$teamId/triage"
+    '/(app)/_/team/$teamId/triage': {
+      id: '/(app)/_/team/$teamId/triage'
+      path: '/triage'
+      fullPath: '/team/$teamId/triage'
       preLoaderRoute: typeof appTeamTeamIdTriageRouteImport
       parentRoute: typeof appTeamTeamIdRoute
     }
-    "/(app)/_/team/$teamId/documents/": {
-      id: "/(app)/_/team/$teamId/documents/"
-      path: "/"
-      fullPath: "/team/$teamId/documents/"
+    '/(app)/_/team/$teamId/documents/': {
+      id: '/(app)/_/team/$teamId/documents/'
+      path: '/'
+      fullPath: '/team/$teamId/documents/'
       preLoaderRoute: typeof appTeamTeamIdDocumentsIndexRouteImport
       parentRoute: typeof appTeamTeamIdDocumentsRoute
     }
-    "/(app)/_/team/$teamId/documents/$documentId": {
-      id: "/(app)/_/team/$teamId/documents/$documentId"
-      path: "/$documentId"
-      fullPath: "/team/$teamId/documents/$documentId"
+    '/(app)/_/team/$teamId/documents/$documentId': {
+      id: '/(app)/_/team/$teamId/documents/$documentId'
+      path: '/$documentId'
+      fullPath: '/team/$teamId/documents/$documentId'
       preLoaderRoute: typeof appTeamTeamIdDocumentsDocumentIdRouteImport
       parentRoute: typeof appTeamTeamIdDocumentsRoute
     }
-    "/(app)/_/team/$teamId/settings/": {
-      id: "/(app)/_/team/$teamId/settings/"
-      path: "/"
-      fullPath: "/team/$teamId/settings/"
+    '/(app)/_/team/$teamId/settings/': {
+      id: '/(app)/_/team/$teamId/settings/'
+      path: '/'
+      fullPath: '/team/$teamId/settings/'
       preLoaderRoute: typeof appTeamTeamIdSettingsIndexRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
-    "/(app)/_/team/$teamId/settings/cycles": {
-      id: "/(app)/_/team/$teamId/settings/cycles"
-      path: "/cycles"
-      fullPath: "/team/$teamId/settings/cycles"
+    '/(app)/_/team/$teamId/settings/cycles': {
+      id: '/(app)/_/team/$teamId/settings/cycles'
+      path: '/cycles'
+      fullPath: '/team/$teamId/settings/cycles'
       preLoaderRoute: typeof appTeamTeamIdSettingsCyclesRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
-    "/(app)/_/team/$teamId/settings/general": {
-      id: "/(app)/_/team/$teamId/settings/general"
-      path: "/general"
-      fullPath: "/team/$teamId/settings/general"
+    '/(app)/_/team/$teamId/settings/general': {
+      id: '/(app)/_/team/$teamId/settings/general'
+      path: '/general'
+      fullPath: '/team/$teamId/settings/general'
       preLoaderRoute: typeof appTeamTeamIdSettingsGeneralRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
-    "/(app)/_/team/$teamId/settings/labels": {
-      id: "/(app)/_/team/$teamId/settings/labels"
-      path: "/labels"
-      fullPath: "/team/$teamId/settings/labels"
+    '/(app)/_/team/$teamId/settings/labels': {
+      id: '/(app)/_/team/$teamId/settings/labels'
+      path: '/labels'
+      fullPath: '/team/$teamId/settings/labels'
       preLoaderRoute: typeof appTeamTeamIdSettingsLabelsRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
-    "/(app)/_/team/$teamId/settings/members": {
-      id: "/(app)/_/team/$teamId/settings/members"
-      path: "/members"
-      fullPath: "/team/$teamId/settings/members"
+    '/(app)/_/team/$teamId/settings/members': {
+      id: '/(app)/_/team/$teamId/settings/members'
+      path: '/members'
+      fullPath: '/team/$teamId/settings/members'
       preLoaderRoute: typeof appTeamTeamIdSettingsMembersRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
-    "/(app)/_/team/$teamId/settings/statuses": {
-      id: "/(app)/_/team/$teamId/settings/statuses"
-      path: "/statuses"
-      fullPath: "/team/$teamId/settings/statuses"
+    '/(app)/_/team/$teamId/settings/statuses': {
+      id: '/(app)/_/team/$teamId/settings/statuses'
+      path: '/statuses'
+      fullPath: '/team/$teamId/settings/statuses'
       preLoaderRoute: typeof appTeamTeamIdSettingsStatusesRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
-    "/(app)/_/team/$teamId/settings/templates": {
-      id: "/(app)/_/team/$teamId/settings/templates"
-      path: "/templates"
-      fullPath: "/team/$teamId/settings/templates"
+    '/(app)/_/team/$teamId/settings/templates': {
+      id: '/(app)/_/team/$teamId/settings/templates'
+      path: '/templates'
+      fullPath: '/team/$teamId/settings/templates'
       preLoaderRoute: typeof appTeamTeamIdSettingsTemplatesRouteImport
       parentRoute: typeof appTeamTeamIdSettingsRoute
     }
   }
 }
+
+interface appSettingsRouteChildren {
+  appSettingsMcpRoute: typeof appSettingsMcpRoute
+  appSettingsIndexRoute: typeof appSettingsIndexRoute
+}
+
+const appSettingsRouteChildren: appSettingsRouteChildren = {
+  appSettingsMcpRoute: appSettingsMcpRoute,
+  appSettingsIndexRoute: appSettingsIndexRoute,
+}
+
+const appSettingsRouteWithChildren = appSettingsRoute._addFileChildren(
+  appSettingsRouteChildren,
+)
 
 interface appProjectIdRouteChildren {
   appProjectIdActivityRoute: typeof appProjectIdActivityRoute
@@ -689,7 +778,7 @@ const appProjectIdRouteChildren: appProjectIdRouteChildren = {
 }
 
 const appProjectIdRouteWithChildren = appProjectIdRoute._addFileChildren(
-  appProjectIdRouteChildren
+  appProjectIdRouteChildren,
 )
 
 interface appTeamTeamIdDocumentsRouteChildren {
@@ -706,7 +795,7 @@ const appTeamTeamIdDocumentsRouteChildren: appTeamTeamIdDocumentsRouteChildren =
 
 const appTeamTeamIdDocumentsRouteWithChildren =
   appTeamTeamIdDocumentsRoute._addFileChildren(
-    appTeamTeamIdDocumentsRouteChildren
+    appTeamTeamIdDocumentsRouteChildren,
   )
 
 interface appTeamTeamIdSettingsRouteChildren {
@@ -731,7 +820,7 @@ const appTeamTeamIdSettingsRouteChildren: appTeamTeamIdSettingsRouteChildren = {
 
 const appTeamTeamIdSettingsRouteWithChildren =
   appTeamTeamIdSettingsRoute._addFileChildren(
-    appTeamTeamIdSettingsRouteChildren
+    appTeamTeamIdSettingsRouteChildren,
   )
 
 interface appTeamTeamIdRouteChildren {
@@ -753,7 +842,7 @@ const appTeamTeamIdRouteChildren: appTeamTeamIdRouteChildren = {
 }
 
 const appTeamTeamIdRouteWithChildren = appTeamTeamIdRoute._addFileChildren(
-  appTeamTeamIdRouteChildren
+  appTeamTeamIdRouteChildren,
 )
 
 interface appRouteChildren {
@@ -761,6 +850,7 @@ interface appRouteChildren {
   appIssuesRoute: typeof appIssuesRoute
   appMembersRoute: typeof appMembersRoute
   appProjectsRoute: typeof appProjectsRoute
+  appSettingsRoute: typeof appSettingsRouteWithChildren
   appTeamsRoute: typeof appTeamsRoute
   appIndexRoute: typeof appIndexRoute
   appIssueIssueIdRoute: typeof appIssueIssueIdRoute
@@ -773,6 +863,7 @@ const appRouteChildren: appRouteChildren = {
   appIssuesRoute: appIssuesRoute,
   appMembersRoute: appMembersRoute,
   appProjectsRoute: appProjectsRoute,
+  appSettingsRoute: appSettingsRouteWithChildren,
   appTeamsRoute: appTeamsRoute,
   appIndexRoute: appIndexRoute,
   appIssueIssueIdRoute: appIssueIssueIdRoute,
@@ -801,15 +892,16 @@ const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   appRoute: appRouteWithChildren,
   authRoute: authRouteWithChildren,
+  ApiMcpRoute: ApiMcpRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx"
-import type { createStart } from "@tanstack/react-start"
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
