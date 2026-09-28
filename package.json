@@ -1,5 +1,5 @@
 {
-  "name": "what-if",
+  "name": "project-one",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "turbo format",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "db:push": "pnpm --filter web db:push"
   },
   "devDependencies": {
     "prettier": "^3.8.3",
@@ -23,6 +24,12 @@
     "onlyBuiltDependencies": [
       "esbuild",
       "lightningcss"
+    ]
+  },
+  "intent": {
+    "skills": [
+      "@tanstack/*",
+      "dotenv"
     ]
   }
 }

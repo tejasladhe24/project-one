@@ -1,0 +1,196 @@
+import * as React from "react"
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router"
+import { Alert, AlertDescription } from "@workspace/ui/components/alert"
+import { Button } from "@workspace/ui/components/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card"
+import { Spinner } from "@workspace/ui/components/spinner"
+import { authClient } from "@/lib/auth/client"
+import { getInvitation, getSession } from "@/lib/auth/session"
+
+export const Route = createFileRoute(
+  "/(auth)/_/accept-invitation/$invitationId"
+)({
+  beforeLoad: async ({ params }) => {
+    const session = await getSession()
+    if (!session) {
+      throw redirect({
+        to: "/sign-in",
+        search: {
+          redirect: `/accept-invitation/${params.invitationId}`,
+        },
+      })
+    }
+    return { session }
+  },
+  loader: async ({ params, context }) => {
+    const result = await getInvitation({
+      data: { invitationId: params.invitationId },
+    })
+    return {
+      invitation: result.invitation,
+      error: result.error,
+      userEmail: context.session.user.email,
+    }
+  },
+  component: AcceptInvitationPage,
+})
+
+function AcceptInvitationPage() {
+  const { invitation, error: loadError, userEmail } = Route.useLoaderData()
+  const { invitationId } = Route.useParams()
+  const navigate = useNavigate()
+  const router = useRouter()
+  const [pending, setPending] = React.useState<"accept" | "reject" | null>(
+    null
+  )
+  const [actionError, setActionError] = React.useState<string | null>(null)
+
+  async function accept() {
+    setActionError(null)
+    setPending("accept")
+    try {
+      const { error } = await authClient.organization.acceptInvitation({
+        invitationId,
+      })
+      if (error) {
+        setActionError(error.message ?? "Could not accept invitation")
+        setPending(null)
+        return
+      }
+      void router.invalidate()
+      void navigate({ to: "/" })
+    } catch (err) {
+      setActionError(
+        err instanceof Error ? err.message : "Could not accept invitation"
+      )
+      setPending(null)
+    }
+  }
+
+  async function reject() {
+    setActionError(null)
+    setPending("reject")
+    try {
+      const { error } = await authClient.organization.rejectInvitation({
+        invitationId,
+      })
+      if (error) {
+        setActionError(error.message ?? "Could not reject invitation")
+        setPending(null)
+        return
+      }
+      void navigate({ to: "/select-org" })
+    } catch (err) {
+      setActionError(
+        err instanceof Error ? err.message : "Could not reject invitation"
+      )
+      setPending(null)
+    }
+  }
+
+  if (loadError || !invitation) {
+    return (
+      <div className="m-auto flex w-full justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Invitation unavailable</CardTitle>
+            <CardDescription>
+              This invitation may have expired, already been used, or was sent
+              to a different email address.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Alert variant="destructive">
+              <AlertDescription>
+                {loadError ?? "Invitation not found."}
+              </AlertDescription>
+            </Alert>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Signed in as {userEmail}
+            </p>
+          </CardContent>
+          <CardFooter className="flex flex-col gap-2">
+            <Button
+              className="w-full"
+              render={<Link to="/select-org" />}
+              nativeButton={false}
+            >
+              Go to organizations
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              render={<Link to="/sign-in" search={{ redirect: undefined }} />}
+              nativeButton={false}
+            >
+              Sign in with another account
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    )
+  }
+
+  return (
+    <div className="m-auto flex w-full justify-center">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Join {invitation.organizationName}</CardTitle>
+          <CardDescription>
+            {invitation.inviterEmail} invited you to join as{" "}
+            <span className="font-medium text-foreground">{invitation.role}</span>
+            .
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          <p className="text-sm text-muted-foreground">
+            Accepting will add{" "}
+            <span className="font-medium text-foreground">{userEmail}</span> to
+            this organization.
+          </p>
+          {actionError ? (
+            <Alert variant="destructive">
+              <AlertDescription>{actionError}</AlertDescription>
+            </Alert>
+          ) : null}
+        </CardContent>
+        <CardFooter className="flex flex-col gap-2 sm:flex-row">
+          <Button
+            className="w-full"
+            disabled={pending !== null}
+            onClick={() => void accept()}
+          >
+            {pending === "accept" ? (
+              <Spinner data-icon="inline-start" />
+            ) : null}
+            {pending === "accept" ? "Joining…" : "Accept invitation"}
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={pending !== null}
+            onClick={() => void reject()}
+          >
+            {pending === "reject" ? (
+              <Spinner data-icon="inline-start" />
+            ) : null}
+            {pending === "reject" ? "Rejecting…" : "Decline"}
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  )
+}
