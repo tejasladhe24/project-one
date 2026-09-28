@@ -50,3 +50,32 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build
+        env:
+          # Compile-time placeholders; preview/runtime secrets come from Vercel.
+          POSTGRES_URL: postgresql://ci:ci@127.0.0.1:5432/ci
+          POSTGRES_SSL: "false"
+          REDIS_URL: redis://127.0.0.1:6379
+          BETTER_AUTH_SECRET: ci-better-auth-secret-min-32-chars!!
+          BETTER_AUTH_DOMAIN: localhost
+          GOOGLE_CLIENT_ID: ci-google-client-id
+          GOOGLE_CLIENT_SECRET: ci-google-client-secret
+          RESEND_API_KEY: re_ci_placeholder
+          EMAIL_SENDER_NAME: CI
+          EMAIL_SENDER_ADDRESS: ci@example.com
+          APP_URL: http://localhost:3000
+          VITE_APP_URL: http://localhost:3000
+        run: pnpm build
