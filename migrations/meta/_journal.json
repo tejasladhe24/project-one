@@ -8,6 +8,20 @@
       "when": 1790587872502,
       "tag": "0000_sloppy_meltdown",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790610551516,
+      "tag": "0001_rare_iron_patriot",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790615027331,
+      "tag": "0002_colorful_maria_hill",
+      "breakpoints": true
     }
   ]
 }

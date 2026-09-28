@@ -3,9 +3,11 @@ import { useRouter } from "@tanstack/react-router"
 import {
   IconBuilding,
   IconCheck,
+  IconCopy,
   IconPlus,
   IconSelector,
 } from "@tabler/icons-react"
+import { toast } from "sonner"
 
 import {
   DropdownMenu,
@@ -101,8 +103,8 @@ export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
             </div>
             <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">{activeOrg.title}</span>
-              <span className="truncate text-xs text-muted-foreground">
-                Organization
+              <span className="truncate font-mono text-[8px] text-muted-foreground">
+                {activeOrg.id}
               </span>
             </div>
             <IconSelector className="ml-auto size-4 shrink-0 text-muted-foreground" />
@@ -147,6 +149,22 @@ export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
                 </div>
                 <span className="font-medium text-muted-foreground">
                   Add organization
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="gap-2 p-2"
+                onClick={() => {
+                  void navigator.clipboard.writeText(activeOrg.id).then(
+                    () => toast.success("Organization ID copied"),
+                    () => toast.error("Could not copy organization ID")
+                  )
+                }}
+              >
+                <div className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-background">
+                  <IconCopy className="size-3.5" />
+                </div>
+                <span className="font-medium text-muted-foreground">
+                  Copy active org ID
                 </span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
