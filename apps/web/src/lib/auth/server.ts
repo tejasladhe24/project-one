@@ -76,6 +76,8 @@ export const auth = betterAuth({
       ...(appHost ? [appHost] : []),
       "project-one-tejas-ladhes-projects.vercel.app",
       "project-one-one-zeta.vercel.app",
+      "project-one-tejas-dev.vercel.app",
+      "project-one-tejas.vercel.app",
       "project-one-git-dev-tejas-ladhes-projects.vercel.app",
       "*.vercel.app",
     ],
@@ -94,6 +96,8 @@ export const auth = betterAuth({
       : null,
     "https://project-one-tejas-ladhes-projects.vercel.app",
     "https://project-one-one-zeta.vercel.app",
+    "https://project-one-tejas-dev.vercel.app",
+    "https://project-one-tejas.vercel.app",
     "https://project-one-git-dev-tejas-ladhes-projects.vercel.app",
     "https://*.vercel.app",
   ].filter(
