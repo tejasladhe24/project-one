@@ -4,6 +4,7 @@ import { TeamTriageView } from "@/components/team/team-triage-view"
 import { listIssues } from "@/lib/issues"
 import { listLabels } from "@/lib/labels"
 import { listProjectOptions } from "@/lib/projects"
+import { pageMeta } from "@/lib/seo"
 import { listStatuses } from "@/lib/statuses"
 import { listTeamMembersDetailed } from "@/lib/teams"
 
@@ -95,6 +96,18 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/triage")({
         name: l.name,
       })),
     }
+  },
+  head: ({ loaderData }) => {
+    const teamName = loaderData?.team?.name
+    const selected = loaderData?.issues?.find(
+      (i) => i.id === loaderData.selectedId
+    )
+    const title = selected?.title
+      ? `Triage · ${selected.title}`
+      : teamName
+        ? `Triage · ${teamName}`
+        : "Triage"
+    return pageMeta({ title, noIndex: true })
   },
   component: TeamTriagePage,
 })

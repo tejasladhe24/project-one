@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 import { SignInForm } from "@/components/auth/sign-in-form"
+import { pageMeta } from "@/lib/seo"
 
 const signInSearchSchema = z.object({
   redirect: z.string().optional().catch(undefined),
@@ -8,6 +9,11 @@ const signInSearchSchema = z.object({
 
 export const Route = createFileRoute("/(auth)/_/sign-in")({
   validateSearch: signInSearchSchema,
+  head: () =>
+    pageMeta({
+      title: "Sign in",
+      description: "Sign in to Project One to manage your teams and work.",
+    }),
   component: SignInPage,
 })
 

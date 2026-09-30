@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ProfileForm } from "@/components/settings/profile-form"
 import { getSession, listOrganizations } from "@/lib/auth/session"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/settings/profile")({
   loader: async () => {
@@ -39,6 +40,7 @@ export const Route = createFileRoute("/(app)/_/settings/profile")({
         : null,
     }
   },
+  head: () => pageMeta({ title: "Profile", noIndex: true }),
   component: ProfileSettingsPage,
 })
 

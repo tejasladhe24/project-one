@@ -10,6 +10,7 @@ import { TeamHomeShell } from "@/components/team/team-home-shell"
 import { useServerMutation } from "@/hooks/use-server-mutation"
 import { listTeamDocuments } from "@/lib/documents"
 import { listTeamMembersDetailed, updateTeamSettings } from "@/lib/teams"
+import { pageMeta } from "@/lib/seo"
 import { Separator } from "@workspace/ui/components/separator"
 import { cn } from "@workspace/ui/lib/utils"
 import { buttonVariants } from "@workspace/ui/components/button"
@@ -32,6 +33,11 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/")({
       documentCount: documents.length,
     }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name ?? "Team",
+      noIndex: true,
+    }),
   component: TeamOverviewPage,
 })
 

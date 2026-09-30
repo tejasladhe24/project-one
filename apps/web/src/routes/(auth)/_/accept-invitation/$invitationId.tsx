@@ -22,6 +22,7 @@ import {
 } from "@/components/auth/auth-shell"
 import { authClient } from "@/lib/auth/client"
 import { getInvitation, getSession } from "@/lib/auth/session"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute(
   "/(auth)/_/accept-invitation/$invitationId"
@@ -48,6 +49,11 @@ export const Route = createFileRoute(
       userEmail: context.session.user.email,
     }
   },
+  head: () =>
+    pageMeta({
+      title: "Accept invitation",
+      noIndex: true,
+    }),
   component: AcceptInvitationPage,
 })
 

@@ -3,6 +3,7 @@ import { IssuesTable } from "@/components/issues/issues-table"
 import { getCurrentCycleNumber } from "@/lib/cycles/dates"
 import { listIssues, toIssueRows } from "@/lib/issues"
 import { listProjectOptions } from "@/lib/projects"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/team/$teamId/cycles")({
   loader: async ({ params, context }) => {
@@ -40,6 +41,13 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/cycles")({
       cycleSettings,
     }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name
+        ? `Cycles · ${loaderData.team.name}`
+        : "Cycles",
+      noIndex: true,
+    }),
   component: TeamCyclesPage,
 })
 

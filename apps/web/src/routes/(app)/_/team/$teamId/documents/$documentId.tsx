@@ -12,6 +12,7 @@ import { MarkdownEditor } from "@/components/markdown-editor"
 import { TeamHomeShell } from "@/components/team/team-home-shell"
 import { useServerMutation } from "@/hooks/use-server-mutation"
 import { getTeamDocument, updateTeamDocument } from "@/lib/documents"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute(
   "/(app)/_/team/$teamId/documents/$documentId"
@@ -25,6 +26,11 @@ export const Route = createFileRoute(
     ])
     return { team, document }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.document?.title ?? "Document",
+      noIndex: true,
+    }),
   component: TeamDocumentPage,
 })
 

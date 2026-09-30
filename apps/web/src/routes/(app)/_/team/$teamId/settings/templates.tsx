@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Button } from "@workspace/ui/components/button"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute(
   "/(app)/_/team/$teamId/settings/templates"
@@ -8,6 +9,13 @@ export const Route = createFileRoute(
     const team = context.team
     return { team }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name
+        ? `Templates · ${loaderData.team.name}`
+        : "Templates",
+      noIndex: true,
+    }),
   component: TeamTemplatesPage,
 })
 

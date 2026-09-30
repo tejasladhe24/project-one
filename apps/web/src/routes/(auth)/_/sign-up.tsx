@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 import { SignUpForm } from "@/components/auth/sign-up-form"
+import { pageMeta } from "@/lib/seo"
 
 const signUpSearchSchema = z.object({
   redirect: z.string().optional().catch(undefined),
@@ -8,6 +9,12 @@ const signUpSearchSchema = z.object({
 
 export const Route = createFileRoute("/(auth)/_/sign-up")({
   validateSearch: signUpSearchSchema,
+  head: () =>
+    pageMeta({
+      title: "Create account",
+      description:
+        "Create a Project One account to start collaborating with your team.",
+    }),
   component: SignUpPage,
 })
 

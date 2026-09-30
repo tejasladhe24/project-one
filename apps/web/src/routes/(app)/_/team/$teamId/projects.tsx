@@ -4,6 +4,7 @@ import {
   type ProjectRow,
 } from "@/components/projects/projects-table"
 import { listTeamProjects } from "@/lib/projects"
+import { pageMeta } from "@/lib/seo"
 
 function toProjectRows(
   data: Awaited<ReturnType<typeof listTeamProjects>>
@@ -39,6 +40,13 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/projects")({
     ])
     return { team, projects: toProjectRows(data) }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name
+        ? `Projects · ${loaderData.team.name}`
+        : "Projects",
+      noIndex: true,
+    }),
   component: TeamProjectsPage,
 })
 
