@@ -16,7 +16,10 @@ import {
 } from "@/db/schema"
 import { priorityLabel } from "@/lib/issues/meta"
 import { recordProjectActivity } from "@/lib/projects/activity"
-import { formatProjectShortDate } from "@/lib/projects/dates"
+import {
+  formatProjectShortDate,
+  suggestedProjectPeriod,
+} from "@/lib/projects/dates"
 import { requireProjectInOrg } from "@/lib/server/access"
 import { getOptionalOrgSession, requireOrgSession } from "@/lib/server/session"
 import { generateUUID } from "@/lib/utils"
@@ -636,7 +639,10 @@ export const createProject = createServerFn({ method: "POST" })
     z.object({
       name: z.string().min(2, "Project name is required"),
       priority: z.number().int().min(0).max(4).default(0),
-      targetDate: z.string().min(1, "Target date is required"),
+      /** Defaults to creation day when omitted. */
+      startDate: z.string().optional(),
+      /** Defaults to creation day + 14 days when omitted. */
+      targetDate: z.string().optional(),
       leadId: z.string().optional(),
       teamId: z.string().min(1).optional(),
     })
@@ -644,7 +650,17 @@ export const createProject = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { session, organizationId } = await requireOrgSession()
 
-    const targetDate = new Date(data.targetDate)
+    const defaults = suggestedProjectPeriod()
+    const startDate = data.startDate
+      ? new Date(data.startDate)
+      : defaults.startDate
+    if (Number.isNaN(startDate.getTime())) {
+      throw new Error("Invalid start date")
+    }
+
+    const targetDate = data.targetDate
+      ? new Date(data.targetDate)
+      : defaults.targetDate
     if (Number.isNaN(targetDate.getTime())) {
       throw new Error("Invalid target date")
     }
@@ -686,6 +702,7 @@ export const createProject = createServerFn({ method: "POST" })
         lead: leadId,
         priority: data.priority,
         status: "backlog",
+        startDate,
         targetDate,
         issuesCount: 0,
         progress: 0,

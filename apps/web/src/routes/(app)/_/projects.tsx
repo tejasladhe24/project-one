@@ -17,6 +17,11 @@ function toProjectRows(
     priority: item.priority,
     leadName: item.leadName,
     leadImage: item.leadImage,
+    startDate: item.startDate
+      ? typeof item.startDate === "string"
+        ? item.startDate
+        : new Date(item.startDate).toISOString()
+      : null,
     targetDate:
       typeof item.targetDate === "string"
         ? item.targetDate

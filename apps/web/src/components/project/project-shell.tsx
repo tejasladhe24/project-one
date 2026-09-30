@@ -41,7 +41,7 @@ import {
   isProjectPeriodUnset,
   projectStatusDotClass,
   projectStatusLabel,
-  suggestedProjectPeriod,
+  resolveProjectPeriod,
   toProjectDateInputValue,
   updateProject,
 } from "@/lib/projects"
@@ -96,14 +96,10 @@ function Check({ show }: { show: boolean }) {
 }
 
 function periodFormDefaults(project: ProjectDetail) {
-  const suggestion = suggestedProjectPeriod()
+  const period = resolveProjectPeriod(project)
   return {
-    startDate: isProjectPeriodUnset(project.startDate)
-      ? suggestion.startInput
-      : toProjectDateInputValue(project.startDate),
-    targetDate: isProjectPeriodUnset(project.startDate)
-      ? suggestion.targetInput
-      : toProjectDateInputValue(project.targetDate) || suggestion.targetInput,
+    startDate: toProjectDateInputValue(period.startDate),
+    targetDate: toProjectDateInputValue(period.targetDate),
   }
 }
 
@@ -161,9 +157,9 @@ export function ProjectPropertyPills({
   }
 
   const periodUnset = isProjectPeriodUnset(project.startDate)
-  const suggestion = suggestedProjectPeriod()
-  const pillStart = periodUnset ? suggestion.startDate : project.startDate
-  const pillTarget = periodUnset ? suggestion.targetDate : project.targetDate
+  const period = resolveProjectPeriod(project)
+  const pillStart = period.startDate
+  const pillTarget = period.targetDate
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
