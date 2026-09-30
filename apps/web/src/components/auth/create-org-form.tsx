@@ -1,26 +1,36 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useForm } from "@tanstack/react-form"
 import { useNavigate } from "@tanstack/react-router"
+import { IconArrowLeft, IconUpload } from "@tabler/icons-react"
 import { z } from "zod"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Button } from "@workspace/ui/components/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card"
-import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
+import {
+  AuthBody,
+  AuthCard,
+  AuthFooter,
+  AuthHeader,
+} from "@/components/auth/auth-shell"
 import { authClient } from "@/lib/auth/client"
+import {
+  ALLOWED_ORG_LOGO_TYPES,
+  MAX_ORG_LOGO_BYTES,
+  uploadOrgLogo,
+} from "@/lib/storage/org-logo"
 
 const createOrgSchema = z.object({
   name: z.string().min(2, "Organization name is required"),
@@ -41,10 +51,38 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, "")
 }
 
-export function CreateOrgForm() {
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result
+      if (typeof result !== "string") {
+        reject(new Error("Could not read logo file"))
+        return
+      }
+      const comma = result.indexOf(",")
+      resolve(comma >= 0 ? result.slice(comma + 1) : result)
+    }
+    reader.onerror = () => reject(new Error("Could not read logo file"))
+    reader.readAsDataURL(file)
+  })
+}
+
+export function CreateOrgForm({
+  onCancel,
+  uploadLogo = uploadOrgLogo,
+}: {
+  onCancel?: () => void
+  /** Server upload fn — default is Vercel Blob `uploadOrgLogo`. */
+  uploadLogo?: typeof uploadOrgLogo
+}) {
   const navigate = useNavigate()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [formError, setFormError] = useState<string | null>(null)
   const [slugTouched, setSlugTouched] = useState(false)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null)
+  const [logoUploading, setLogoUploading] = useState(false)
 
   const form = useForm({
     defaultValues: {
@@ -56,32 +94,97 @@ export function CreateOrgForm() {
     },
     onSubmit: async ({ value }) => {
       setFormError(null)
-      const { data, error } = await authClient.organization.create({
-        name: value.name.trim(),
-        slug: value.slug.trim(),
-      })
-      if (error) {
-        setFormError(error.message ?? "Could not create organization")
-        return
-      }
+      let logoUrl: string | undefined
 
-      if (data?.id) {
-        await authClient.organization.setActive({ organizationId: data.id })
-      }
+      try {
+        if (logoFile) {
+          setLogoUploading(true)
+          const base64 = await fileToBase64(logoFile)
+          const uploaded = await uploadLogo({
+            data: {
+              fileName: logoFile.name,
+              contentType:
+                logoFile.type as (typeof ALLOWED_ORG_LOGO_TYPES)[number],
+              base64,
+            },
+          })
+          logoUrl = uploaded.url
+        }
 
-      await navigate({ to: "/members" })
+        const { data, error } = await authClient.organization.create({
+          name: value.name.trim(),
+          slug: value.slug.trim(),
+          ...(logoUrl ? { logo: logoUrl } : {}),
+        })
+        if (error) {
+          setFormError(error.message ?? "Could not create organization")
+          return
+        }
+
+        if (data?.id) {
+          await authClient.organization.setActive({ organizationId: data.id })
+        }
+
+        await navigate({ to: "/members" })
+      } catch (err) {
+        setFormError(
+          err instanceof Error ? err.message : "Could not create organization"
+        )
+      } finally {
+        setLogoUploading(false)
+      }
     },
   })
 
+  function clearLogo() {
+    if (logoPreviewUrl) {
+      URL.revokeObjectURL(logoPreviewUrl)
+    }
+    setLogoFile(null)
+    setLogoPreviewUrl(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
+  function onLogoSelected(file: File | undefined) {
+    setFormError(null)
+    if (!file) {
+      clearLogo()
+      return
+    }
+
+    if (
+      !ALLOWED_ORG_LOGO_TYPES.includes(
+        file.type as (typeof ALLOWED_ORG_LOGO_TYPES)[number]
+      )
+    ) {
+      setFormError("Logo must be a JPEG, PNG, WebP, or GIF image")
+      clearLogo()
+      return
+    }
+
+    if (file.size > MAX_ORG_LOGO_BYTES) {
+      setFormError("Logo must be 10MB or smaller")
+      clearLogo()
+      return
+    }
+
+    if (logoPreviewUrl) {
+      URL.revokeObjectURL(logoPreviewUrl)
+    }
+    setLogoFile(file)
+    setLogoPreviewUrl(URL.createObjectURL(file))
+  }
+
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Create organization</CardTitle>
-        <CardDescription>
-          Set up a workspace for your team and projects.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <AuthCard>
+      <AuthBody>
+        <AuthHeader
+          title="Create organization"
+          description="Set up a workspace for your team and projects."
+        />
+
         <form
           id="create-org-form"
           onSubmit={(e) => {
@@ -91,6 +194,58 @@ export function CreateOrgForm() {
           }}
         >
           <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="org-logo-upload">Logo</FieldLabel>
+              <div className="flex items-center gap-3">
+                <Avatar className="size-14 rounded-lg border border-dashed border-border after:rounded-lg">
+                  {logoPreviewUrl ? (
+                    <AvatarImage
+                      src={logoPreviewUrl}
+                      alt="Organization logo preview"
+                    />
+                  ) : null}
+                  <AvatarFallback className="rounded-lg bg-muted/50 text-muted-foreground">
+                    <IconUpload className="size-5" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      ref={fileInputRef}
+                      id="org-logo-upload"
+                      type="file"
+                      accept={ALLOWED_ORG_LOGO_TYPES.join(",")}
+                      className="sr-only"
+                      onChange={(e) => onLogoSelected(e.target.files?.[0])}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={logoUploading}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      {logoFile ? "Change" : "Upload"}
+                    </Button>
+                    {logoFile ? (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        disabled={logoUploading}
+                        onClick={clearLogo}
+                      >
+                        Remove
+                      </Button>
+                    ) : null}
+                  </div>
+                  <FieldDescription>
+                    Recommended size 1:1, up to 10MB.
+                  </FieldDescription>
+                </div>
+              </div>
+            </Field>
+
             <form.Field name="name">
               {(field) => {
                 const isInvalid =
@@ -101,6 +256,8 @@ export function CreateOrgForm() {
                     <Input
                       id={field.name}
                       name={field.name}
+                      placeholder="Acme Inc"
+                      className="h-10"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => {
@@ -126,10 +283,12 @@ export function CreateOrgForm() {
                   field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid || undefined}>
-                    <FieldLabel htmlFor={field.name}>Slug</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Slug URL</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
+                      placeholder="my-org"
+                      className="h-10"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => {
@@ -147,27 +306,58 @@ export function CreateOrgForm() {
             </form.Field>
           </FieldGroup>
         </form>
+
         {formError ? (
-          <Alert variant="destructive" className="mt-3">
+          <Alert variant="destructive">
             <AlertDescription>{formError}</AlertDescription>
           </Alert>
         ) : null}
-      </CardContent>
-      <CardFooter>
-        <form.Subscribe selector={(state) => state.isSubmitting}>
-          {(isSubmitting) => (
+
+        <div className="flex flex-col gap-2">
+          <form.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
+              <Button
+                type="submit"
+                form="create-org-form"
+                size="lg"
+                className="h-10 w-full"
+                disabled={isSubmitting || logoUploading}
+              >
+                {isSubmitting || logoUploading ? (
+                  <Spinner data-icon="inline-start" />
+                ) : null}
+                {logoUploading
+                  ? "Uploading logo…"
+                  : isSubmitting
+                    ? "Creating…"
+                    : "Create Organization"}
+              </Button>
+            )}
+          </form.Subscribe>
+          {onCancel ? (
             <Button
-              type="submit"
-              form="create-org-form"
+              type="button"
+              variant="ghost"
               className="w-full"
-              disabled={isSubmitting}
+              onClick={onCancel}
             >
-              {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-              {isSubmitting ? "Creating…" : "Create organization"}
+              <IconArrowLeft data-icon="inline-start" />
+              Back
             </Button>
-          )}
-        </form.Subscribe>
-      </CardFooter>
-    </Card>
+          ) : null}
+        </div>
+      </AuthBody>
+
+      <AuthFooter>
+        Want to switch to different account?{" "}
+        <Button
+          variant="link"
+          className="h-auto p-0 px-1"
+          onClick={() => void authClient.signOut()}
+        >
+          Logout
+        </Button>
+      </AuthFooter>
+    </AuthCard>
   )
 }

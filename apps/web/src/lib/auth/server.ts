@@ -95,9 +95,9 @@ export const auth = betterAuth({
     "http://localhost:*",
     "http://127.0.0.1:*",
     // Vercel assigns per-deployment + project aliases; allow the request host.
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
-    process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    env.VERCEL_URL ? `https://${env.VERCEL_URL}` : null,
+    env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
       : null,
     "https://project-one-tejas-ladhes-projects.vercel.app",
     "https://project-one-one-zeta.vercel.app",
@@ -111,7 +111,7 @@ export const auth = betterAuth({
       generateId: (_options) => generateUUID(),
     },
     // Vercel terminates TLS; honor x-forwarded-host/proto for dynamic baseURL.
-    trustedProxyHeaders: Boolean(process.env.VERCEL),
+    trustedProxyHeaders: Boolean(env.VERCEL_URL),
     // Only share cookies across real custom domains — not *.vercel.app aliases.
     ...(env.BETTER_AUTH_DOMAIN &&
     !["localhost", "127.0.0.1"].includes(env.BETTER_AUTH_DOMAIN) &&

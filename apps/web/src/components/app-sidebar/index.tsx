@@ -17,7 +17,7 @@ import { NavWorkspace } from "./nav-workspace"
 import { NavMain } from "./nav-main"
 import { NavTeams } from "./nav-teams"
 import { NavSecondary } from "./nav-secondary"
-import { NavUser } from "./nav-user"
+import { NavUser, type NavUserData } from "./nav-user"
 import { OrgSwitcher, type OrgSwitcherItem } from "./org-switcher"
 import {
   Sidebar,
@@ -27,11 +27,6 @@ import {
 } from "@workspace/ui/components/sidebar"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Inbox",
@@ -104,9 +99,10 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
     cyclesEnabled?: boolean
   }[]
   orgs: OrgSwitcherItem[]
+  user: NavUserData
 }
 
-export function AppSidebar({ teams, orgs, ...props }: AppSidebarProps) {
+export function AppSidebar({ teams, orgs, user, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -119,7 +115,7 @@ export function AppSidebar({ teams, orgs, ...props }: AppSidebarProps) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

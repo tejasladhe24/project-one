@@ -14,11 +14,7 @@ export const Route = createFileRoute("/(auth)/_/sign-up")({
 function SignUpPage() {
   const { redirect: redirectTo } = Route.useSearch()
 
-  return (
-    <div className="m-auto flex w-full justify-center">
-      <SignUpForm redirectTo={safeRedirect(redirectTo)} />
-    </div>
-  )
+  return <SignUpForm redirectTo={safeRedirect(redirectTo)} />
 }
 
 /** Only allow same-origin relative paths to avoid open redirects. */

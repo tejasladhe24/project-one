@@ -40,6 +40,10 @@ export const env = createEnv({
 
     // server-side urls
     APP_URL: z.url(),
+    BLOB_STORE_ID: z.string(),
+    BLOB_READ_WRITE_TOKEN: z.string(),
+    VERCEL_URL: z.string().nullable(),
+    VERCEL_PROJECT_PRODUCTION_URL: z.string().nullable(),
   },
   clientPrefix: "VITE_",
   client: {
@@ -69,6 +73,10 @@ export const env = createEnv({
 
     // server-side urls
     APP_URL: process.env.APP_URL,
+    BLOB_STORE_ID: process.env.BLOB_STORE_ID,
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
+    VERCEL_URL: process.env.VERCEL_URL,
+    VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
 
     // client
     VITE_APP_URL: process.env.VITE_APP_URL,
