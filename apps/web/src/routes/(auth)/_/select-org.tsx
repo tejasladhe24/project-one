@@ -36,6 +36,7 @@ import {
 import { CreateOrgForm } from "@/components/auth/create-org-form"
 import { authClient } from "@/lib/auth/client"
 import { getSession, listOrganizations } from "@/lib/auth/session"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(auth)/_/select-org")({
   beforeLoad: async () => {
@@ -49,6 +50,11 @@ export const Route = createFileRoute("/(auth)/_/select-org")({
     const organizations = await listOrganizations()
     return { organizations: organizations ?? [] }
   },
+  head: () =>
+    pageMeta({
+      title: "Select organization",
+      noIndex: true,
+    }),
   component: SelectOrgPage,
 })
 

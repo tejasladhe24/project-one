@@ -5,6 +5,7 @@ import {
   listTeamJoinRequests,
   listTeamMembersDetailed,
 } from "@/lib/teams"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/team/$teamId/settings/members")({
   loader: async ({ params, context }) => {
@@ -50,6 +51,13 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/settings/members")({
       })),
     }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name
+        ? `Members · ${loaderData.team.name}`
+        : "Members",
+      noIndex: true,
+    }),
   component: TeamMembersPage,
 })
 

@@ -30,6 +30,7 @@ import {
   TableRow,
 } from "@workspace/ui/components/table"
 import { createLabel, listLabels } from "@/lib/labels"
+import { pageMeta } from "@/lib/seo"
 
 const DOT_COLORS = [
   "#3b82f6",
@@ -58,6 +59,13 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/settings/labels")({
     const labels = await listLabels()
     return { team, labels }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name
+        ? `Labels · ${loaderData.team.name}`
+        : "Labels",
+      noIndex: true,
+    }),
   component: TeamLabelsPage,
 })
 

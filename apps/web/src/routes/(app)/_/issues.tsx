@@ -3,6 +3,7 @@ import { IssuesTable, type IssueRow } from "@/components/issues/issues-table"
 import { listUserTeams } from "@/lib/auth/session"
 import { listIssues, toIssueRows } from "@/lib/issues"
 import { listProjectOptions } from "@/lib/projects"
+import { pageMeta } from "@/lib/seo"
 import { z } from "zod"
 
 const issuesSearchSchema = z.object({
@@ -47,6 +48,7 @@ export const Route = createFileRoute("/(app)/_/issues")({
       projects: (projects ?? []).map((p) => ({ id: p.id, name: p.name })),
     }
   },
+  head: () => pageMeta({ title: "Issues", noIndex: true }),
   component: IssuesPage,
 })
 

@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { PreferencesForm } from "@/components/settings/preferences-form"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/settings/preferences")({
+  head: () => pageMeta({ title: "Preferences", noIndex: true }),
   component: PreferencesSettingsPage,
 })
 

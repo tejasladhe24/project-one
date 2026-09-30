@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { TeamSettingsHub } from "@/components/teams/team-settings-hub"
+import { pageMeta } from "@/lib/seo"
 import { getTeamSettingsSummary } from "@/lib/teams"
 
 export const Route = createFileRoute("/(app)/_/team/$teamId/settings/")({
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/settings/")({
     })
     return { summary }
   },
+  head: () => pageMeta({ title: "Team settings", noIndex: true }),
   component: TeamSettingsIndexPage,
 })
 

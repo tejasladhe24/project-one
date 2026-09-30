@@ -1,12 +1,14 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router"
 import { McpApiKeysTable } from "@/components/settings/mcp-api-keys-table"
 import { listMcpApiKeys } from "@/lib/mcp/keys"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/settings/mcp")({
   loader: async () => {
     const keys = await listMcpApiKeys()
     return { keys }
   },
+  head: () => pageMeta({ title: "MCP API keys", noIndex: true }),
   component: McpSettingsPage,
 })
 

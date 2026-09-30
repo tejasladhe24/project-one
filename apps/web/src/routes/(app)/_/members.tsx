@@ -4,6 +4,7 @@ import {
   type MemberRow,
 } from "@/components/members/members-table"
 import { listMembers } from "@/lib/auth/session"
+import { pageMeta } from "@/lib/seo"
 
 function toMemberRows(
   data: Awaited<ReturnType<typeof listMembers>>
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/(app)/_/members")({
     const data = await listMembers()
     return { members: toMemberRows(data) }
   },
+  head: () => pageMeta({ title: "Members", noIndex: true }),
   component: MembersPage,
 })
 

@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { pageMeta } from "@/lib/seo"
 import { getTeam } from "@/lib/teams"
 
 export const Route = createFileRoute("/(app)/_/team/$teamId")({
@@ -10,6 +11,12 @@ export const Route = createFileRoute("/(app)/_/team/$teamId")({
       throw redirect({ to: "/teams" })
     }
   },
+  loader: ({ context }) => ({ team: context.team }),
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name ?? "Team",
+      noIndex: true,
+    }),
   component: TeamLayout,
 })
 

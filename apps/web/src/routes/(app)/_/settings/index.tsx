@@ -6,12 +6,14 @@ import {
   IconUser,
 } from "@tabler/icons-react"
 import { listMcpApiKeys } from "@/lib/mcp/keys"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/settings/")({
   loader: async () => {
     const keys = await listMcpApiKeys()
     return { keyCount: keys.length }
   },
+  head: () => pageMeta({ title: "Settings", noIndex: true }),
   component: SettingsIndexPage,
 })
 

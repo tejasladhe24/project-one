@@ -4,6 +4,7 @@ import { TeamHomeShell } from "@/components/team/team-home-shell"
 import { listTeamDocuments } from "@/lib/documents"
 import { listIssueOptions } from "@/lib/issues"
 import { listProjectOptions } from "@/lib/projects"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/team/$teamId/documents/")({
   loader: async ({ params, context }) => {
@@ -25,6 +26,13 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/documents/")({
       })),
     }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.team?.name
+        ? `Documents · ${loaderData.team.name}`
+        : "Documents",
+      noIndex: true,
+    }),
   component: TeamDocumentsPage,
 })
 

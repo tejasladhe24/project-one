@@ -1,5 +1,6 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { TeamsTable, type TeamRow } from "@/components/teams/teams-table"
+import { pageMeta } from "@/lib/seo"
 import { listOrgTeamsWithMembership } from "@/lib/teams"
 
 function toTeamRows(
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/(app)/_/teams")({
     const data = await listOrgTeamsWithMembership()
     return { teams: toTeamRows(data) }
   },
+  head: () => pageMeta({ title: "Teams", noIndex: true }),
   component: TeamsPage,
 })
 

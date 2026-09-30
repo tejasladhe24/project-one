@@ -40,6 +40,7 @@ import {
   updateStatus,
   type StatusCategory,
 } from "@/lib/statuses"
+import { pageMeta } from "@/lib/seo"
 
 const CREATABLE_CATEGORIES = STATUS_CATEGORIES.filter(
   (c) => !isFixedStatusCategory(c)
@@ -73,6 +74,13 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/settings/statuses")(
       ])
       return { team, statuses }
     },
+    head: ({ loaderData }) =>
+      pageMeta({
+        title: loaderData?.team?.name
+          ? `Statuses · ${loaderData.team.name}`
+          : "Statuses",
+        noIndex: true,
+      }),
     component: TeamStatusesPage,
   }
 )

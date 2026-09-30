@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
 import { InboxView } from "@/components/inbox/inbox-view"
 import { listInboxNotifications } from "@/lib/inbox"
+import { pageMeta } from "@/lib/seo"
 
 const inboxSearchSchema = z.object({
   n: z.string().optional(),
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/(app)/_/inbox")({
 
     return { notifications, selectedId }
   },
+  head: () => pageMeta({ title: "Inbox", noIndex: true }),
   component: InboxPage,
 })
 

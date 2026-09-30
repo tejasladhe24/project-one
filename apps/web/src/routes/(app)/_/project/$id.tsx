@@ -11,6 +11,7 @@ import {
   listOrgMemberOptions,
   listOrgTeamOptions,
 } from "@/lib/projects"
+import { pageMeta } from "@/lib/seo"
 
 export const Route = createFileRoute("/(app)/_/project/$id")({
   loader: async ({ params }) => {
@@ -33,6 +34,11 @@ export const Route = createFileRoute("/(app)/_/project/$id")({
       throw notFound()
     }
   },
+  head: ({ loaderData }) =>
+    pageMeta({
+      title: loaderData?.project?.name ?? "Project",
+      noIndex: true,
+    }),
   component: ProjectLayout,
 })
 
