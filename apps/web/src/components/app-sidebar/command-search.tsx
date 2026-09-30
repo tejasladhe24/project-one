@@ -35,7 +35,8 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
 
   React.useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key.toLowerCase() !== "k") return
+      if (event.altKey) return
+      if (event.code !== "KeyK" && event.key.toLowerCase() !== "k") return
       if (!(event.metaKey || event.ctrlKey)) return
       event.preventDefault()
       onOpenChange(!open)
@@ -87,22 +88,30 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
       <Command>
         <CommandInput placeholder="Search issues, projects, members…" />
         <CommandList>
-          {loading ? (
-            <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
-              <IconLoader2 className="size-4 animate-spin" />
-              Loading…
-            </div>
-          ) : error ? (
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              {error}
-            </div>
-          ) : data.issues.length === 0 &&
-            data.projects.length === 0 &&
-            data.members.length === 0 ? (
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              Nothing to search yet.
-            </div>
-          ) : (
+          <div role="status" aria-live="polite">
+            {loading ? (
+              <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
+                <IconLoader2 className="size-4 animate-spin" />
+                Loading…
+              </div>
+            ) : error ? (
+              <div className="py-6 text-center text-sm text-muted-foreground">
+                {error}
+              </div>
+            ) : data.issues.length === 0 &&
+              data.projects.length === 0 &&
+              data.members.length === 0 ? (
+              <div className="py-6 text-center text-sm text-muted-foreground">
+                Nothing to search yet.
+              </div>
+            ) : null}
+          </div>
+
+          {!loading &&
+          !error &&
+          (data.issues.length > 0 ||
+            data.projects.length > 0 ||
+            data.members.length > 0) ? (
             <>
               <CommandEmpty>No results found.</CommandEmpty>
 
@@ -113,7 +122,7 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
                     return (
                       <CommandItem
                         key={item.id}
-                        value={`${key} ${item.title}`}
+                        value={`${key} ${item.title} ${item.id}`}
                         onSelect={() =>
                           runAndClose(() => {
                             void navigate({
@@ -144,7 +153,7 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
                   {data.projects.map((item) => (
                     <CommandItem
                       key={item.id}
-                      value={`project ${item.name}`}
+                      value={`project ${item.name} ${item.id}`}
                       onSelect={() =>
                         runAndClose(() => {
                           void navigate({
@@ -171,7 +180,7 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
                   {data.members.map((item) => (
                     <CommandItem
                       key={item.id}
-                      value={`member ${item.name} ${item.email}`}
+                      value={`member ${item.name} ${item.email} ${item.id}`}
                       onSelect={() =>
                         runAndClose(() => {
                           void navigate({ to: "/members" })
@@ -198,7 +207,7 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
                 </CommandGroup>
               ) : null}
             </>
-          )}
+          ) : null}
         </CommandList>
       </Command>
     </CommandDialog>
