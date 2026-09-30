@@ -1,17 +1,38 @@
+import * as React from "react"
 import {
   createFileRoute,
   Link,
   redirect,
   useRouter,
 } from "@tanstack/react-router"
+import { IconBuilding, IconPlus } from "@tabler/icons-react"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar"
 import { Button } from "@workspace/ui/components/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card"
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+} from "@workspace/ui/components/empty"
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@workspace/ui/components/item"
+import { Separator } from "@workspace/ui/components/separator"
+import { Spinner } from "@workspace/ui/components/spinner"
+import {
+  AuthBody,
+  AuthCard,
+  AuthFooter,
+  AuthHeader,
+} from "@/components/auth/auth-shell"
 import { CreateOrgForm } from "@/components/auth/create-org-form"
 import { authClient } from "@/lib/auth/client"
 import { getSession, listOrganizations } from "@/lib/auth/session"
@@ -34,52 +55,122 @@ export const Route = createFileRoute("/(auth)/_/select-org")({
 function SelectOrgPage() {
   const { organizations } = Route.useLoaderData()
   const router = useRouter()
+  const [mode, setMode] = React.useState<"choose" | "create">(
+    organizations.length === 0 ? "create" : "choose"
+  )
+  const [pendingId, setPendingId] = React.useState<string | null>(null)
+
+  if (mode === "create") {
+    return (
+      <CreateOrgForm
+        onCancel={
+          organizations.length > 0 ? () => setMode("choose") : undefined
+        }
+      />
+    )
+  }
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 md:flex-row md:items-start">
-      <div className="flex-1">
-        <CreateOrgForm />
-      </div>
+    <AuthCard>
+      <AuthBody className="gap-6">
+        <AuthHeader
+          title="Choose an organization"
+          description="Select the organization with which you wish to continue."
+        />
 
-      <Card className="w-full max-w-md flex-1">
-        <CardHeader>
-          <CardTitle>Your organizations</CardTitle>
-          <CardDescription>
-            Select an organization to continue, or create a new one.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          {organizations.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              You are not a member of any organization yet.
-            </p>
-          ) : (
-            organizations.map((org) => (
-              <Button
-                key={org.id}
-                variant="outline"
-                className="justify-start"
-                onClick={async () => {
-                  await authClient.organization.setActive({
-                    organizationId: org.id,
-                  })
-                  await router.navigate({ to: "/members" })
-                }}
+        <ItemGroup className="gap-0 overflow-hidden rounded-xl border">
+          {organizations.map((org, index) => (
+            <React.Fragment key={org.id}>
+              {index > 0 ? <Separator /> : null}
+              <Item
+                size="sm"
+                className="rounded-none"
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={pendingId !== null}
+                    className="h-auto w-full justify-start rounded-none px-3.5 py-3 font-normal hover:bg-muted/60"
+                    onClick={async () => {
+                      setPendingId(org.id)
+                      try {
+                        await authClient.organization.setActive({
+                          organizationId: org.id,
+                        })
+                        await router.navigate({ to: "/members" })
+                      } finally {
+                        setPendingId(null)
+                      }
+                    }}
+                  />
+                }
               >
-                {org.name}
-              </Button>
-            ))
-          )}
-          <Button
-            variant="ghost"
-            className="mt-2 justify-start"
-            render={<Link to="/" />}
-            nativeButton={false}
+                <ItemMedia>
+                  <Avatar className="size-9 rounded-lg after:rounded-lg">
+                    {org.logo ? <AvatarImage src={org.logo} alt="" /> : null}
+                    <AvatarFallback className="rounded-lg bg-foreground text-background">
+                      <IconBuilding className="size-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{org.name}</ItemTitle>
+                  <ItemDescription>{org.slug}</ItemDescription>
+                </ItemContent>
+                {pendingId === org.id ? <Spinner /> : null}
+              </Item>
+            </React.Fragment>
+          ))}
+
+          {organizations.length > 0 ? <Separator /> : null}
+
+          <Item
+            size="sm"
+            className="rounded-none"
+            render={
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-auto w-full justify-start rounded-none px-3.5 py-3 font-normal text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                onClick={() => setMode("create")}
+              />
+            }
           >
-            Back to home
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+            <ItemMedia>
+              <Avatar className="size-9 rounded-lg border border-dashed border-border after:hidden">
+                <AvatarFallback className="rounded-lg bg-transparent text-muted-foreground">
+                  <IconPlus className="size-4" />
+                </AvatarFallback>
+              </Avatar>
+            </ItemMedia>
+            <ItemContent>
+              <ItemTitle>Create organization</ItemTitle>
+            </ItemContent>
+          </Item>
+        </ItemGroup>
+
+        {organizations.length === 0 ? (
+          <Empty className="border-0 p-0">
+            <EmptyHeader>
+              <EmptyDescription>
+                You are not a member of any organization yet.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : null}
+      </AuthBody>
+
+      <AuthFooter>
+        <Button
+          variant="link"
+          size="sm"
+          className="h-auto p-0 text-muted-foreground"
+          render={<Link to="/" />}
+          nativeButton={false}
+        >
+          Back to home
+        </Button>
+      </AuthFooter>
+    </AuthCard>
   )
 }

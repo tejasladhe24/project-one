@@ -23,11 +23,19 @@ export const Route = createFileRoute("/(app)/_")({
     ])
     const activeTeamId = context.session.session.activeTeamId
     const activeOrgId = context.session.session.activeOrganizationId
+    const user = context.session.user
 
     return {
-      orgs: orgs.map((org) => ({
+      user: {
+        name: user.name,
+        email: user.email,
+        avatar: user.image ?? null,
+      },
+      orgs: (orgs ?? []).map((org) => ({
         id: org.id,
         title: org.name,
+        slug: org.slug,
+        logoUrl: org.logo ?? null,
         isActive: org.id === activeOrgId,
       })),
       teams: teams.map((team) => ({
@@ -43,7 +51,7 @@ export const Route = createFileRoute("/(app)/_")({
 })
 
 function AppLayout() {
-  const { teams, orgs } = Route.useLoaderData()
+  const { teams, orgs, user } = Route.useLoaderData()
 
   return (
     <SidebarProvider
@@ -54,7 +62,7 @@ function AppLayout() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" teams={teams} orgs={orgs} />
+      <AppSidebar variant="inset" teams={teams} orgs={orgs} user={user} />
       <SidebarInset>
         <SiteHeader />
         <Outlet />

@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
+import { AuthPage } from "@/components/auth/auth-shell"
 
 export const Route = createFileRoute("/(auth)/_")({
   component: RouteComponent,
@@ -6,8 +7,8 @@ export const Route = createFileRoute("/(auth)/_")({
 
 function RouteComponent() {
   return (
-    <div className="flex min-h-svh p-6">
+    <AuthPage>
       <Outlet />
-    </div>
+    </AuthPage>
   )
 }

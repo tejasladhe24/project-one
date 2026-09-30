@@ -9,14 +9,17 @@ import {
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Button } from "@workspace/ui/components/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card"
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+} from "@workspace/ui/components/empty"
 import { Spinner } from "@workspace/ui/components/spinner"
+import {
+  AuthBody,
+  AuthCard,
+  AuthFooter,
+  AuthHeader,
+} from "@/components/auth/auth-shell"
 import { authClient } from "@/lib/auth/client"
 import { getInvitation, getSession } from "@/lib/auth/session"
 
@@ -101,28 +104,25 @@ function AcceptInvitationPage() {
 
   if (loadError || !invitation) {
     return (
-      <div className="m-auto flex w-full justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Invitation unavailable</CardTitle>
-            <CardDescription>
-              This invitation may have expired, already been used, or was sent
-              to a different email address.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Alert variant="destructive">
-              <AlertDescription>
-                {loadError ?? "Invitation not found."}
-              </AlertDescription>
-            </Alert>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Signed in as {userEmail}
-            </p>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-2">
+      <AuthCard>
+        <AuthBody>
+          <AuthHeader
+            title="Invitation unavailable"
+            description="This invitation may have expired, already been used, or was sent to a different email address."
+          />
+          <Alert variant="destructive">
+            <AlertDescription>
+              {loadError ?? "Invitation not found."}
+            </AlertDescription>
+          </Alert>
+          <Empty className="border-0 p-0">
+            <EmptyHeader>
+              <EmptyDescription>Signed in as {userEmail}</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+          <div className="flex flex-col gap-2">
             <Button
-              className="w-full"
+              className="h-10 w-full"
               render={<Link to="/select-org" />}
               nativeButton={false}
             >
@@ -130,46 +130,42 @@ function AcceptInvitationPage() {
             </Button>
             <Button
               variant="outline"
-              className="w-full"
+              className="h-10 w-full"
               render={<Link to="/sign-in" search={{ redirect: undefined }} />}
               nativeButton={false}
             >
               Sign in with another account
             </Button>
-          </CardFooter>
-        </Card>
-      </div>
+          </div>
+        </AuthBody>
+      </AuthCard>
     )
   }
 
   return (
-    <div className="m-auto flex w-full justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Join {invitation.organizationName}</CardTitle>
-          <CardDescription>
-            {invitation.inviterEmail} invited you to join as{" "}
-            <span className="font-medium text-foreground">
-              {invitation.role}
-            </span>
-            .
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <p className="text-sm text-muted-foreground">
-            Accepting will add{" "}
-            <span className="font-medium text-foreground">{userEmail}</span> to
-            this organization.
-          </p>
-          {actionError ? (
-            <Alert variant="destructive">
-              <AlertDescription>{actionError}</AlertDescription>
-            </Alert>
-          ) : null}
-        </CardContent>
-        <CardFooter className="flex flex-col gap-2 sm:flex-row">
+    <AuthCard>
+      <AuthBody>
+        <AuthHeader
+          title={`Join ${invitation.organizationName}`}
+          description={`${invitation.inviterEmail} invited you to join as ${invitation.role}.`}
+        />
+        <Empty className="border-0 p-0">
+          <EmptyHeader>
+            <EmptyDescription>
+              Accepting will add{" "}
+              <span className="font-medium text-foreground">{userEmail}</span>{" "}
+              to this organization.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+        {actionError ? (
+          <Alert variant="destructive">
+            <AlertDescription>{actionError}</AlertDescription>
+          </Alert>
+        ) : null}
+        <div className="flex flex-col gap-2">
           <Button
-            className="w-full"
+            className="h-10 w-full"
             disabled={pending !== null}
             onClick={() => void accept()}
           >
@@ -178,15 +174,26 @@ function AcceptInvitationPage() {
           </Button>
           <Button
             variant="outline"
-            className="w-full"
+            className="h-10 w-full"
             disabled={pending !== null}
             onClick={() => void reject()}
           >
             {pending === "reject" ? <Spinner data-icon="inline-start" /> : null}
             {pending === "reject" ? "Rejecting…" : "Decline"}
           </Button>
-        </CardFooter>
-      </Card>
-    </div>
+        </div>
+      </AuthBody>
+      <AuthFooter>
+        <Button
+          variant="link"
+          size="sm"
+          className="h-auto p-0 text-muted-foreground"
+          render={<Link to="/select-org" />}
+          nativeButton={false}
+        >
+          Choose another organization
+        </Button>
+      </AuthFooter>
+    </AuthCard>
   )
 }

@@ -1,25 +1,32 @@
 import { useState } from "react"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useForm } from "@tanstack/react-form"
+import { IconArrowRight, IconEye, IconEyeOff } from "@tabler/icons-react"
 import { z } from "zod"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Button } from "@workspace/ui/components/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card"
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@workspace/ui/components/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@workspace/ui/components/input-group"
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
+import {
+  AuthBody,
+  AuthCard,
+  AuthDivider,
+  AuthFooter,
+  AuthHeader,
+  GoogleIcon,
+} from "@/components/auth/auth-shell"
 import { authClient } from "@/lib/auth/client"
 
 const signInSchema = z.object({
@@ -35,6 +42,7 @@ export function SignInForm({
   const navigate = useNavigate()
   const [formError, setFormError] = useState<string | null>(null)
   const [googlePending, setGooglePending] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const afterAuthPath = redirectTo || "/select-org"
 
   const form = useForm({
@@ -82,14 +90,31 @@ export function SignInForm({
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Sign in</CardTitle>
-        <CardDescription>
-          Sign in with email and password, or continue with Google
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+    <AuthCard>
+      <AuthBody>
+        <AuthHeader
+          title="Sign in"
+          description="Welcome back! Please sign in to continue."
+        />
+
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className="h-10 w-full justify-center gap-2"
+          disabled={googlePending}
+          onClick={() => void signInWithGoogle()}
+        >
+          {googlePending ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <GoogleIcon />
+          )}
+          {googlePending ? "Redirecting…" : "Continue with Google"}
+        </Button>
+
+        <AuthDivider />
+
         <form
           id="sign-in-form"
           className="flex flex-col gap-4"
@@ -105,12 +130,14 @@ export function SignInForm({
                   field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid || undefined}>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Email address</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
                       type="email"
                       autoComplete="email"
+                      placeholder="alex@acme.com"
+                      className="h-10"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -131,16 +158,31 @@ export function SignInForm({
                 return (
                   <Field data-invalid={isInvalid || undefined}>
                     <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="password"
-                      autoComplete="current-password"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                    />
+                    <InputGroup className="h-10">
+                      <InputGroupInput
+                        id={field.name}
+                        name={field.name}
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        placeholder="••••••••"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        aria-invalid={isInvalid}
+                      />
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupButton
+                          type="button"
+                          size="icon-xs"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                          onClick={() => setShowPassword((v) => !v)}
+                        >
+                          {showPassword ? <IconEyeOff /> : <IconEye />}
+                        </InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
                     {isInvalid ? (
                       <FieldError errors={field.state.meta.errors} />
                     ) : null}
@@ -157,50 +199,42 @@ export function SignInForm({
           </Alert>
         ) : null}
 
-        <div className="relative flex items-center gap-3">
-          <div className="h-px flex-1 bg-border" />
-          <span className="text-xs text-muted-foreground">or</span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          disabled={googlePending}
-          onClick={() => void signInWithGoogle()}
-        >
-          {googlePending ? <Spinner data-icon="inline-start" /> : null}
-          {googlePending ? "Redirecting…" : "Continue with Google"}
-        </Button>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-3">
         <form.Subscribe selector={(s) => s.isSubmitting}>
           {(isSubmitting) => (
             <Button
               type="submit"
               form="sign-in-form"
-              className="w-full"
+              size="lg"
+              className="h-10 w-full"
               disabled={isSubmitting || googlePending}
             >
               {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-              {isSubmitting ? "Signing in…" : "Sign in"}
+              {isSubmitting ? "Signing in…" : "Continue"}
+              {isSubmitting ? null : <IconArrowRight data-icon="inline-end" />}
             </Button>
           )}
         </form.Subscribe>
-        <p className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link
-            to="/sign-up"
-            search={{
-              redirect: redirectTo === "/select-org" ? undefined : redirectTo,
-            }}
-            className="text-foreground underline-offset-4 hover:underline"
-          >
-            Sign up
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
+      </AuthBody>
+
+      <AuthFooter>
+        Don&apos;t have an account?{" "}
+        <Button
+          variant="link"
+          size="sm"
+          className="h-auto p-0 font-medium"
+          render={
+            <Link
+              to="/sign-up"
+              search={{
+                redirect: redirectTo === "/select-org" ? undefined : redirectTo,
+              }}
+            />
+          }
+          nativeButton={false}
+        >
+          Sign up
+        </Button>
+      </AuthFooter>
+    </AuthCard>
   )
 }

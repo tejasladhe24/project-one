@@ -23,20 +23,7 @@ import {
   AvatarImage,
 } from "@workspace/ui/components/avatar"
 import { Button } from "@workspace/ui/components/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@workspace/ui/components/dialog"
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@workspace/ui/components/field"
+import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { authClient } from "@/lib/auth/client"
@@ -70,10 +57,6 @@ const profileSchema = z.object({
       (value) => value === "" || value.length >= 2,
       "At least 2 characters"
     ),
-})
-
-const emailSchema = z.object({
-  email: z.email("Enter a valid email"),
 })
 
 export type ProfileUser = {
@@ -123,19 +106,12 @@ export function ProfileForm({ user, organization }: ProfileFormProps) {
   const navigate = useNavigate()
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [image, setImage] = React.useState(user.image)
-  const [email, setEmail] = React.useState(user.email)
   const [avatarBusy, setAvatarBusy] = React.useState(false)
-  const [emailOpen, setEmailOpen] = React.useState(false)
-  const [emailBusy, setEmailBusy] = React.useState(false)
-  const [emailError, setEmailError] = React.useState<string | null>(null)
   const [leaveBusy, setLeaveBusy] = React.useState(false)
-  const [newEmail, setNewEmail] = React.useState(user.email)
 
   React.useEffect(() => {
     setImage(user.image)
-    setEmail(user.email)
-    setNewEmail(user.email)
-  }, [user.email, user.image])
+  }, [user.image])
 
   const form = useForm({
     defaultValues: {
@@ -230,37 +206,6 @@ export function ProfileForm({ user, organization }: ProfileFormProps) {
     }
   }
 
-  async function onChangeEmail(event: React.FormEvent) {
-    event.preventDefault()
-    setEmailError(null)
-    const parsed = emailSchema.safeParse({ email: newEmail.trim() })
-    if (!parsed.success) {
-      setEmailError(parsed.error.issues[0]?.message ?? "Invalid email")
-      return
-    }
-    if (parsed.data.email === email) {
-      setEmailOpen(false)
-      return
-    }
-
-    setEmailBusy(true)
-    try {
-      const { error } = await authClient.changeEmail({
-        newEmail: parsed.data.email,
-      })
-      if (error) {
-        setEmailError(error.message || "Could not change email")
-        return
-      }
-      setEmail(parsed.data.email)
-      setEmailOpen(false)
-      toast.success("Email updated")
-      void router.invalidate()
-    } finally {
-      setEmailBusy(false)
-    }
-  }
-
   async function onLeaveWorkspace() {
     if (!organization) return
     setLeaveBusy(true)
@@ -288,60 +233,44 @@ export function ProfileForm({ user, organization }: ProfileFormProps) {
         }}
         className="overflow-hidden rounded-lg border"
       >
-        <ProfileRow
-          title="Profile picture"
-          control={
-            <div className="flex items-center gap-2">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="sr-only"
-                onChange={(event) =>
-                  void onAvatarSelected(event.target.files?.[0])
-                }
-              />
-              <button
-                type="button"
-                disabled={avatarBusy}
-                onClick={() => fileInputRef.current?.click()}
-                className="rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                aria-label="Change profile picture"
-              >
-                <Avatar className="size-10">
-                  {image ? <AvatarImage src={image} alt={user.name} /> : null}
-                  <AvatarFallback>
-                    {avatarBusy ? (
-                      <Spinner className="size-4" />
-                    ) : (
-                      getInitials(user.name)
-                    )}
-                  </AvatarFallback>
-                </Avatar>
-              </button>
-            </div>
-          }
-        />
+        <div className="flex items-center justify-center border-b px-4 py-4">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            onChange={(event) => void onAvatarSelected(event.target.files?.[0])}
+          />
+          <button
+            type="button"
+            disabled={avatarBusy}
+            onClick={() => fileInputRef.current?.click()}
+            className="group relative rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            aria-label="Change profile picture"
+          >
+            <Avatar className="size-32">
+              {image ? <AvatarImage src={image} alt={user.name} /> : null}
+              <AvatarFallback>
+                {avatarBusy ? (
+                  <Spinner className="size-5" />
+                ) : (
+                  getInitials(user.name)
+                )}
+              </AvatarFallback>
+            </Avatar>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+            >
+              <IconPencil className="size-5 opacity-80" />
+            </span>
+          </button>
+        </div>
 
         <ProfileRow
           title="Email"
           control={
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">{email}</span>
-              <Button
-                type="button"
-                size="icon-sm"
-                variant="ghost"
-                aria-label="Edit email"
-                onClick={() => {
-                  setNewEmail(email)
-                  setEmailError(null)
-                  setEmailOpen(true)
-                }}
-              >
-                <IconPencil data-icon />
-              </Button>
-            </div>
+            <span className="text-sm text-muted-foreground">{user.email}</span>
           }
         />
 
@@ -428,9 +357,7 @@ export function ProfileForm({ user, organization }: ProfileFormProps) {
           </h2>
           <div className="overflow-hidden rounded-lg border">
             <div className="flex items-center justify-between gap-4 px-4 py-3">
-              <p className="text-sm font-medium">
-                Remove yourself from workspace
-              </p>
+              <p className="text-sm">Remove yourself from workspace</p>
               <AlertDialog>
                 <AlertDialogTrigger
                   render={
@@ -468,52 +395,6 @@ export function ProfileForm({ user, organization }: ProfileFormProps) {
           </div>
         </section>
       ) : null}
-
-      <Dialog open={emailOpen} onOpenChange={setEmailOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Change email</DialogTitle>
-            <DialogDescription>
-              Updates the email on your account.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={onChangeEmail}>
-            <FieldGroup>
-              <Field data-invalid={emailError ? true : undefined}>
-                <FieldLabel htmlFor="profile-email">Email</FieldLabel>
-                <Input
-                  id="profile-email"
-                  type="email"
-                  autoComplete="email"
-                  value={newEmail}
-                  aria-invalid={emailError ? true : undefined}
-                  onChange={(event) => setNewEmail(event.target.value)}
-                />
-                {emailError ? <FieldError>{emailError}</FieldError> : null}
-              </Field>
-            </FieldGroup>
-            <DialogFooter className="mt-4">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => setEmailOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={emailBusy}>
-                {emailBusy ? (
-                  <>
-                    <Spinner data-icon="inline-start" />
-                    Saving…
-                  </>
-                ) : (
-                  "Save"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

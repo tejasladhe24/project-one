@@ -1,25 +1,32 @@
 import { useState } from "react"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useForm } from "@tanstack/react-form"
+import { IconArrowRight, IconEye, IconEyeOff } from "@tabler/icons-react"
 import { z } from "zod"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Button } from "@workspace/ui/components/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card"
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@workspace/ui/components/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@workspace/ui/components/input-group"
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
+import {
+  AuthBody,
+  AuthCard,
+  AuthDivider,
+  AuthFooter,
+  AuthHeader,
+  GoogleIcon,
+} from "@/components/auth/auth-shell"
 import { authClient } from "@/lib/auth/client"
 
 const signUpSchema = z
@@ -46,6 +53,7 @@ export function SignUpForm({
   const [formError, setFormError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [googlePending, setGooglePending] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const afterAuthPath = redirectTo || "/select-org"
 
   const form = useForm({
@@ -101,14 +109,31 @@ export function SignUpForm({
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Create account</CardTitle>
-        <CardDescription>
-          Sign up with email and password, or continue with Google
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+    <AuthCard>
+      <AuthBody>
+        <AuthHeader
+          title="Create your account"
+          description="Welcome! Please fill in the details to get started."
+        />
+
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className="h-10 w-full justify-center gap-2"
+          disabled={googlePending}
+          onClick={() => void signUpWithGoogle()}
+        >
+          {googlePending ? (
+            <Spinner data-icon="inline-start" />
+          ) : (
+            <GoogleIcon />
+          )}
+          {googlePending ? "Redirecting…" : "Continue with Google"}
+        </Button>
+
+        <AuthDivider />
+
         <form
           id="sign-up-form"
           className="flex flex-col gap-4"
@@ -129,6 +154,8 @@ export function SignUpForm({
                       id={field.name}
                       name={field.name}
                       autoComplete="name"
+                      placeholder="Alex Rivera"
+                      className="h-10"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -148,12 +175,14 @@ export function SignUpForm({
                   field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid || undefined}>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Email address</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
                       type="email"
                       autoComplete="email"
+                      placeholder="alex@acme.com"
+                      className="h-10"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -174,16 +203,31 @@ export function SignUpForm({
                 return (
                   <Field data-invalid={isInvalid || undefined}>
                     <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      type="password"
-                      autoComplete="new-password"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                    />
+                    <InputGroup className="h-10">
+                      <InputGroupInput
+                        id={field.name}
+                        name={field.name}
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        placeholder="••••••••"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        aria-invalid={isInvalid}
+                      />
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupButton
+                          type="button"
+                          size="icon-xs"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                          onClick={() => setShowPassword((v) => !v)}
+                        >
+                          {showPassword ? <IconEyeOff /> : <IconEye />}
+                        </InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
                     {isInvalid ? (
                       <FieldError errors={field.state.meta.errors} />
                     ) : null}
@@ -206,6 +250,8 @@ export function SignUpForm({
                       name={field.name}
                       type="password"
                       autoComplete="new-password"
+                      placeholder="••••••••"
+                      className="h-10"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -232,50 +278,42 @@ export function SignUpForm({
           </Alert>
         ) : null}
 
-        <div className="relative flex items-center gap-3">
-          <div className="h-px flex-1 bg-border" />
-          <span className="text-xs text-muted-foreground">or</span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          disabled={googlePending}
-          onClick={() => void signUpWithGoogle()}
-        >
-          {googlePending ? <Spinner data-icon="inline-start" /> : null}
-          {googlePending ? "Redirecting…" : "Continue with Google"}
-        </Button>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-3">
         <form.Subscribe selector={(s) => s.isSubmitting}>
           {(isSubmitting) => (
             <Button
               type="submit"
               form="sign-up-form"
-              className="w-full"
+              size="lg"
+              className="h-10 w-full"
               disabled={isSubmitting || googlePending}
             >
               {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-              {isSubmitting ? "Creating account…" : "Create account"}
+              {isSubmitting ? "Creating account…" : "Continue"}
+              {isSubmitting ? null : <IconArrowRight data-icon="inline-end" />}
             </Button>
           )}
         </form.Subscribe>
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link
-            to="/sign-in"
-            search={{
-              redirect: redirectTo === "/select-org" ? undefined : redirectTo,
-            }}
-            className="text-foreground underline-offset-4 hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
-      </CardFooter>
-    </Card>
+      </AuthBody>
+
+      <AuthFooter>
+        Already have an account?{" "}
+        <Button
+          variant="link"
+          size="sm"
+          className="h-auto p-0 font-medium"
+          render={
+            <Link
+              to="/sign-in"
+              search={{
+                redirect: redirectTo === "/select-org" ? undefined : redirectTo,
+              }}
+            />
+          }
+          nativeButton={false}
+        >
+          Sign in
+        </Button>
+      </AuthFooter>
+    </AuthCard>
   )
 }

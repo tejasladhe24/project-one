@@ -1,7 +1,6 @@
 import * as React from "react"
 import { useRouter } from "@tanstack/react-router"
 import {
-  IconBuilding,
   IconCheck,
   IconCopy,
   IconPlus,
@@ -9,6 +8,11 @@ import {
 } from "@tabler/icons-react"
 import { toast } from "sonner"
 
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +34,45 @@ import { authClient } from "@/lib/auth/client"
 export type OrgSwitcherItem = {
   id: string
   title: string
+  slug?: string | null
+  logoUrl?: string | null
   isActive?: boolean
+}
+
+function OrgMark({
+  title,
+  logoUrl,
+  size = "md",
+}: {
+  title: string
+  logoUrl?: string | null
+  size?: "sm" | "md"
+}) {
+  const hasLogo = Boolean(logoUrl)
+  const box =
+    size === "sm"
+      ? "size-6 rounded-md"
+      : hasLogo
+        ? "size-8 rounded-lg"
+        : "size-8 rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
+  const initial = title.trim().charAt(0).toUpperCase() || "?"
+
+  return (
+    <Avatar className={`${box} shrink-0 after:rounded-[inherit]`}>
+      {logoUrl ? (
+        <AvatarImage src={logoUrl} alt="" className="rounded-[inherit]" />
+      ) : null}
+      <AvatarFallback
+        className={
+          size === "sm"
+            ? "rounded-md border bg-background text-[10px]"
+            : "rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
+        }
+      >
+        {initial}
+      </AvatarFallback>
+    </Avatar>
+  )
 }
 
 export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
@@ -98,14 +140,14 @@ export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
               />
             }
           >
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-              <IconBuilding className="size-4" />
-            </div>
+            <OrgMark title={activeOrg.title} logoUrl={activeOrg.logoUrl} />
             <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">{activeOrg.title}</span>
-              <span className="truncate font-mono text-[8px] text-muted-foreground">
-                {activeOrg.id}
-              </span>
+              {activeOrg.slug ? (
+                <span className="truncate text-xs text-muted-foreground">
+                  {activeOrg.slug}
+                </span>
+              ) : null}
             </div>
             <IconSelector className="ml-auto size-4 shrink-0 text-muted-foreground" />
           </DropdownMenuTrigger>
@@ -127,9 +169,11 @@ export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
                     onClick={() => void switchOrg(org)}
                     className="gap-2 p-2"
                   >
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-background">
-                      <IconBuilding className="size-3.5" />
-                    </div>
+                    <OrgMark
+                      title={org.title}
+                      logoUrl={org.logoUrl}
+                      size="sm"
+                    />
                     <span className="min-w-0 flex-1 truncate">{org.title}</span>
                     {isActive ? (
                       <IconCheck className="size-4 shrink-0 text-foreground" />
