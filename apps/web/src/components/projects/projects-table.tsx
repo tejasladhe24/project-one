@@ -38,6 +38,10 @@ import { Button } from "@workspace/ui/components/button"
 import { Checkbox } from "@workspace/ui/components/checkbox"
 import { getInitials, priorityLabel } from "@/lib/issues/meta"
 import {
+  formatProjectShortDate,
+  resolveProjectPeriod,
+} from "@/lib/projects/dates"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -96,6 +100,7 @@ export const projectSchema = z.object({
   priority: z.number(),
   leadName: z.string().nullable(),
   leadImage: z.string().nullable().optional(),
+  startDate: z.string().nullable(),
   targetDate: z.string(),
   issuesCount: z.number(),
   progress: z.number(),
@@ -175,6 +180,17 @@ function ProjectProgressCell({ project }: { project: ProjectRow }) {
         </div>
       </HoverCardContent>
     </HoverCard>
+  )
+}
+
+function ProjectDatesCell({ project }: { project: ProjectRow }) {
+  const period = resolveProjectPeriod(project)
+  return (
+    <span className="text-muted-foreground tabular-nums">
+      {formatProjectShortDate(period.startDate)}
+      <span className="text-muted-foreground/70"> → </span>
+      {formatProjectShortDate(period.targetDate)}
+    </span>
   )
 }
 
@@ -258,13 +274,10 @@ const columns = columnHelper.columns([
       )
     },
   }),
-  columnHelper.accessor("targetDate", {
-    header: "Target date",
-    cell: ({ getValue }) => {
-      const value = getValue()
-      const date = new Date(value)
-      return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString()
-    },
+  columnHelper.display({
+    id: "dates",
+    header: "Dates",
+    cell: ({ row }) => <ProjectDatesCell project={row.original} />,
   }),
   columnHelper.accessor("issuesCount", {
     header: "Issues",

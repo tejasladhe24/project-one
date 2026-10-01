@@ -20,7 +20,7 @@ import {
 } from "@workspace/ui/components/select"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { ISSUE_PRIORITIES } from "@/lib/issues/meta"
-import { createProject } from "@/lib/projects"
+import { createProject, suggestedProjectPeriod } from "@/lib/projects"
 
 const priorityItems = ISSUE_PRIORITIES.map((p) => ({
   label: p.label,
@@ -30,6 +30,7 @@ const priorityItems = ISSUE_PRIORITIES.map((p) => ({
 const createProjectSchema = z.object({
   name: z.string().min(2, "Project name is required"),
   priority: z.enum(["0", "1", "2", "3", "4"]),
+  startDate: z.string().min(1, "Start date is required"),
   targetDate: z.string().min(1, "Target date is required"),
 })
 
@@ -39,17 +40,27 @@ type CreateProjectFormProps = {
   teamId?: string
 }
 
+function defaultPeriodValues() {
+  const period = suggestedProjectPeriod()
+  return {
+    startDate: period.startInput,
+    targetDate: period.targetInput,
+  }
+}
+
 export function CreateProjectForm({
   onCreated,
   teamId,
 }: CreateProjectFormProps) {
   const [formError, setFormError] = useState<string | null>(null)
+  const periodDefaults = defaultPeriodValues()
 
   const form = useForm({
     defaultValues: {
       name: "",
       priority: "0" as "0" | "1" | "2" | "3" | "4",
-      targetDate: "",
+      startDate: periodDefaults.startDate,
+      targetDate: periodDefaults.targetDate,
     },
     validators: {
       onSubmit: createProjectSchema,
@@ -62,11 +73,16 @@ export function CreateProjectForm({
           data: {
             name: value.name.trim(),
             priority: Number(value.priority),
+            startDate: value.startDate,
             targetDate: value.targetDate,
             ...(teamId ? { teamId } : {}),
           },
         })
-        form.reset()
+        form.reset({
+          name: "",
+          priority: "0",
+          ...defaultPeriodValues(),
+        })
         onCreated?.()
       } catch (error) {
         setFormError(
@@ -143,6 +159,30 @@ export function CreateProjectForm({
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                  {isInvalid ? (
+                    <FieldError errors={field.state.meta.errors} />
+                  ) : null}
+                </Field>
+              )
+            }}
+          </form.Field>
+
+          <form.Field name="startDate">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid || undefined}>
+                  <FieldLabel htmlFor={field.name}>Start date</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="date"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                  />
                   {isInvalid ? (
                     <FieldError errors={field.state.meta.errors} />
                   ) : null}
