@@ -98,10 +98,12 @@ export function OrgSwitcher({ orgs }: { orgs: OrgSwitcherItem[] }) {
         },
         {
           errorMessage: "Could not switch organization",
-          invalidate: true,
+          // Soft-reload below so beforeLoad + loaders see the new active org.
+          invalidate: false,
         }
       )
-      await router.navigate({ to: "/" })
+      await router.invalidate({ sync: true })
+      await router.navigate({ to: "/", replace: true })
     } catch {
       // toast handled by useServerMutation
     } finally {
