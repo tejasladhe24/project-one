@@ -4,7 +4,7 @@ import {
   startedFillPercent,
   statusColor,
   statusDotClass,
-} from "@/lib/issues/meta"
+} from "@/lib/statuses/display"
 
 export function StatusDot({
   category,

@@ -14,7 +14,7 @@ import {
   team,
   user,
 } from "@/db/schema"
-import { priorityLabel } from "@/lib/issues/meta"
+import { priorityLabel } from "@/lib/shared/priority"
 import { recordProjectActivity } from "@/lib/projects/activity"
 import { formatProjectShortDate } from "@/lib/projects/dates"
 import { requireProjectInOrg } from "@/lib/server/access"

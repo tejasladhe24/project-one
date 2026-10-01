@@ -22,7 +22,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { formatRelativeTime } from "@/components/team/team-documents-table"
 import { IssueCommentComposer } from "@/components/team/issue-comment-composer"
 import { useServerMutation } from "@/hooks/use-server-mutation"
-import { getInitials } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
 import {
   createProjectComment,
   deleteProjectComment,

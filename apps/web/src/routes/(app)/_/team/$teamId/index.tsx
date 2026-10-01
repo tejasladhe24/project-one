@@ -11,6 +11,7 @@ import { useServerMutation } from "@/hooks/use-server-mutation"
 import { listTeamDocuments } from "@/lib/documents"
 import { listTeamMembersDetailed, updateTeamSettings } from "@/lib/teams"
 import { pageMeta } from "@/lib/seo"
+import { getInitials } from "@/lib/shared/string"
 import { Separator } from "@workspace/ui/components/separator"
 import { cn } from "@workspace/ui/lib/utils"
 import { buttonVariants } from "@workspace/ui/components/button"
@@ -40,14 +41,6 @@ export const Route = createFileRoute("/(app)/_/team/$teamId/")({
     }),
   component: TeamOverviewPage,
 })
-
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length >= 2) {
-    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase()
-  }
-  return name.slice(0, 2).toUpperCase() || "?"
-}
 
 function TeamOverviewPage() {
   const { team, members, memberCount, documentCount } = Route.useLoaderData()

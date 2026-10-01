@@ -24,7 +24,7 @@ import {
   listIssueSubscribers,
   setIssueSubscription,
 } from "@/lib/issues/issue-activity"
-import { getInitials } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
 
 export type IssueCommentRow = {
   id: string

@@ -27,7 +27,7 @@ import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { authClient } from "@/lib/auth/client"
-import { getInitials } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
 
 type ProfileUpdate = {
   name?: string

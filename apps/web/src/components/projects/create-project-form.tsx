@@ -19,10 +19,10 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select"
 import { Spinner } from "@workspace/ui/components/spinner"
-import { ISSUE_PRIORITIES } from "@/lib/issues/meta"
+import { PRIORITIES } from "@/lib/shared/priority"
 import { createProject } from "@/lib/projects"
 
-const priorityItems = ISSUE_PRIORITIES.map((p) => ({
+const priorityItems = PRIORITIES.map((p) => ({
   label: p.label,
   value: String(p.value) as "0" | "1" | "2" | "3" | "4",
 }))

@@ -20,7 +20,8 @@ import {
   listCommentMentionOptions,
 } from "@/lib/issues/comments"
 import { listProjectCommentMentionOptions } from "@/lib/projects/comments"
-import { getInitials, statusDotClass } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
+import { statusDotClass } from "@/lib/statuses/display"
 import { usePreferences } from "@/hooks/use-preferences"
 
 type MentionUser = {

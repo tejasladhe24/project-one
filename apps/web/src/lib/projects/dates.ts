@@ -1,10 +1,6 @@
-/** Project period helpers (client-safe). */
+import { startOfLocalDay } from "@/lib/shared/dates"
 
-function startOfLocalDay(date: Date) {
-  const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
+/** Project period helpers (client-safe). */
 
 function toDateInputValue(value: Date) {
   const y = value.getFullYear()

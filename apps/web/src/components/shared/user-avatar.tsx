@@ -3,7 +3,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar"
-import { getInitials } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
 import { cn } from "@workspace/ui/lib/utils"
 
 type UserAvatarProps = {
