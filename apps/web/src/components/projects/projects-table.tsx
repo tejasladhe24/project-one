@@ -36,7 +36,8 @@ import {
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Checkbox } from "@workspace/ui/components/checkbox"
-import { getInitials, priorityLabel } from "@/lib/issues/meta"
+import { priorityLabel } from "@/lib/shared/priority"
+import { getInitials } from "@/lib/shared/string"
 import {
   formatProjectShortDate,
   resolveProjectPeriod,

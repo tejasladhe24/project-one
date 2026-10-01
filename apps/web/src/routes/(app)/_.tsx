@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 import { getSession, listOrganizations } from "@/lib/auth/session"
-import { listSidebarTeams } from "@/lib/cycles"
+import { listSidebarTeams } from "@/lib/teams"
 import { pageMeta } from "@/lib/seo"
 import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"

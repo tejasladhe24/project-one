@@ -72,8 +72,9 @@ import {
   listTeamJoinRequests,
   acceptTeamJoinRequest,
   declineTeamJoinRequest,
+  listSidebarTeams,
 } from "@/lib/teams/server"
-import { updateTeamCycleSettings, listSidebarTeams } from "@/lib/cycles/server"
+import { updateTeamCycleSettings } from "@/lib/cycles/server"
 import { listOrganizations, listMembers } from "@/lib/auth/session"
 import { requireOrgMember } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"

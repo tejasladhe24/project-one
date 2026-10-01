@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start"
-import { and, asc, eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import { db } from "@/db"
 import { team, teamMember } from "@/db/schema"
@@ -109,28 +109,3 @@ export const updateTeamCycleSettings = createServerFn({ method: "POST" })
           : null,
     }
   })
-
-/** Teams for sidebar, including whether Cycles is enabled. */
-export const listSidebarTeams = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const { session, organizationId } = await requireOrgSession()
-    const rows = await db
-      .select({
-        id: team.id,
-        name: team.name,
-        cyclesEnabled: team.cyclesEnabled,
-      })
-      .from(team)
-      .innerJoin(
-        teamMember,
-        and(
-          eq(teamMember.teamId, team.id),
-          eq(teamMember.userId, session.user.id)
-        )
-      )
-      .where(eq(team.organizationId, organizationId))
-      .orderBy(asc(team.name))
-
-    return rows
-  }
-)

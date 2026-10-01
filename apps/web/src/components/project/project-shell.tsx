@@ -34,7 +34,8 @@ import {
   type EntityTab,
 } from "@/components/shared/entity-tab-nav"
 import { useServerMutation } from "@/hooks/use-server-mutation"
-import { getInitials, ISSUE_PRIORITIES, priorityLabel } from "@/lib/issues/meta"
+import { PRIORITIES, priorityLabel } from "@/lib/shared/priority"
+import { getInitials } from "@/lib/shared/string"
 import {
   PROJECT_STATUSES,
   formatProjectShortDate,
@@ -217,7 +218,7 @@ export function ProjectPropertyPills({
       >
         <CommandEmpty>No priority found.</CommandEmpty>
         <CommandGroup>
-          {ISSUE_PRIORITIES.map((p) => (
+          {PRIORITIES.map((p) => (
             <CommandItem
               key={p.value}
               value={p.label}
