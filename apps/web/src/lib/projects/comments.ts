@@ -17,7 +17,7 @@ import {
   formatIssueMention,
   formatUserMention,
   parseMentionsFromBody,
-} from "@/lib/issues/comments"
+} from "@/lib/shared/mentions"
 import { requireProjectInOrg } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"
 import { generateUUID } from "@/lib/utils"

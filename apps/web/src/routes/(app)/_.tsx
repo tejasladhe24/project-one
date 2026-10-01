@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 import { getSession, listOrganizations } from "@/lib/auth/session"
-import { listSidebarTeams } from "@/lib/cycles"
+import { listSidebarTeams } from "@/lib/teams"
 import { pageMeta } from "@/lib/seo"
 import { SidebarInset, SidebarProvider } from "@workspace/ui/components/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
@@ -18,13 +18,17 @@ export const Route = createFileRoute("/(app)/_")({
     return { session }
   },
   loader: async ({ context }) => {
-    const [teams, orgs] = await Promise.all([
+    // Re-fetch session so org switch (invalidate) does not keep stale
+    // activeOrganizationId from the previous beforeLoad context.
+    const [session, teams, orgs] = await Promise.all([
+      getSession(),
       listSidebarTeams(),
       listOrganizations(),
     ])
-    const activeTeamId = context.session.session.activeTeamId
-    const activeOrgId = context.session.session.activeOrganizationId
-    const user = context.session.user
+    const activeSession = session ?? context.session
+    const activeTeamId = activeSession.session.activeTeamId
+    const activeOrgId = activeSession.session.activeOrganizationId
+    const user = activeSession.user
 
     return {
       user: {

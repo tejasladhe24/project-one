@@ -30,14 +30,15 @@ import { MetaMenu, MetaPillTrigger } from "@/components/issue/meta-menu"
 import { PriorityIcon } from "@/components/issue/priority-icon"
 import type { ProjectDetail } from "@/components/project/project-shell"
 import { useServerMutation } from "@/hooks/use-server-mutation"
-import { getInitials, ISSUE_PRIORITIES, priorityLabel } from "@/lib/issues/meta"
+import { PRIORITIES, priorityLabel } from "@/lib/shared/priority"
+import { getInitials } from "@/lib/shared/string"
 import {
   PROJECT_STATUSES,
   formatProjectShortDate,
   isProjectPeriodUnset,
   projectStatusDotClass,
   projectStatusLabel,
-  suggestedProjectPeriod,
+  resolveProjectPeriod,
   toProjectDateInputValue,
   updateProject,
 } from "@/lib/projects"
@@ -101,14 +102,10 @@ function toDateInputValue(value: Date | string | null | undefined) {
 }
 
 function periodFormDefaults(project: ProjectDetail) {
-  const suggestion = suggestedProjectPeriod()
+  const period = resolveProjectPeriod(project)
   return {
-    startDate: isProjectPeriodUnset(project.startDate)
-      ? suggestion.startInput
-      : toDateInputValue(project.startDate),
-    targetDate: isProjectPeriodUnset(project.startDate)
-      ? suggestion.targetInput
-      : toDateInputValue(project.targetDate) || suggestion.targetInput,
+    startDate: toDateInputValue(period.startDate),
+    targetDate: toDateInputValue(period.targetDate),
   }
 }
 
@@ -149,6 +146,7 @@ export function ProjectProperties({
   const dateDefaults = periodFormDefaults(project)
   const [startDate, setStartDate] = React.useState(dateDefaults.startDate)
   const [targetDate, setTargetDate] = React.useState(dateDefaults.targetDate)
+  const datesPeriod = resolveProjectPeriod(project)
   const [memberIds, setMemberIds] = React.useState(() =>
     project.members.map((m) => m.userId)
   )
@@ -349,7 +347,7 @@ export function ProjectProperties({
         >
           <CommandEmpty>No priority found.</CommandEmpty>
           <CommandGroup>
-            {ISSUE_PRIORITIES.map((p) => (
+            {PRIORITIES.map((p) => (
               <CommandItem
                 key={p.value}
                 value={p.label}
@@ -534,17 +532,9 @@ export function ProjectProperties({
                   "text-muted-foreground"
               )}
             >
-              {formatShortDate(
-                isProjectPeriodUnset(project.startDate)
-                  ? suggestedProjectPeriod().startDate
-                  : project.startDate
-              )}
+              {formatShortDate(datesPeriod.startDate)}
               <span className="text-muted-foreground"> → </span>
-              {formatShortDate(
-                isProjectPeriodUnset(project.startDate)
-                  ? suggestedProjectPeriod().targetDate
-                  : project.targetDate
-              )}
+              {formatShortDate(datesPeriod.targetDate)}
             </span>
           </PopoverTrigger>
           <PopoverContent align="start" className="w-64 gap-3 p-3">

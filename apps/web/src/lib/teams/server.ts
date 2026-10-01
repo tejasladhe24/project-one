@@ -57,6 +57,31 @@ export const listOrgTeamsWithMembership = createServerFn({
   }))
 })
 
+/** Teams for sidebar, including whether Cycles is enabled. */
+export const listSidebarTeams = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const { session, organizationId } = await requireOrgSession()
+    const rows = await db
+      .select({
+        id: team.id,
+        name: team.name,
+        cyclesEnabled: team.cyclesEnabled,
+      })
+      .from(team)
+      .innerJoin(
+        teamMember,
+        and(
+          eq(teamMember.teamId, team.id),
+          eq(teamMember.userId, session.user.id)
+        )
+      )
+      .where(eq(team.organizationId, organizationId))
+      .orderBy(asc(team.name))
+
+    return rows
+  }
+)
+
 export const getTeam = createServerFn({ method: "GET" })
   .validator(z.object({ teamId: z.string().min(1) }))
   .handler(async ({ data }) => {

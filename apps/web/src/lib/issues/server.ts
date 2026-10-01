@@ -15,7 +15,7 @@ import {
   user,
 } from "@/db/schema"
 import { recordIssueActivity, subscribeToIssue } from "@/lib/issues/activity"
-import { priorityLabel } from "@/lib/issues/meta"
+import { priorityLabel } from "@/lib/shared/priority"
 import { getCurrentCycleNumber } from "@/lib/cycles/dates"
 import { getOptionalOrgSession, requireOrgSession } from "@/lib/server/session"
 import { requireTeamIssueAccess } from "@/lib/server/access"

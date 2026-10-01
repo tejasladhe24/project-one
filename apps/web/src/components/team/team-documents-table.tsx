@@ -44,6 +44,7 @@ import {
 } from "@workspace/ui/components/table"
 import { cn } from "@workspace/ui/lib/utils"
 import { createTeamDocument } from "@/lib/documents"
+import { getInitials } from "@/lib/shared/string"
 import { MarkdownEditor } from "@/components/markdown-editor"
 
 export type TeamDocumentRow = {
@@ -67,14 +68,6 @@ export type IssueOption = {
   number: number
   title: string
   identifier: string
-}
-
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length >= 2) {
-    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase()
-  }
-  return name.slice(0, 2).toUpperCase() || "?"
 }
 
 export function formatRelativeTime(value: Date | string) {

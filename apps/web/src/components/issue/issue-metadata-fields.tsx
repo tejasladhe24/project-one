@@ -27,11 +27,6 @@ import {
 } from "@/components/issue/meta-menu"
 import { useIssueMetadataUpdate } from "@/hooks/issues/use-issue-metadata-update"
 import {
-  ISSUE_PRIORITIES,
-  getInitials,
-  labelDotColor,
-  maxStartedSortOrder,
-  priorityLabel,
   type IssueCycleOption,
   type IssueMetadataValue,
   type MetadataLabel,
@@ -39,6 +34,10 @@ import {
   type MetadataProject,
   type MetadataStatus,
 } from "@/lib/issues/meta"
+import { labelDotColor } from "@/lib/labels/display"
+import { PRIORITIES, priorityLabel } from "@/lib/shared/priority"
+import { getInitials } from "@/lib/shared/string"
+import { maxStartedSortOrder } from "@/lib/statuses/display"
 
 export type {
   IssueCycleOption,
@@ -197,7 +196,7 @@ export function IssueMetadataFields({
       >
         <CommandEmpty>No priority found.</CommandEmpty>
         <CommandGroup>
-          {ISSUE_PRIORITIES.map((p) => (
+          {PRIORITIES.map((p) => (
             <CommandItem
               key={p.value}
               value={p.label}

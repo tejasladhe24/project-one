@@ -1,3 +1,5 @@
+import { startOfLocalDay } from "@/lib/shared/dates"
+
 /** Weekday matching `Date#getDay()`: 0=Sunday … 6=Saturday. */
 export const CYCLE_START_DAYS = [
   { value: 1, label: "Monday" },
@@ -16,12 +18,6 @@ export type TeamCycleSettings = {
   cycleDurationWeeks: number
   cycleStartDay: number
   cyclesOrigin: Date | string | null
-}
-
-function startOfLocalDay(value: Date) {
-  const d = new Date(value)
-  d.setHours(0, 0, 0, 0)
-  return d
 }
 
 /** Most recent `startDay` on or before `date`. */

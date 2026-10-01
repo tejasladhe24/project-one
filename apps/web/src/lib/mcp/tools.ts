@@ -72,8 +72,9 @@ import {
   listTeamJoinRequests,
   acceptTeamJoinRequest,
   declineTeamJoinRequest,
+  listSidebarTeams,
 } from "@/lib/teams/server"
-import { updateTeamCycleSettings, listSidebarTeams } from "@/lib/cycles/server"
+import { updateTeamCycleSettings } from "@/lib/cycles/server"
 import { listOrganizations, listMembers } from "@/lib/auth/session"
 import { requireOrgMember } from "@/lib/server/access"
 import { requireOrgSession } from "@/lib/server/session"
@@ -379,7 +380,10 @@ export function registerMcpTools(server: McpServer) {
       inputSchema: {
         name: z.string().min(2),
         priority: z.number().int().min(0).max(4).optional(),
-        targetDate: z.string().min(1),
+        /** Defaults to creation day when omitted. */
+        startDate: z.string().optional(),
+        /** Defaults to creation day + 14 days when omitted. */
+        targetDate: z.string().optional(),
         leadId: z.string().optional(),
         teamId: z.string().optional(),
       },
@@ -390,6 +394,7 @@ export function registerMcpTools(server: McpServer) {
           data: {
             name: args.name,
             priority: args.priority ?? 0,
+            startDate: args.startDate,
             targetDate: args.targetDate,
             leadId: args.leadId,
             teamId: args.teamId,

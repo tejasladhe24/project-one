@@ -26,7 +26,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@workspace/ui/components/sidebar"
-import { getInitials } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
 import { authClient } from "@/lib/auth/client"
 
 export type NavUserData = {

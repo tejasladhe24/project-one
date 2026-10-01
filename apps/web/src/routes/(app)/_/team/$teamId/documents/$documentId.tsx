@@ -13,6 +13,7 @@ import { TeamHomeShell } from "@/components/team/team-home-shell"
 import { useServerMutation } from "@/hooks/use-server-mutation"
 import { getTeamDocument, updateTeamDocument } from "@/lib/documents"
 import { pageMeta } from "@/lib/seo"
+import { getInitials } from "@/lib/shared/string"
 
 export const Route = createFileRoute(
   "/(app)/_/team/$teamId/documents/$documentId"
@@ -33,14 +34,6 @@ export const Route = createFileRoute(
     }),
   component: TeamDocumentPage,
 })
-
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length >= 2) {
-    return `${parts[0]![0]!}${parts[1]![0]!}`.toUpperCase()
-  }
-  return name.slice(0, 2).toUpperCase() || "?"
-}
 
 function TeamDocumentPage() {
   const { team, document } = Route.useLoaderData()

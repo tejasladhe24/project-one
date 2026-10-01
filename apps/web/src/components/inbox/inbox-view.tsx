@@ -46,7 +46,7 @@ import {
   markInboxNotificationRead,
   markInboxNotificationUnread,
 } from "@/lib/inbox"
-import { getInitials } from "@/lib/issues/meta"
+import { getInitials } from "@/lib/shared/string"
 import { getSession } from "@/lib/auth/session"
 import { acceptTeamJoinRequest } from "@/lib/teams"
 

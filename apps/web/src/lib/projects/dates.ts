@@ -1,10 +1,6 @@
-/** Project period helpers (client-safe). */
+import { startOfLocalDay } from "@/lib/shared/dates"
 
-function startOfLocalDay(date: Date) {
-  const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
+/** Project period helpers (client-safe). */
 
 function toDateInputValue(value: Date) {
   const y = value.getFullYear()
@@ -13,11 +9,11 @@ function toDateInputValue(value: Date) {
   return `${y}-${m}-${d}`
 }
 
-/** Suggested period when start date has not been set: today → today + 15 days. */
+/** Default period for new projects: today → today + 14 days. */
 export function suggestedProjectPeriod(now = new Date()) {
   const startDate = startOfLocalDay(now)
   const targetDate = new Date(startDate)
-  targetDate.setDate(targetDate.getDate() + 15)
+  targetDate.setDate(targetDate.getDate() + 14)
   return {
     startDate,
     targetDate,
@@ -31,6 +27,25 @@ export function isProjectPeriodUnset(
   startDate: Date | string | null | undefined
 ) {
   return startDate == null || startDate === ""
+}
+
+/**
+ * Effective start/target for display and forms.
+ * Legacy rows with a null start fall back to createdAt so table and
+ * properties stay aligned with the stored target date.
+ */
+export function resolveProjectPeriod(project: {
+  startDate: Date | string | null | undefined
+  targetDate: Date | string
+  createdAt?: Date | string | null
+}) {
+  const startDate = isProjectPeriodUnset(project.startDate)
+    ? (project.createdAt ?? null)
+    : project.startDate
+  return {
+    startDate,
+    targetDate: project.targetDate,
+  }
 }
 
 export function formatProjectShortDate(

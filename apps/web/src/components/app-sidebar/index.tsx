@@ -13,6 +13,7 @@ import {
   IconUsersGroup,
 } from "@tabler/icons-react"
 
+import { CommandSearch, useCommandSearchShortcutLabel } from "./command-search"
 import { NavWorkspace } from "./nav-workspace"
 import { NavMain } from "./nav-main"
 import { NavTeams } from "./nav-teams"
@@ -54,23 +55,6 @@ const data = {
       icon: IconBookmarkEdit,
     },
   ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
   workspace: [
     {
       name: "Projects",
@@ -103,6 +87,9 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
 }
 
 export function AppSidebar({ teams, orgs, user, ...props }: AppSidebarProps) {
+  const [searchOpen, setSearchOpen] = React.useState(false)
+  const searchShortcut = useCommandSearchShortcutLabel()
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -112,11 +99,32 @@ export function AppSidebar({ teams, orgs, user, ...props }: AppSidebarProps) {
         <NavMain items={data.navMain} />
         <NavWorkspace items={data.workspace} />
         <NavTeams teams={teams} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary
+          className="mt-auto"
+          items={[
+            {
+              title: "Settings",
+              url: "/settings",
+              icon: IconSettings,
+            },
+            {
+              title: "Get Help",
+              url: "#",
+              icon: IconHelp,
+            },
+            {
+              title: "Search",
+              icon: IconSearch,
+              onClick: () => setSearchOpen(true),
+              shortcut: searchShortcut,
+            },
+          ]}
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />
       </SidebarFooter>
+      <CommandSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </Sidebar>
   )
 }
