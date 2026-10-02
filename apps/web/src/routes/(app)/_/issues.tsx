@@ -15,6 +15,10 @@ export const Route = createFileRoute("/(app)/_/issues")({
   loaderDeps: ({ search }) => ({ teamId: search.team_id }),
   loader: async ({ deps, context }) => {
     const session = context.session
+    const organizationId = session.session.activeOrganizationId
+    if (!organizationId) {
+      throw new Error("No active organization")
+    }
     const mine = !deps.teamId
     const [issues, projects, teams] = await Promise.all([
       listIssues({
@@ -41,6 +45,7 @@ export const Route = createFileRoute("/(app)/_/issues")({
     return {
       mode: mine ? ("mine" as const) : ("team" as const),
       currentUserId: session.user.id,
+      organizationId,
       teamId: deps.teamId,
       teamName,
       teams: teamOptions,
@@ -53,8 +58,16 @@ export const Route = createFileRoute("/(app)/_/issues")({
 })
 
 function IssuesPage() {
-  const { issues, projects, teams, teamId, teamName, mode, currentUserId } =
-    Route.useLoaderData()
+  const {
+    issues,
+    projects,
+    teams,
+    organizationId,
+    teamId,
+    teamName,
+    mode,
+    currentUserId,
+  } = Route.useLoaderData()
   const router = useRouter()
 
   return (
@@ -63,6 +76,7 @@ function IssuesPage() {
         data={issues}
         projects={projects}
         teams={teams}
+        organizationId={organizationId}
         teamId={teamId}
         teamName={teamName}
         mode={mode}

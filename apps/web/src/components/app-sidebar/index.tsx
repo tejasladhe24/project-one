@@ -51,7 +51,7 @@ const data = {
     },
     {
       title: "Drafts",
-      url: "#",
+      url: "/drafts",
       icon: IconBookmarkEdit,
     },
   ],

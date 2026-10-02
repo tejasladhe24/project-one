@@ -16,6 +16,8 @@ import { Button } from "@workspace/ui/components/button"
 import { Textarea } from "@workspace/ui/components/textarea"
 import { cn } from "@workspace/ui/lib/utils"
 
+type Mode = "write" | "preview"
+
 type MarkdownEditorProps = {
   value: string
   onChange: (value: string) => void
@@ -24,10 +26,10 @@ type MarkdownEditorProps = {
   disabled?: boolean
   /** Compact for short fields like team description. */
   variant?: "default" | "compact"
+  /** Initial editor mode. Defaults to preview. */
+  defaultMode?: Mode
   className?: string
 }
-
-type Mode = "write" | "preview"
 
 function wrapSelection(
   value: string,
@@ -77,9 +79,10 @@ export function MarkdownEditor({
   placeholder = "Write markdown…",
   disabled,
   variant = "default",
+  defaultMode = "preview",
   className,
 }: MarkdownEditorProps) {
-  const [mode, setMode] = React.useState<Mode>("preview")
+  const [mode, setMode] = React.useState<Mode>(defaultMode)
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const compact = variant === "compact"
   const isWrite = mode === "write"
