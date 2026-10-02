@@ -1,0 +1,42 @@
+{
+  "team": "Tech",
+  "state": "Todo",
+  "assignee": "me",
+  "project": "Project One",
+  "projectId": "P-TC-1",
+  "priority": {
+    "default": 3,
+    "bug": 2,
+    "feature": 3,
+    "scale": {
+      "0": "None",
+      "1": "Urgent",
+      "2": "High",
+      "3": "Medium",
+      "4": "Low"
+    }
+  },
+  "estimate": {
+    "default": 2,
+    "scale": "exponential",
+    "unit": "hours",
+    "pointsToHours": 1,
+    "allowed": [1, 2, 4, 8, 16, 32, 64],
+    "guidance": {
+      "1": "Trivial — single obvious change; ~1 hour with AI",
+      "2": "Simple — localized change, clear path; ~2 hours",
+      "4": "Moderate — a few files or a small flow; ~4 hours",
+      "8": "Substantial — multi-surface or non-trivial logic; ~8 hours",
+      "16": "Complex — several interconnected pieces or tricky edge cases; ~16 hours",
+      "32": "Heavy — broad refactor or deep investigation; ~32 hours; prefer splitting",
+      "64": "Epic complexity — many unknowns or cross-cutting systems; ~64 hours; almost always split"
+    }
+  },
+  "labels": {
+    "bug": ["Bug"],
+    "feature": ["Feature"]
+  },
+  "environmentDefault": "dev",
+  "allowedStates": ["Todo", "Triage", "Backlog"],
+  "notes": "Tech team currently has Todo (unstarted) and Backlog; Triage is preferred when the team enables it. Always assign to me and link to Project One unless the user overrides."
+}

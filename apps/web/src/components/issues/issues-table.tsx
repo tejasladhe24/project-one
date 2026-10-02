@@ -1,9 +1,6 @@
 import * as React from "react"
 import { Link } from "@tanstack/react-router"
-import { useForm } from "@tanstack/react-form"
 import { IconPlus, IconSearch } from "@tabler/icons-react"
-import { z } from "zod"
-import { Alert, AlertDescription } from "@workspace/ui/components/alert"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import {
@@ -14,12 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@workspace/ui/components/dialog"
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import {
   Select,
@@ -29,13 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select"
-import { Spinner } from "@workspace/ui/components/spinner"
-import { Textarea } from "@workspace/ui/components/textarea"
 import {
   IssueMetadataFields,
   type IssueMetadataValue,
 } from "@/components/issue/issue-metadata-fields"
 import { IssueEstimateField } from "@/components/issue/issue-estimate-field"
+import {
+  CreateIssueForm,
+  type CreateIssueProjectOption,
+  type CreateIssueTeamOption,
+} from "@/components/issues/create-issue-form"
 import { useIssueMetadataOptions } from "@/hooks/issues/use-issue-metadata-options"
 import {
   formatCycleRangeLabel,
@@ -43,36 +37,12 @@ import {
 } from "@/lib/cycles/dates"
 import { formatIssueKey } from "@/lib/issues/meta"
 import { type IssueRow } from "@/lib/issues/rows"
-import { createIssue } from "@/lib/issues"
 
 export type { IssueRow } from "@/lib/issues/rows"
 
-export type IssueProjectOption = {
-  id: string
-  name: string
-}
+export type IssueProjectOption = CreateIssueProjectOption
 
-export type IssueTeamOption = {
-  id: string
-  name: string
-  identifier: string | null
-}
-
-const priorityItems = [
-  { label: "No priority", value: "0" },
-  { label: "Urgent", value: "1" },
-  { label: "High", value: "2" },
-  { label: "Medium", value: "3" },
-  { label: "Low", value: "4" },
-] as const
-
-const createIssueSchema = z.object({
-  title: z.string().min(2, "Title is required"),
-  teamId: z.string().min(1, "Team is required"),
-  projectId: z.string(),
-  priority: z.enum(["0", "1", "2", "3", "4"]),
-  description: z.string(),
-})
+export type IssueTeamOption = CreateIssueTeamOption
 
 function formatDueDate(value: string | null) {
   if (!value) return null
@@ -124,251 +94,6 @@ function mergeMetadataIntoRow(
   }
 }
 
-function CreateIssueForm({
-  projects,
-  teams,
-  teamId,
-  onCreated,
-}: {
-  projects: IssueProjectOption[]
-  teams: IssueTeamOption[]
-  teamId?: string
-  onCreated?: () => void
-}) {
-  const [formError, setFormError] = React.useState<string | null>(null)
-  const projectItems = [
-    { label: "No project", value: "__none__" },
-    ...projects.map((p) => ({
-      label: p.name,
-      value: p.id,
-    })),
-  ]
-  const teamItems = teams.map((t) => ({
-    label: t.identifier ? `${t.name} (${t.identifier})` : t.name,
-    value: t.id,
-  }))
-
-  const form = useForm({
-    defaultValues: {
-      title: "",
-      teamId: teamId ?? teams[0]?.id ?? "",
-      projectId: "__none__",
-      priority: "0" as "0" | "1" | "2" | "3" | "4",
-      description: "",
-    },
-    validators: {
-      onSubmit: createIssueSchema,
-    },
-    onSubmit: async ({ value }) => {
-      setFormError(null)
-      try {
-        await createIssue({
-          data: {
-            title: value.title.trim(),
-            teamId: value.teamId,
-            projectId:
-              value.projectId && value.projectId !== "__none__"
-                ? value.projectId
-                : undefined,
-            priority: Number(value.priority),
-            description: value.description.trim() || undefined,
-          },
-        })
-        form.reset()
-        onCreated?.()
-      } catch (error) {
-        setFormError(
-          error instanceof Error ? error.message : "Could not create issue"
-        )
-      }
-    },
-  })
-
-  return (
-    <div className="flex flex-col gap-3">
-      <form
-        id="create-issue-form"
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          void form.handleSubmit()
-        }}
-      >
-        <FieldGroup>
-          <form.Field name="title">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              return (
-                <Field data-invalid={isInvalid || undefined}>
-                  <FieldLabel htmlFor={field.name}>Title</FieldLabel>
-                  <Input
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    placeholder="Issue title"
-                  />
-                  {isInvalid ? (
-                    <FieldError errors={field.state.meta.errors} />
-                  ) : null}
-                </Field>
-              )
-            }}
-          </form.Field>
-
-          {!teamId ? (
-            <form.Field name="teamId">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid || undefined}>
-                    <FieldLabel htmlFor={field.name}>Team</FieldLabel>
-                    <Select
-                      items={teamItems}
-                      value={field.state.value}
-                      onValueChange={(value) => {
-                        if (value === null) return
-                        field.handleChange(value)
-                      }}
-                    >
-                      <SelectTrigger id={field.name} className="w-full">
-                        <SelectValue placeholder="Select team" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {teamItems.map((item) => (
-                            <SelectItem key={item.value} value={item.value}>
-                              {item.label}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    {isInvalid ? (
-                      <FieldError errors={field.state.meta.errors} />
-                    ) : null}
-                  </Field>
-                )
-              }}
-            </form.Field>
-          ) : null}
-
-          <form.Field name="projectId">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              return (
-                <Field data-invalid={isInvalid || undefined}>
-                  <FieldLabel htmlFor={field.name}>Project</FieldLabel>
-                  <Select
-                    items={projectItems}
-                    value={field.state.value}
-                    onValueChange={(value) => {
-                      if (value === null) return
-                      field.handleChange(value)
-                    }}
-                  >
-                    <SelectTrigger id={field.name} className="w-full">
-                      <SelectValue placeholder="Optional project" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {projectItems.map((item) => (
-                          <SelectItem key={item.value} value={item.value}>
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  {isInvalid ? (
-                    <FieldError errors={field.state.meta.errors} />
-                  ) : null}
-                </Field>
-              )
-            }}
-          </form.Field>
-
-          <form.Field name="priority">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              return (
-                <Field data-invalid={isInvalid || undefined}>
-                  <FieldLabel htmlFor={field.name}>Priority</FieldLabel>
-                  <Select
-                    items={[...priorityItems]}
-                    value={field.state.value}
-                    onValueChange={(value) => {
-                      if (value === null) return
-                      field.handleChange(value as typeof field.state.value)
-                    }}
-                  >
-                    <SelectTrigger id={field.name} className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {priorityItems.map((item) => (
-                          <SelectItem key={item.value} value={item.value}>
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  {isInvalid ? (
-                    <FieldError errors={field.state.meta.errors} />
-                  ) : null}
-                </Field>
-              )
-            }}
-          </form.Field>
-
-          <form.Field name="description">
-            {(field) => (
-              <Field>
-                <FieldLabel htmlFor={field.name}>Description</FieldLabel>
-                <Textarea
-                  id={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="Optional"
-                  rows={3}
-                />
-              </Field>
-            )}
-          </form.Field>
-        </FieldGroup>
-      </form>
-
-      {formError ? (
-        <Alert variant="destructive">
-          <AlertDescription>{formError}</AlertDescription>
-        </Alert>
-      ) : null}
-
-      <form.Subscribe selector={(s) => s.isSubmitting}>
-        {(isSubmitting) => (
-          <Button
-            type="submit"
-            form="create-issue-form"
-            disabled={isSubmitting}
-            className="w-full"
-          >
-            {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
-            Create issue
-          </Button>
-        )}
-      </form.Subscribe>
-    </div>
-  )
-}
-
 type IssueGroup = {
   key: string
   label: string
@@ -382,6 +107,8 @@ type IssuesTableProps = {
   data: IssueRow[]
   projects: IssueProjectOption[]
   teams: IssueTeamOption[]
+  /** Required when create dialog is shown (`hideCreate` is false). */
+  organizationId?: string
   teamId?: string
   teamName?: string
   mode?: "mine" | "team"
@@ -479,6 +206,7 @@ export function IssuesTable({
   data,
   projects: projectOptions,
   teams,
+  organizationId,
   teamId,
   teamName,
   mode = "team",
@@ -721,7 +449,7 @@ export function IssuesTable({
             </Badge>
           ) : null}
         </div>
-        {!hideCreate ? (
+        {!hideCreate && organizationId ? (
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
             <DialogTrigger render={<Button variant="outline" size="sm" />}>
               <IconPlus data-icon="inline-start" />
@@ -739,6 +467,7 @@ export function IssuesTable({
                 projects={projectOptions}
                 teams={teams}
                 teamId={teamId}
+                organizationId={organizationId}
                 onCreated={() => {
                   setCreateOpen(false)
                   onCreated?.()
