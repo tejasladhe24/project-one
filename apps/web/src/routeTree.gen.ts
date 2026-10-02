@@ -13,6 +13,7 @@ import { Route as appRouteImport } from './routes/(app)/_'
 import { Route as authRouteImport } from './routes/(auth)/_'
 import { Route as ApiMcpRouteImport } from './routes/api/mcp'
 import { Route as appIndexRouteImport } from './routes/(app)/_/index'
+import { Route as appDraftsRouteImport } from './routes/(app)/_/drafts'
 import { Route as appInboxRouteImport } from './routes/(app)/_/inbox'
 import { Route as appIssuesRouteImport } from './routes/(app)/_/issues'
 import { Route as appMembersRouteImport } from './routes/(app)/_/members'
@@ -66,6 +67,11 @@ const ApiMcpRoute = ApiMcpRouteImport.update({
 const appIndexRoute = appIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => appRoute,
+} as any)
+const appDraftsRoute = appDraftsRouteImport.update({
+  id: '/drafts',
+  path: '/drafts',
   getParentRoute: () => appRoute,
 } as any)
 const appInboxRoute = appInboxRouteImport.update({
@@ -261,6 +267,7 @@ const appTeamTeamIdSettingsTemplatesRoute =
 
 export interface FileRoutesByFullPath {
   '/api/mcp': typeof ApiMcpRoute
+  '/drafts': typeof appDraftsRoute
   '/inbox': typeof appInboxRoute
   '/issues': typeof appIssuesRoute
   '/members': typeof appMembersRoute
@@ -301,6 +308,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/api/mcp': typeof ApiMcpRoute
+  '/drafts': typeof appDraftsRoute
   '/inbox': typeof appInboxRoute
   '/issues': typeof appIssuesRoute
   '/members': typeof appMembersRoute
@@ -339,6 +347,7 @@ export interface FileRoutesById {
   '/(app)/_': typeof appRouteWithChildren
   '/(auth)/_': typeof authRouteWithChildren
   '/api/mcp': typeof ApiMcpRoute
+  '/(app)/_/drafts': typeof appDraftsRoute
   '/(app)/_/inbox': typeof appInboxRoute
   '/(app)/_/issues': typeof appIssuesRoute
   '/(app)/_/members': typeof appMembersRoute
@@ -381,6 +390,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/api/mcp'
+    | '/drafts'
     | '/inbox'
     | '/issues'
     | '/members'
@@ -421,6 +431,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/mcp'
+    | '/drafts'
     | '/inbox'
     | '/issues'
     | '/members'
@@ -458,6 +469,7 @@ export interface FileRouteTypes {
     | '/(app)/_'
     | '/(auth)/_'
     | '/api/mcp'
+    | '/(app)/_/drafts'
     | '/(app)/_/inbox'
     | '/(app)/_/issues'
     | '/(app)/_/members'
@@ -532,6 +544,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof appIndexRouteImport
+      parentRoute: typeof appRoute
+    }
+    '/(app)/_/drafts': {
+      id: '/(app)/_/drafts'
+      path: '/drafts'
+      fullPath: '/drafts'
+      preLoaderRoute: typeof appDraftsRouteImport
       parentRoute: typeof appRoute
     }
     '/(app)/_/inbox': {
@@ -888,6 +907,7 @@ const appTeamTeamIdRouteWithChildren = appTeamTeamIdRoute._addFileChildren(
 )
 
 interface appRouteChildren {
+  appDraftsRoute: typeof appDraftsRoute
   appInboxRoute: typeof appInboxRoute
   appIssuesRoute: typeof appIssuesRoute
   appMembersRoute: typeof appMembersRoute
@@ -901,6 +921,7 @@ interface appRouteChildren {
 }
 
 const appRouteChildren: appRouteChildren = {
+  appDraftsRoute: appDraftsRoute,
   appInboxRoute: appInboxRoute,
   appIssuesRoute: appIssuesRoute,
   appMembersRoute: appMembersRoute,

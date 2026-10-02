@@ -2,9 +2,10 @@
 name: create-linear-ticket
 description: >-
   Create Linear issues with a fixed markdown template (Summary, Environment,
-  Bug/Feature, How to Reproduce, Acceptance Criteria, Extra Notes). Use when
-  the user asks to create a Linear ticket, file a bug, open a feature request,
-  or log work in Linear.
+  Bug/Feature, How to Reproduce, Acceptance Criteria, Extra Notes). Assigns to
+  the logged-in user, links Project One, and sets priority/estimate from
+  preferences. Use when the user asks to create a Linear ticket, file a bug,
+  open a feature request, or log work in Linear.
 ---
 
 # Create Linear Ticket
@@ -18,27 +19,75 @@ template.
 - User asks to create / file / open a Linear ticket, bug, or feature
 - User wants work logged from conversation context into Linear
 
+## Preferences
+
+**Always read** [preferences.json](preferences.json) before creating an issue.
+Those values are the defaults for this repo. User overrides in the chat win.
+
+| Preference | Purpose |
+|------------|---------|
+| `team` | Linear team name |
+| `state` | Initial status (`Todo` or `Triage` when available) |
+| `assignee` | Who owns the ticket (`"me"` = logged-in Linear user) |
+| `project` / `projectId` | Project to attach (this repo → **Project One**) |
+| `priority` | Default / bug / feature priority (1=Urgent … 4=Low) |
+| `estimate` | Default points (1 point = 1 hour) + complexity guidance |
+| `labels` | Bug vs Feature label sets |
+| `environmentDefault` | Fallback for Which Environment? |
+
+If `state` is `Triage` but the team has no Triage status, fall back to `Todo`.
+
 ## Workflow
 
-1. Infer or ask for: short title, environment, type (bug vs feature), reproduction steps, acceptance criteria.
-2. Default team to **Tech** unless the user names another team.
-3. Apply Linear label **Bug** or **Feature** to match the ticket type.
+1. Read [preferences.json](preferences.json).
+2. Infer or ask for: short title, environment, type (bug vs feature), reproduction steps, acceptance criteria.
+3. Resolve fields from preferences (unless the user overrides):
+   - **team** → `preferences.team`
+   - **assignee** → `preferences.assignee` (`"me"`)
+   - **project** → `preferences.project` (`Project One`)
+   - **state** → `preferences.state`
+   - **labels** → Bug or Feature from `preferences.labels`
+   - **priority** → pick from preferences + guidance below
+   - **estimate** → pick from preferences + guidance below
 4. Build the description from the template below (exact section headings).
-5. Call `save_issue` with `team`, `title`, `description`, and `labels`.
+5. Call `save_issue` with all resolved fields.
 6. Return the issue identifier and URL. Do not push code or open PRs unless asked.
 
-### Defaults
+### Priority
 
-| Field | Default |
-|-------|---------|
-| Team | `Tech` |
-| State | `Todo` (or omit) |
-| Environment | Ask if unclear; otherwise infer from context (`dev` for local) |
-| Extra Notes | Leave empty |
+Use `preferences.priority` defaults, then adjust from context:
+
+| Value | Name | When |
+|-------|------|------|
+| 1 | Urgent | Blocking / production incident / unblocks others now |
+| 2 | High | Important soon; bugs that hurt core flows |
+| 3 | Medium | Normal planned work (default for features) |
+| 4 | Low | Nice-to-have, polish, non-blocking |
+| 0 | None | Only if the user asks for no priority |
+
+Defaults: bugs → `priority.bug` (High), features → `priority.feature` (Medium).
+
+### Estimate
+
+Always set an estimate using `preferences.estimate.allowed` (exponential: 1, 2, 4, 8, 16, 32, 64).
+**1 point = 1 hour** of effective effort (AI-assisted). Size by complexity, not calendar days.
+
+| Points | Hours | Complexity |
+|--------|-------|------------|
+| 1 | ~1h | Trivial — single obvious change |
+| 2 | ~2h | Simple — localized, clear path |
+| 4 | ~4h | Moderate — a few files or a small flow |
+| 8 | ~8h | Substantial — multi-surface or non-trivial logic |
+| 16 | ~16h | Complex — interconnected pieces / tricky edges |
+| 32 | ~32h | Heavy — broad refactor or deep investigation; prefer splitting |
+| 64 | ~64h | Epic — many unknowns / cross-cutting; almost always split |
+
+If scope is unclear, use `estimate.default` and note uncertainty only if the user asks; do not put sizing debate in Extra Notes.
 
 ### Environment values
 
 Use exactly one of: `dev`, `product`, `rc`, `main`.
+If unclear, use `preferences.environmentDefault`.
 
 ### Missing info
 
@@ -96,13 +145,15 @@ Use these section headings **verbatim** and in this order:
 
 ### Labels
 
-- Bug ticket → `labels: ["Bug"]`
-- Feature ticket → `labels: ["Feature"]`
+- Bug ticket → `labels` from `preferences.labels.bug`
+- Feature ticket → `labels` from `preferences.labels.feature`
 - Do not add other labels unless the user asks
 
 ## Example (bug)
 
 **Title:** `Center error details trigger on global error page`
+
+**Fields:** `assignee: me`, `project: Project One`, `state: Todo`, `priority: 2`, `estimate: 2`, `labels: ["Bug"]`
 
 **Description:**
 
@@ -139,6 +190,8 @@ On the global error boundary, icon, title, description, and actions are centered
 
 **Title:** `Add default OG image for public auth pages`
 
+**Fields:** `assignee: me`, `project: Project One`, `state: Todo`, `priority: 3`, `estimate: 4`, `labels: ["Feature"]`
+
 **Description:**
 
 ```markdown
@@ -174,11 +227,18 @@ Sign-in and sign-up pages currently emit title/description OG tags but no `og:im
 
 ```text
 save_issue
-  team: Tech
+  team: <preferences.team>
   title: <title>
   description: <template markdown with literal newlines>
   labels: ["Bug"] | ["Feature"]
-  state: Todo   # optional
+  assignee: me
+  project: Project One
+  state: Todo
+  priority: <1|2|3|4>
+  estimate: <1|2|4|8|16|32|64>
 ```
+
+`assignee: "me"` resolves to the logged-in Linear user. Always pass it unless the
+user names someone else. Always pass `project` for tickets from this repo.
 
 After create, reply with the issue id and url only (plus a one-line confirmation).
